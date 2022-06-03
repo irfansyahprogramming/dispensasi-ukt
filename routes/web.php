@@ -35,22 +35,21 @@ Route::group(['prefix' => 'dispensasi', 'as' => 'dispensasi.'], function () {
     Route::delete('/{id}', [DispensasiController::class, 'delete'])->name('delete');
 });
 
-Route::get('/verifikasi_dispensasi', [VerifikasiUKTController::class, 'index'])->name('index');
+// Route::get('/verifikasi_dispensasi', [VerifikasiUKTController::class, 'index'])->name('index');
 Route::group(['prefix' => 'verifikasi_dispensasi', 'as' => 'verifikasi_dispensasi.'], function () {
-    Route::get('/verifikasi_dispensasi', [VerifikasiUKTController::class, 'index'])->name('index');
+    Route::get('/', [VerifikasiUKTController::class, 'index'])->name('index');
     Route::post('simpan', [VerifikasiUKTController::class, 'simpan'])->name('simpan');
     Route::get('/detil/{id}', [VerifikasiUKTController::class, 'detil'])->name('detil');
     Route::delete('/{id}', [VerifikasiUKTController::class, 'delete'])->name('delete');
 });
 
-Route::get('/penerima_dispensasi', [PeneriamDispensasiController::class, 'index'])->name('index');
+// Route::get('/penerima_dispensasi', [PeneriamDispensasiController::class, 'index'])->name('index');
 Route::group(['prefix' => 'penerima_dispensasi', 'as' => 'penerima_dispensasi.'], function () {
-    Route::get('/penerima_dispensasi', [PeneriamDispensasiController::class, 'index'])->name('index');
+    Route::get('/', [PeneriamDispensasiController::class, 'index'])->name('index');
     Route::get('/cetak/{id}', [PeneriamDispensasiController::class, 'cetak'])->name('cetak');
 });
 
-Route::get('/laporan', [LaporanController::class, 'index'])->name('index');
+// Route::get('/laporan', [LaporanController::class, 'index'])->name('index');
 Route::group(['prefix' => 'laporan', 'as' => 'laporan.'], function () {
-    Route::get('/laporan', [LaporanController::class, 'index'])->name('index');
+    Route::get('/', [LaporanController::class, 'index'])->name('index');
 });
-
