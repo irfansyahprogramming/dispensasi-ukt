@@ -16,7 +16,6 @@ class LaporanController extends Controller
             return redirect()->to('login');
         }
 
-        $periode = BukaDispensasi::checkOpenPeriode();
 
         $user = session('user_name');
         $mode = session('user_mode');
@@ -65,6 +64,7 @@ class LaporanController extends Controller
 
         // flash request data
         $request->flash();
+
 
         $listSemester = DB::table('ref_periode')->get();
         $listJenis = DB::table('ref_jenisdipensasi')->get();
