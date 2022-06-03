@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DispensasiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PeneriamDispensasiController;
+use App\Http\Controllers\PrintController;
 use App\Http\Controllers\VerifikasiUKTController;
 
 /*
@@ -47,6 +48,9 @@ Route::group(['prefix' => 'verifikasi_dispensasi', 'as' => 'verifikasi_dispensas
 Route::group(['prefix' => 'penerima_dispensasi', 'as' => 'penerima_dispensasi.'], function () {
     Route::get('/', [PeneriamDispensasiController::class, 'index'])->name('index');
     Route::get('/cetak/{id}', [PeneriamDispensasiController::class, 'cetak'])->name('cetak');
+
+    // cetak penerima dispensasi
+    Route::get('/print/{semester}/{kode_prodi}', [PrintController::class, 'cetakPenerimaDispensasi'])->name('print');
 });
 
 // Route::get('/laporan', [LaporanController::class, 'index'])->name('index');
