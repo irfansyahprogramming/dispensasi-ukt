@@ -66,7 +66,6 @@ class LaporanController extends Controller
         // flash request data
         $request->flash();
 
-
         $listSemester = DB::table('ref_periode')->get();
         $listJenis = DB::table('ref_jenisdipensasi')->get();
         $listStatus = DB::table('ref_status_pengajuan')->get();
