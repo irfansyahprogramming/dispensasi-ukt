@@ -85,9 +85,17 @@
                                 <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
                                 @endif
                             </td>
-                            <td>{{ $item->status ?? '' }}</td>
+
+                            @if ($item->status_pengajuan == 2)
+                              <td class="text-success">{{ $item->status ?? '' }}</td>
+                            @elseif ($item->status_pengajuan == 22)
+                              <td class="text-danger">{{ $item->status ?? '' }}</td>
+                            @else
+                              <td class="text-dark">{{ $item->status ?? '' }}</td>
+                            @endif
+
                             <td class="text-center">
-                                @if ($item->status_pengajuan == 1 || $item->status_pengajuan == 21)
+                                @if ($item->status_pengajuan == 2 || $item->status_pengajuan == 22)
                                     <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-success" onclick="verifData({{ $item->id }})"></i> Edit Status </button>
                                 @elseif ($item->status_pengajuan > 1)
                                     <button type="button" class="btn btn-sm btn-outline-success"></i> Lock </button>
@@ -117,7 +125,7 @@
         </div>
       </div>
 
-      <div id="modal-verifikasi-pengajuan" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+      <div id="modal-verifikasiDekan-pengajuan" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header py-2">
@@ -209,7 +217,7 @@
                           <tr>
                             <td colspan="2">Kelayakan Berkas Dokumen</td>
                             <td colspan="2">
-                                <form action="{{ route('verifikasi_dispensasi.simpan') }}" class="row g-3" method="POST">
+                                <form action="{{ route('verifikasiDekan_dispensasi.simpan') }}" class="row g-3" method="POST">
                                     @csrf
                                     <div class="col-auto">
                                         <input type="hidden" name="id" id="id">
@@ -222,8 +230,8 @@
                                         </select>
                                     </div>
                                     <div class="col-auto">
-                                      <textarea class="form-control col" rows="3" cols="50" id="txtAlasan" name="txtAlasan" placeholder="Alasan Bila Tidak Layak"></textarea>
-                                  </div>
+                                        <textarea class="form-control col" rows="3" cols="50" id="txtAlasan" name="txtAlasan" placeholder="Alasan Bila Tidak Layak"></textarea>
+                                    </div>
                                     <div class="col-auto text-right">
                                         <button type="submit" class="btn btn-primary col" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin dengan status terpilih ?')"><i class="fas fa-arrow"></i> Proses</button>
                                     </div>
@@ -244,14 +252,6 @@
         </div>
       </div>
       
-      <div id="modal-verifikasi-pengajuan" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-            <div class="modal-body">
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 @endsection
 
@@ -323,7 +323,7 @@
                 $('[name="id"]').val(data.id);
                 $('[name="nim"]').val(data.nim);
                 $('[name="semester"]').val(data.semester);
-                
+
                 $('#nim').html (data.nim);
                 $('#nim_siakad').html (data.nim_siakad);
                 $('#nama').html (data.nama);
@@ -340,17 +340,19 @@
                 $('#pekerjaan').html(data.pekerjaan);
                 $('#jabatan_kerja').html(data.jabatan_kerja);
                 $('#file_pendukung').html(data.file_pendukung);
+                
+                document.getElementById('txtAlasan').value = data.alasan_verif;
 
-                if (data.status_pengajuan == '1'){
+                if (data.status_pengajuan == '2'){
                   document.getElementById('sellayak').value = '1';
-                }else if (data.status_pengajuan == '21'){
+                }else if (data.status_pengajuan == '22'){
                   document.getElementById('sellayak').value = '2';
                 }else{
                   document.getElementById('sellayak').value = '0';
                 }
-                document.getElementById('txtAlasan').value = data.alasan_verif;
+                
 
-                $("#modal-verifikasi-pengajuan").modal('show');
+                $("#modal-verifikasiDekan-pengajuan").modal('show');
                 $('.modal-title').text('Verifikasi Berkas Pengajuan Dispensasi UKT'); // Set title to Bootstrap modal title
                 
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\BukaDispensasi;
@@ -14,9 +15,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Mockery\VerificationDirector;
 
-
-
-class VerifikasiUKTController extends Controller
+class VerifikasiDekanController extends Controller
 {
     public function index()
     {
@@ -38,8 +37,8 @@ class VerifikasiUKTController extends Controller
         $pengajuan = DB::table('tb_pengajuan_dispensasi')
         ->where('kode_prodi','like',trim(session('user_unit')).'%')
         ->where('semester',trim($semester))
-        ->where('status_pengajuan','<=','1')
-        ->orWhere('status_pengajuan','=','21')
+        ->where('status_pengajuan','2')
+        ->orWhere('status_pengajuan','22')
         ->get();
 
         foreach($pengajuan as $ajuan){
@@ -47,6 +46,7 @@ class VerifikasiUKTController extends Controller
             $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
             $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
             $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
+            
         }
 
         $arrData = [
@@ -54,7 +54,7 @@ class VerifikasiUKTController extends Controller
             'active'            => 'Dispensasi UKT',
             'user'              => $user,
             'mode'              => $mode,
-            'subtitle'          => 'Verifikasi Dispensasi',
+            'subtitle'          => 'Verifikasi Dekanat Dispensasi',
             'home_active'       => '',
             'dispen_active'     => 'active',
             'laporan_active'    => '',
@@ -64,7 +64,7 @@ class VerifikasiUKTController extends Controller
             'pengajuan'         => $pengajuan
         ];
 
-        return view('verifikasi_dispensasi',$arrData);
+        return view('dekan.verifikasi_dispensasi',$arrData);
     }
 
     public function delete($id){
@@ -78,17 +78,17 @@ class VerifikasiUKTController extends Controller
     public function simpan(Request $request){
         $nim = $request->nim;
         $semester = $request->semester;
-        $id = $request->id;
         $kelayakan = $request->sellayak;
+        $id = $request->id;
         $alasan = $request->txtAlasan;
         
         try {
             DB::beginTransaction();
             
             if ($kelayakan == '1'){
-                $status_pengajuan = '1';     
+                $status_pengajuan = '2';     
             }elseif ($kelayakan == '2'){
-                $status_pengajuan = '21';     
+                $status_pengajuan = '22';     
             }else{
                 return redirect()->back()->with('toast_error', 'Belum Ada Pilihan Kelayakan Berkas Dokumen');
             }
@@ -108,17 +108,17 @@ class VerifikasiUKTController extends Controller
                     ],
                     [
                         'alasan_verif'      => $alasan,
-                        'status_ajuan'      => $status_pengajuan
+                        'status_ajuan'      => $kelayakan
                     ]
                 );
             }
-
+            
             DB::commit();
-            return redirect()->route('verifikasi_dispensasi.index')->with('toast_success', 'Verifikasi Kelayakan Pengajuan Dispensasi berhasil');
+            return redirect()->route('verifikasiDekan_dispensasi.index')->with('toast_success', 'Verifikasi Kelayakan Pengajuan Dispensasi berhasil');
 
         }catch (Exception $ex) {
             DB::rollBack();
-            return redirect()->route('verifikasi_dispensasi.index')->with('toast_error', 'Error : ' . $ex->getMessage());
+            return redirect()->route('verifikasiDekan_dispensasi.index')->with('toast_error', 'Error : ' . $ex->getMessage());
         }
     }
     
@@ -158,7 +158,7 @@ class VerifikasiUKTController extends Controller
             }else{
                 $data->alasan_verif = "";
             }
-           
+            
             //get data siakad
             $url = "http://103.8.12.212:36880/siakad_api/api/as400/dataMahasiswa/" . $data->nim . "/" . session('user_token');
             $response = Http::get($url);
@@ -181,7 +181,7 @@ class VerifikasiUKTController extends Controller
                 $data->alamat_siakad = "<i class='fas fa-x/'></i>";
                 $data->nom_ukt_siakad = "<i class='fas fa-x'></i>";
             }
-
+    
         }
         return json_encode($data);
     }

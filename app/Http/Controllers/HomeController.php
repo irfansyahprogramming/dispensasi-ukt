@@ -18,12 +18,14 @@ class HomeController extends Controller
 
         $user = session('user_name');
         $mode = session('user_mode');
+        $cmode = session('user_cmode');
 
         $arrData = [
             'title'         => 'Home',
             'active'        => 'home',
             'user'          => $user,
             'mode'          => $mode,
+            'cmode'          => $cmode,
             'subtitle'      => 'Dashboard',
             'home_active'   => 'active',
             'dispen_active' => '',

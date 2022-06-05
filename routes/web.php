@@ -7,6 +7,7 @@ use App\Http\Controllers\DispensasiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PeneriamDispensasiController;
 use App\Http\Controllers\PrintController;
+use App\Http\Controllers\VerifikasiDekanController;
 use App\Http\Controllers\VerifikasiUKTController;
 
 /*
@@ -42,6 +43,14 @@ Route::group(['prefix' => 'verifikasi_dispensasi', 'as' => 'verifikasi_dispensas
     Route::post('simpan', [VerifikasiUKTController::class, 'simpan'])->name('simpan');
     Route::get('/detil/{id}', [VerifikasiUKTController::class, 'detil'])->name('detil');
     Route::delete('/{id}', [VerifikasiUKTController::class, 'delete'])->name('delete');
+});
+
+// Route::get('/verifikasi_dispensasi', [VerifikasiUKTController::class, 'index'])->name('index');
+Route::group(['prefix' => 'verifikasiDekan_dispensasi', 'as' => 'verifikasiDekan_dispensasi.'], function () {
+    Route::get('/', [VerifikasiDekanController::class, 'index'])->name('index');
+    Route::post('simpan', [VerifikasiDekanController::class, 'simpan'])->name('simpan');
+    Route::get('/detil/{id}', [VerifikasiDekanController::class, 'detil'])->name('detil');
+    Route::delete('/{id}', [VerifikasiDekanController::class, 'delete'])->name('delete');
 });
 
 // Route::get('/penerima_dispensasi', [PeneriamDispensasiController::class, 'index'])->name('index');

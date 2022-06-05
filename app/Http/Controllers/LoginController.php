@@ -34,6 +34,7 @@ class LoginController extends Controller
         
         $response = Http::asForm()->post($url, $credentials);
         $response = json_decode($response);
+        //return $response;
         if ($response->status != 200) {
             $this->logout($request);
             $request->flash();
@@ -41,7 +42,7 @@ class LoginController extends Controller
         }
         
         $set_session = $this->setUserSession($response);
-
+        // return $set_session;
         if ($set_session) {
             return redirect()->to('home');
         } else {

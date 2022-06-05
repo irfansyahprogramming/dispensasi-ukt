@@ -72,6 +72,37 @@
                       </p>
                   </a>
                 </li>
+            
+            @elseif (session('user_cmode') == '14')
+           
+                <li class="nav-item">
+                    <a href="/verifikasiDekan_dispensasi" class="nav-link {{ $dispen_active }}">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>
+                            Verifikasi Dekan
+                            <!--<span class="right badge badge-danger">New</span>-->
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                          Penerima Dispensasi
+                          <!--<span class="right badge badge-danger">New</span>-->
+                      </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/laporan" class="nav-link {{ $laporan_active }}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                          Laporan Verifikasi Dispen
+                          <!--<span class="right badge badge-danger">New</span>-->
+                      </p>
+                  </a>
+                </li>
+            
             @elseif (session('user_cmode') == '9')
            
                 <li class="nav-item">
