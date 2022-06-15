@@ -39,7 +39,7 @@
         </div>
         <div class="card-body">
             <div class="mt-4">
-                <button class="btn btn-outline-success" onclick="#"><i class="ace-icon fa fa-download"></i> Surat Pernyataan</button>
+                {{-- <button class="btn btn-outline-success" onclick="#"><i class="ace-icon fa fa-download"></i> Surat Pernyataan</button> --}}
 
                 @if ($tombol == '')
                     @if ($kipk == 'no' && $kerjasama == 'no')
@@ -51,8 +51,6 @@
                     <button class="btn btn-danger"><i class="ace-icon fa fa-ban"></i> Periode Sudah Ditutup</button>
                 @endif
 
-
-                
                 @if ($errors->any())
                     <div class="alert alert-danger mt-2">
                         <ul>
@@ -334,7 +332,7 @@
         });
     });
     function uploadBukti(id){
-        alert(id);
+        // alert(id);
 
         document.getElementById("bukti1").style.display = "none";
         document.getElementById("bukti2").style.display = "none";

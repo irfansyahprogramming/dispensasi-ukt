@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Functions;
 use App\Models\BukaDispensasi;
+use App\Models\HistoryPengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
@@ -75,7 +76,9 @@ class DispensasiController extends Controller
         $urlb = "http://103.8.12.212:36880/siakad_api/api/as400/beasiswaMahasiswaPerSemester/" . session('user_username') . "/" . $semester. "/" . session('user_token');
         $responseb = Http::get($urlb);
         $dataBeasiswa = json_decode($responseb);
+        //echo $urlb;
 
+       // print_r ($dataBeasiswa);
         if ($dataBeasiswa->status == true) {
             foreach ($dataBeasiswa->isi as $bea) {
                 $kipk = $bea->beasiswa;
@@ -335,6 +338,18 @@ class DispensasiController extends Controller
                 'file_pratranskrip' => $path_pratranskrip_saved
             ]);
 
+            $dataAjuan = PengajuanDispensasiUKTModel::where('semester',$semester)->where('nim',$nim)->first();
+            $history = HistoryPengajuan::updateOrCreate (
+                [
+                    'id_pengajuan'      => $dataAjuan->id,
+                    'v_mode'            => trim(session('user_cmode'))
+                ],
+                [
+                    'alasan_verif'      => '',
+                    'status_ajuan'      => '0'
+                ]
+            );
+            // return $history;
             DB::commit();
             return redirect()->route('dispensasi.index')->with('toast_success', 'Pengajuan Dispensasi berhasil ');        
         }catch (Exception $ex) {

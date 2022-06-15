@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 @endsection
 
 @section('contain')
@@ -56,10 +58,10 @@
                     <thead>
                     <tr>
                         <th scope="col text-center">
-                          <label class="pos-rel">
-                            <input type="checkbox" class="ace" id="selectALL" value="select" onClick="do_this()"/>
-                            <span class="lbl"></span>
-                          </label>
+                            <label class="pos-rel">
+                              <input type="checkbox" class="ace" id="selectALL" value="select" onClick="do_this()"/>
+                              <span class="lbl"></span>
+                            </label>
                         </th>
                         <th scope="col">No</th>
                         <th scope="col">NIM</th>
@@ -70,7 +72,7 @@
                         <th scope="col">Nom.UKT</th>
                         <th scope="col">File Pendukung</th>
                         <th scope="col">Status Pengajuan Dispensasi</th>
-                        <th scope="col">Proses Dispensasi ke WD2/Dekan</th>
+                        <th scope="col">Proses Dispensasi</th>
                         <th scope="col">Hapus Data</th>
                     </tr>
                     </thead>
@@ -78,7 +80,7 @@
                         @foreach ($pengajuan as $item)
                         <tr>
                             <td>
-                              @if ($item->status_pengajuan == '1' OR $item->status_pengajuan == '22')
+                              @if ($item->status_pengajuan == '2' OR $item->status_pengajuan == '22')
                               <label class="pos-rel">
                                 <input type="hidden" id="semester_cek" name="semester_cek" value="{{ $item->semester }}"  />
                                 <input type="hidden" id="nim_cek" name="nim_cek" value="{{ $item->nim }}"  />
@@ -116,19 +118,18 @@
                                 <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
                                 @endif
                             </td>
-
-                            @if ($item->status_pengajuan >= 2 AND $item->status_pengajuan <= 7)
+                            @if ($item->status_pengajuan >= 3 AND $item->status_pengajuan <= 7)
                               <td><span class="badge bg-success text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
-                            @elseif ($item->status_pengajuan >= 22 AND $item->status_pengajuan <= 27)
+                            @elseif ($item->status_pengajuan >= 23 AND $item->status_pengajuan <= 27)
                               <td><span class="badge bg-danger text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
                             @else
                               <td><span class="badge bg-info text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
                             @endif
 
                             <td class="text-center">
-                                @if ($item->status_pengajuan == 2 || $item->status_pengajuan == 22)
+                                @if ($item->status_pengajuan == 3 || $item->status_pengajuan == 23)
                                     <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-success" onclick="verifData({{ $item->id }})"></i> Edit Status </button>
-                                @elseif ($item->status_pengajuan > 1)
+                                @elseif ($item->status_pengajuan > 2)
                                     <button type="button" class="btn btn-sm btn-outline-success"></i> Lock </button>
                                 @else
                                     <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-info" onclick="verifData({{ $item->id }})"><i class="fas fa-edit"></i> Proses</button>
@@ -136,7 +137,7 @@
                             </td>
                             <td class="btn-group text-center">
                                 @if ($item->status_pengajuan == 0)
-                                    <form action="{{ route('verifikasi_dispensasi.delete', ['id' => $item->id]) }}" method="POST">
+                                    <form action="{{ route('verifikasiWR2_dispensasi.delete', ['id' => $item->id]) }}" method="POST">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" data-toggle="tooltip" data-placement="top" title="Hapus Data" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin akan menghapus data ini ?')"><i class="fas fa-trash"></i> Hapus</button>
@@ -207,7 +208,7 @@
           </div>
         </div>
       </div>
-      <div id="modal-verifikasiDekan-pengajuan" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+      <div id="modal-verifikasiWR2-pengajuan" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header py-2">
@@ -299,7 +300,7 @@
                           <tr>
                             <td colspan="2">Kelayakan Berkas Dokumen</td>
                             <td colspan="2">
-                                <form action="{{ route('verifikasiDekan_dispensasi.simpan') }}" class="row g-3" method="POST">
+                                <form action="{{ route('verifikasiWR2_dispensasi.simpan') }}" class="row g-3" method="POST">
                                     @csrf
                                     <div class="col-auto">
                                         <input type="hidden" name="id" id="id">
@@ -347,10 +348,12 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
 <script>
 
     $(function () {
-      
+        
         $("#dataTabel1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
@@ -366,6 +369,22 @@
             "responsive": true,
         });
     });
+    function do_this(){
+        var checkboxes = document.getElementsByName('idAjuan[]');
+        var button = document.getElementById('selectALL');
+        //alert (button.value);
+        if(button.value == 'select'){
+          for (var i in checkboxes){
+            checkboxes[i].checked = 'FALSE';
+          }
+          button.value = 'deselect'
+        }else{
+          for (var i in checkboxes){
+            checkboxes[i].checked = '';
+          }
+          button.value = 'select';
+        }
+    }
     function uploadBukti(id){
         
         document.getElementById("bukti1").style.display = "none";
@@ -395,7 +414,7 @@
         
         //Ajax Load data from ajax
         $.ajax({
-            url : "/verifikasi_dispensasi/detil/" +id,
+            url : "/verifikasiWR2_dispensasi/detil/" +id,
             type: "GET",
             dataType: "JSON",
             success: function(data)
@@ -424,17 +443,18 @@
                 $('#file_pendukung').html(data.file_pendukung);
                 
                 document.getElementById('txtAlasan').value = data.alasan_verif;
+                document.getElementById('sellayak').value = data.layak;
 
-                if (data.status_pengajuan == '2'){
-                  document.getElementById('sellayak').value = '1';
-                }else if (data.status_pengajuan == '22'){
-                  document.getElementById('sellayak').value = '2';
-                }else{
-                  document.getElementById('sellayak').value = '0';
-                }
+                // if (data.status_pengajuan == '2'){
+                //   document.getElementById('sellayak').value = '1';
+                // }else if (data.status_pengajuan == '22'){
+                //   document.getElementById('sellayak').value = '2';
+                // }else{
+                //   document.getElementById('sellayak').value = '0';
+                // }
                 
 
-                $("#modal-verifikasiDekan-pengajuan").modal('show');
+                $("#modal-verifikasiWR2-pengajuan").modal('show');
                 $('.modal-title').text('Verifikasi Berkas Pengajuan Dispensasi UKT'); // Set title to Bootstrap modal title
                 
 
@@ -444,23 +464,6 @@
                 alert('Error get data from ajax');
             }
         });
-    }
-
-    function do_this(){
-        var checkboxes = document.getElementsByName('idAjuan[]');
-        var button = document.getElementById('selectALL');
-        //alert (button.value);
-        if(button.value == 'select'){
-          for (var i in checkboxes){
-            checkboxes[i].checked = 'FALSE';
-          }
-          button.value = 'deselect'
-        }else{
-          for (var i in checkboxes){
-            checkboxes[i].checked = '';
-          }
-          button.value = 'select';
-        }
     }
 
     document.getElementById ("btnLayak").addEventListener ("click", kelayakan, false);
@@ -487,7 +490,7 @@
             idAjuan : idAjuan
         };
                   
-        url = "{{ route('verifikasiDekan_dispensasi.layakpost') }}";
+        url = "{{ route('verifikasiWR2_dispensasi.layakpost') }}";
         //ajax adding
         $.ajax({
           headers: {
@@ -537,7 +540,7 @@
             idAjuan : idAjuan
         };
                   
-        url = "{{ route('verifikasiDekan_dispensasi.tidaklayakpost') }}";
+        url = "{{ route('verifikasiWR2_dispensasi.tidaklayakpost') }}";
         //ajax adding
         $.ajax({
           headers: {

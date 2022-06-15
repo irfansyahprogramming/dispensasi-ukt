@@ -101,13 +101,21 @@ class PrintController extends Controller
         if ($request->format == null or $request->format == '') {
             return redirect()->back()->with('toast_warning', 'Silahkan pilih format cetak laporan');
         }
-
-        $data_pengajuan = DB::table('tb_pengajuan_dispensasi')
+        if (trim(session('user_cmode')) != '4' && trim(session('user_cmode')) != '11' && trim(session('user_cmode')) != '13'&& trim(session('user_cmode')) != '20'){
+            $data_pengajuan = DB::table('tb_pengajuan_dispensasi')
             ->where('kode_prodi', 'like', $kode_prodi . '%')
             ->where('semester', trim($semester))
-            ->where('status_pengajuan', '>=', '4')
+            ->where('status_pengajuan', '>=', '3')
             ->where('status_pengajuan', '<=', '7')
             ->get();
+        }else{
+            $data_pengajuan = DB::table('tb_pengajuan_dispensasi')
+            ->where('semester', trim($semester))
+            ->where('status_pengajuan', '>=', '3')
+            ->where('status_pengajuan', '<=', '7')
+            ->get();
+        }
+        
 
         foreach ($data_pengajuan as $ajuan) {
             $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
@@ -139,7 +147,7 @@ class PrintController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setShowGridlines(false);
 
-        foreach (range('A', 'I') as $columnID) {
+        foreach (range('A', 'G') as $columnID) {
             $sheet->getColumnDimension($columnID)
                 ->setAutoSize(true);
         }
@@ -158,11 +166,11 @@ class PrintController extends Controller
         $sheet->setCellValue('B' . $row, 'NIM');
         $sheet->setCellValue('C' . $row, 'Nama');
         $sheet->setCellValue('D' . $row, 'Program Studi');
-        $sheet->setCellValue('E' . $row, 'Jenis Dispensasi');
-        $sheet->setCellValue('F' . $row, 'Kel. UKT');
-        $sheet->setCellValue('G' . $row, 'Nominal UKT');
-        $sheet->setCellValue('H' . $row, 'File Pendukung');
-        $sheet->setCellValue('I' . $row, 'Status Pengajuan Dispensasi');
+        $sheet->setCellValue('E' . $row, 'Kel. UKT');
+        $sheet->setCellValue('F' . $row, 'Nominal UKT');
+        $sheet->setCellValue('G' . $row, 'Jenis Dispensasi');
+        // $sheet->setCellValue('H' . $row, 'File Pendukung');
+        // $sheet->setCellValue('I' . $row, 'Status Pengajuan Dispensasi');
 
         // insert content
         $row++;
@@ -183,19 +191,19 @@ class PrintController extends Controller
 
             $sheet->setCellValue('D' . $row, $pengajuan->jenjang_prodi . ' ' . $pengajuan->nama_prodi);
 
-            $sheet->setCellValue('E' . $row, $pengajuan->jenis);
+            $sheet->getStyle('E' . $row)->applyFromArray($this->center);
+            $sheet->setCellValue('E' . $row, $pengajuan->kelompok);
 
-            $sheet->getStyle('F' . $row)->applyFromArray($this->center);
-            $sheet->setCellValue('F' . $row, $pengajuan->kelompok);
+            $sheet->setCellValue('F' . $row, number_format($pengajuan->nominal_ukt, 0));
+            $sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode(self::FORMAT_ACCOUNTING_IDR);
 
-            $sheet->setCellValue('G' . $row, number_format($pengajuan->nominal_ukt, 0));
-            $sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode(self::FORMAT_ACCOUNTING_IDR);
+            $sheet->setCellValue('G' . $row, $pengajuan->jenis);
 
-            $sheet->getStyle('H' . $row)->applyFromArray($this->center);
-            $sheet->setCellValue('H' . $row, ' ');
+            // $sheet->getStyle('H' . $row)->applyFromArray($this->center);
+            // $sheet->setCellValue('H' . $row, ' ');
 
-            $sheet->getStyle('I' . $row)->applyFromArray($this->center);
-            $sheet->setCellValue('I' . $row, $pengajuan->status ?? '');
+            // $sheet->getStyle('I' . $row)->applyFromArray($this->center);
+            // $sheet->setCellValue('I' . $row, $pengajuan->status ?? '');
         }
 
         // write to file

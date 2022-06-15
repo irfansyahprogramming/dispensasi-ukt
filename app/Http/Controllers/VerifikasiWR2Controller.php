@@ -16,7 +16,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Mockery\VerificationDirector;
 
-class VerifikasiDekanController extends Controller
+class VerifikasiWR2Controller extends Controller
 {
     public function index(Request $request)
     {
@@ -34,12 +34,16 @@ class VerifikasiDekanController extends Controller
             $tombol = "disabled";
             $semester = "";
         }
-        
+
         $badges = Functions::pengajuan($semester);
-        
-        $pengajuan = DB::table('tb_pengajuan_dispensasi')
-        ->where('kode_prodi','like',trim(session('user_unit')).'%');
-        
+
+        $pengajuan = DB::table('tb_pengajuan_dispensasi');
+        // ->where('semester',trim($semester))
+        // ->where('status_pengajuan','2')
+        // ->orWhere('status_pengajuan','3')
+        // ->orWhere('status_pengajuan','23')
+        // ->get();
+
         if (isset($request->semester) and $request->semester != 'All') {
             $pengajuan = $pengajuan->where('semester', trim($request->semester));
         } else {
@@ -58,16 +62,18 @@ class VerifikasiDekanController extends Controller
 
         // get data pengajuan
         $pengajuan = $pengajuan
-        ->Where('status_pengajuan','>=','1')
-        ->Where('status_pengajuan','<=','23')
-        ->get();
-
+                        ->where(function($query){
+                            $query->where('status_pengajuan','2')
+                            ->orWhere('status_pengajuan','3')
+                            ->orWhere('status_pengajuan','23');
+                        })->get();
+        
         foreach($pengajuan as $ajuan){
             $ajuan->nom_ukt = number_format($ajuan->nominal_ukt,0);
             $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
             $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
             $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
-
+            
         }
 
         $listSemester = DB::table('ref_periode')->get();
@@ -75,7 +81,7 @@ class VerifikasiDekanController extends Controller
         $listStatus = DB::table('ref_status_pengajuan')->get();
 
         // get mengajar from siakad
-        $url = "http://103.8.12.212:36880/siakad_api/api/as400/programStudi/".trim(session('user_unit'));
+        $url = "http://103.8.12.212:36880/siakad_api/api/as400/programStudi/All";
         //echo $url;
         $response = Http::get($url);
         $listProdi = json_decode($response);
@@ -88,21 +94,22 @@ class VerifikasiDekanController extends Controller
             'active'            => 'Dispensasi UKT',
             'user'              => $user,
             'mode'              => $mode,
-            'subtitle'          => 'Verifikasi Dekanat Dispensasi',
+            'subtitle'          => 'Verifikasi Wakil Rektor 2 Dispensasi',
             'home_active'       => '',
+            'periode_active'       => '',
             'dispen_active'     => 'active',
             'laporan_active'    => '',
             'penerima_active'   => '',
             'user'              => session('user_username'),
             'semester'          => $semester,
+            'pengajuan'         => $pengajuan,
             'listSemester'      => $listSemester,
             'listProdi'         => $listProdi,
             'listJenis'         => $listJenis,
-            'pengajuan'         => $pengajuan,
             'badges'            => $badges
         ];
 
-        return view('dekan.verifikasi_dispensasi',$arrData);
+        return view('wr2.verifikasi_dispensasi',$arrData);
     }
 
     public function delete($id){
@@ -124,9 +131,9 @@ class VerifikasiDekanController extends Controller
             DB::beginTransaction();
             
             if ($kelayakan == '1'){
-                $status_pengajuan = '2';     
+                $status_pengajuan = '3';     
             }elseif ($kelayakan == '2'){
-                $status_pengajuan = '22';     
+                $status_pengajuan = '23';     
             }else{
                 return redirect()->back()->with('toast_error', 'Belum Ada Pilihan Kelayakan Berkas Dokumen');
             }
@@ -152,11 +159,11 @@ class VerifikasiDekanController extends Controller
             }
             
             DB::commit();
-            return redirect()->route('verifikasiDekan_dispensasi.index')->with('toast_success', 'Verifikasi Kelayakan Pengajuan Dispensasi berhasil');
+            return redirect()->route('verifikasiWR2_dispensasi.index')->with('toast_success', 'Verifikasi Kelayakan Pengajuan Dispensasi berhasil');
 
         }catch (Exception $ex) {
             DB::rollBack();
-            return redirect()->route('verifikasiDekan_dispensasi.index')->with('toast_error', 'Error : ' . $ex->getMessage());
+            return redirect()->route('verifikasiWR2_dispensasi.index')->with('toast_error', 'Error : ' . $ex->getMessage());
         }
     }
     
@@ -193,8 +200,10 @@ class VerifikasiDekanController extends Controller
             //return count($history);
             if ($history){
                 $data->alasan_verif = $history->alasan_verif;
+                $data->layak = $history->status_ajuan;
             }else{
                 $data->alasan_verif = "";
+                $data->layak = 0;
             }
             
             //get data siakad
@@ -241,7 +250,7 @@ class VerifikasiDekanController extends Controller
                     $store = PengajuanDispensasiUKTModel::where([
                         'id'    => $id
                     ])->update([
-                        'status_pengajuan'  => '2'
+                        'status_pengajuan'  => '3'
                     ]);
         
                     if ($store){
@@ -292,7 +301,7 @@ class VerifikasiDekanController extends Controller
                     $store = PengajuanDispensasiUKTModel::where([
                         'id'    => $id
                     ])->update([
-                        'status_pengajuan'  => '22'
+                        'status_pengajuan'  => '23'
                     ]);
         
                     if ($store){

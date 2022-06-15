@@ -108,7 +108,7 @@
           </div>
           <div class="modal-body">
             <div class="modal-body py-2">
-              <form id="cetak-penerima-dispensasi" action="{{ route('penerima_dispensasi.print', ['semester' => $semester, 'kode_prodi' => trim(session('user_unit'))]) }}" method="get" target="_blank">
+              <form id="cetak-penerima-dispensasi" action="{{ route('penerima_dispensasi.print', ['semester' => $semester, 'kode_prodi' => $unit]) }}" method="get" target="_blank">
                 <div class="form-body">
                   <div class="form-group">
                     <label for="kelompok_ukt">Format Cetak Laporan</label>

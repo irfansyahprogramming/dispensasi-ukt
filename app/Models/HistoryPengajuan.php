@@ -17,7 +17,7 @@ class HistoryPengajuan extends Model
 
     protected $fillable = ['id_pengajuan','v_mode','status_ajuan','alasan_verif'];
 
-    public function Ajuan(){
-        return $this->belongsTo(Ajuan::class)->withDefault();
-    }
+    // public function Ajuan(){
+    //     return $this->belongsTo(Ajuan::class)->withDefault();
+    // }
 }

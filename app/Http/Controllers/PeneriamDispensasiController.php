@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Functions;
 use App\Models\BukaDispensasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,13 +27,26 @@ class PeneriamDispensasiController extends Controller
             $tombol = "disabled";
             $semester = "";
         }
+
+        $badges = Functions::pengajuan($semester);
         
-        $pengajuan = DB::table('tb_pengajuan_dispensasi')
-        ->where('kode_prodi','like',trim(session('user_unit')).'%')
-        ->where('semester',trim($semester))
-        ->where('status_pengajuan','>=','4')
-        ->where('status_pengajuan','<=','7')
-        ->get();
+        if (session ('user_cmode') != '4' && session ('user_cmode') != '11' && session ('user_cmode') != '13' && session ('user_cmode') != '20'){
+            $pengajuan = DB::table('tb_pengajuan_dispensasi')
+            ->where('kode_prodi','like',trim(session('user_unit')).'%')
+            ->where('semester',trim($semester))
+            ->where('status_pengajuan','>=','3')
+            ->where('status_pengajuan','<=','6')
+            ->get();
+            $unit = trim(session('user_unit'));
+        }else{
+            $pengajuan = DB::table('tb_pengajuan_dispensasi')
+            ->where('semester',trim($semester))
+            ->where('status_pengajuan','>=','3')
+            ->where('status_pengajuan','<=','6')
+            ->get();
+            $unit = "All";
+        }
+        // return $pengajuan;
 
         foreach($pengajuan as $ajuan){
             $ajuan->nom_ukt = number_format($ajuan->nominal_ukt,0);
@@ -46,16 +60,19 @@ class PeneriamDispensasiController extends Controller
             'active'            => 'Penerima Dispensasi UKT',
             'user'              => $user,
             'mode'              => $mode,
+            'unit'              => $unit,
             'subtitle'          => 'Penerima Dispensasi',
             'home_active'       => '',
             'dispen_active'     => '',
             'laporan_active'    => '',
+            'periode_active'    => '',
             'penerima_active'   => 'active',
             'user'              => session('user_username'),
             'semester'          => $semester,
-            'pengajuan'         => $pengajuan
+            'pengajuan'         => $pengajuan,
+            'badges'            => $badges
         ];
-
+        // return $arrData;
         return view('penerimaDispensasi.index',$arrData);
     }
 }

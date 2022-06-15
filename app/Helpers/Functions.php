@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+use App\Models\BukaDispensasi;
+use Illuminate\Support\Facades\DB;
+
 class Functions
 {
   public static function dateFormatId($date)
@@ -43,4 +46,13 @@ class Functions
     return 0;
   }
 
+  public static function pengajuan($semester)
+  {
+    $pengajuan = DB::table('tb_pengajuan_dispensasi')
+    ->where('kode_prodi','like',trim(session('user_unit')).'%')
+    ->where('semester',trim($semester))
+    ->get();
+
+    return $pengajuan;
+  }
 }

@@ -50,10 +50,31 @@
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Verifikasi Dispensasi UKT
-                            <!--<span class="right badge badge-danger">New</span>-->
+                            <span class="badge bg-warning text-right">{{ ($badges->where('status_pengajuan', 0)->count('id') == 0) ? '' : $badges->where('status_pengajuan', 0)->count('id')}}</span>
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                  <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                          Penerima Dispensasi
+                          <!--<span class="right badge badge-danger">New</span>-->
+                      </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/laporan" class="nav-link {{ $laporan_active }}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                          Laporan Verifikasi Dispen
+                          <!--<span class="right badge badge-danger">New</span>-->
+                      </p>
+                  </a>
+                </li>
+            
+            @elseif (session('user_cmode') == '4')
+           
                 <li class="nav-item">
                   <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
                       <i class="nav-icon fas fa-user"></i>
@@ -79,7 +100,7 @@
                     <a href="/verifikasiDekan_dispensasi" class="nav-link {{ $dispen_active }}">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
-                            Verifikasi Dekan
+                            Verifikasi Dekan <span class="badge bg-warning text-right">{{ ($badges->where('status_pengajuan', 1)->count('id') == 0) ? '' : $badges->where('status_pengajuan', 1)->count('id')}}</span>
                             <!--<span class="right badge badge-danger">New</span>-->
                         </p>
                     </a>
@@ -102,7 +123,47 @@
                       </p>
                   </a>
                 </li>
-            
+
+            @elseif (session('user_cmode') == '20')
+           
+                <li class="nav-item">
+                    <a href="/periode" class="nav-link {{ $periode_active }}">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>
+                            Buka Periode
+                            <!--<span class="right badge badge-danger">New</span>-->
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/verifikasiWR2_dispensasi" class="nav-link {{ $dispen_active }}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                          Verifikasi WR2
+                          <span class="badge bg-warning text-right">{{ ($badges->where('status_pengajuan', 2)->count('id') == 0) ? '' : $badges->where('status_pengajuan', 2)->count('id')}}</span>
+                          <!--<span class="right badge badge-danger">New</span>-->
+                      </p>
+                  </a>
+              </li>
+                <li class="nav-item">
+                  <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                          Penerima Dispensasi
+                          <!--<span class="right badge badge-danger">New</span>-->
+                      </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/laporan" class="nav-link {{ $laporan_active }}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                          Laporan Verifikasi Dispen
+                          <!--<span class="right badge badge-danger">New</span>-->
+                      </p>
+                  </a>
+                </li>
+
             @elseif (session('user_cmode') == '9')
            
                 <li class="nav-item">

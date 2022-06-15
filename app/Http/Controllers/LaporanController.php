@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Functions;
 use App\Models\BukaDispensasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,8 @@ class LaporanController extends Controller
             $tombol = "disabled";
             $semester = "";
         }
+
+        $badges = Functions::pengajuan($semester);
 
         $pengajuan = DB::table('tb_pengajuan_dispensasi');
         // ->where('kode_prodi','like',trim(session('user_unit')).'%')
@@ -93,6 +96,7 @@ class LaporanController extends Controller
             'home_active'       => '',
             'penerima_active'   => '',
             'dispen_active'     => '',
+            'periode_active'     => '',
             'laporan_active'    => 'active',
             'nim'               => session('user_username'),
             'semester'          => $semester,
@@ -101,7 +105,8 @@ class LaporanController extends Controller
             'listJenis'         => $listJenis,
             'listStatus'         => $listStatus,
             'tombol'            => $tombol,
-            'pengajuan'         => $pengajuan
+            'pengajuan'         => $pengajuan,
+            'badges'            => $badges
         ];
 
         return view('laporan.index', $arrData);
