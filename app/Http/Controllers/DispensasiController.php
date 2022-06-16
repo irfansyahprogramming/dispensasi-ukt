@@ -73,7 +73,7 @@ class DispensasiController extends Controller
         }
 
         //cek status kerjasama dan bidikmisi di SIAKAD
-        $urlb = env('SIAKAD_API') . "/beasiswaMahasiswaPerSemester/" . session('user_username') . "/" . $semester . "/" . session('user_token');
+        $urlb = env('SIAKAD_URI') . "/beasiswaMahasiswaPerSemester/" . session('user_username') . "/" . $semester . "/" . session('user_token');
         $responseb = Http::get($urlb);
         $dataBeasiswa = json_decode($responseb);
         //echo $urlb;
