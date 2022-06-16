@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Functions;
 use App\Models\BukaDispensasi;
 use App\Models\HistoryPengajuan;
 use App\Models\PengajuanDispensasiUKTModel;
@@ -36,15 +37,20 @@ class VerifikasiUKTController extends Controller
             $semester = "";
         }
 
+        $badges = Functions::pengajuan($semester);
+
         $pengajuan = DB::table('tb_pengajuan_dispensasi')
             ->where('kode_prodi', 'like', trim(session('user_unit')) . '%')
             ->where('semester', trim($semester))
-            ->where('status_pengajuan', '<=', '1')
-            ->orWhere('status_pengajuan', '=', '21')
-            ->get();
+            ->where(function ($query) {
+                $query->where('status_pengajuan', '0')
+                    ->orWhere('status_pengajuan', '1')
+                    ->orWhere('status_pengajuan', '21');
+            })->get();
 
         foreach ($pengajuan as $ajuan) {
             $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
+
             $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
             $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
             $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
@@ -62,7 +68,8 @@ class VerifikasiUKTController extends Controller
             'penerima_active'   => '',
             'user'              => session('user_username'),
             'semester'          => $semester,
-            'pengajuan'         => $pengajuan
+            'pengajuan'         => $pengajuan,
+            'badges'            => $badges
         ];
 
         return view('verifikasi_dispensasi', $arrData);
