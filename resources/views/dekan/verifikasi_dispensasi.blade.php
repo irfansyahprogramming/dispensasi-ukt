@@ -227,7 +227,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body p-0">
-                      <table class="table table-sm">
+                      <table class="table table-sm table-responsive">
                         <thead>
                           <tr>
                             <th style="width: 10px">#</th>
