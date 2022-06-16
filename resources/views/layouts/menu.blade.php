@@ -42,7 +42,28 @@
                     </p>
                     </a>
                 </li>
-
+            
+            @elseif (session('user_cmode') == '2')
+           
+                <li class="nav-item">
+                  <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                          Penerima Dispensasi
+                          <!--<span class="right badge badge-danger">New</span>-->
+                      </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/laporan" class="nav-link {{ $laporan_active }}">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>
+                          Laporan Verifikasi Dispen
+                          <!--<span class="right badge badge-danger">New</span>-->
+                      </p>
+                  </a>
+                </li>
+            
             @elseif (session('user_cmode') == '3')
            
                 <li class="nav-item">
@@ -94,6 +115,48 @@
                   </a>
                 </li>
             
+            @elseif (session('user_cmode') == '11')
+           
+            <li class="nav-item">
+                <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>
+                        Penerima Dispensasi
+                        <!--<span class="right badge badge-danger">New</span>-->
+                    </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/laporan" class="nav-link {{ $laporan_active }}">
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>
+                        Laporan Verifikasi Dispen
+                        <!--<span class="right badge badge-danger">New</span>-->
+                    </p>
+                </a>
+              </li>
+                
+            @elseif (session('user_cmode') == '13')
+           
+            <li class="nav-item">
+                <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>
+                        Penerima Dispensasi
+                        <!--<span class="right badge badge-danger">New</span>-->
+                    </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/laporan" class="nav-link {{ $laporan_active }}">
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>
+                        Laporan Verifikasi Dispen
+                        <!--<span class="right badge badge-danger">New</span>-->
+                    </p>
+                </a>
+              </li>
+
             @elseif (session('user_cmode') == '14')
            
                 <li class="nav-item">

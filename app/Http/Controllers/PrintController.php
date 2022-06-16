@@ -178,7 +178,7 @@ class PrintController extends Controller
 
         foreach ($data_pengajuan as $pengajuan) {
             // cetak border
-            $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($this->border);
+            $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray($this->border);
 
             // insert to cell
             $sheet->getStyle('A' . $row)->applyFromArray($this->center);
@@ -204,6 +204,8 @@ class PrintController extends Controller
 
             // $sheet->getStyle('I' . $row)->applyFromArray($this->center);
             // $sheet->setCellValue('I' . $row, $pengajuan->status ?? '');
+
+            $row++;
         }
 
         // write to file
@@ -214,6 +216,7 @@ class PrintController extends Controller
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');
+        die;
     }
 
     // cetak penerima dispensasi dalam bentuk pdf
