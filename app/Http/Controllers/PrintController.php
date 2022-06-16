@@ -101,21 +101,21 @@ class PrintController extends Controller
         if ($request->format == null or $request->format == '') {
             return redirect()->back()->with('toast_warning', 'Silahkan pilih format cetak laporan');
         }
-        if (trim(session('user_cmode')) != '4' && trim(session('user_cmode')) != '11' && trim(session('user_cmode')) != '13'&& trim(session('user_cmode')) != '20'){
+        if (trim(session('user_cmode')) != '4' && trim(session('user_cmode')) != '11' && trim(session('user_cmode')) != '13' && trim(session('user_cmode')) != '20') {
             $data_pengajuan = DB::table('tb_pengajuan_dispensasi')
-            ->where('kode_prodi', 'like', $kode_prodi . '%')
-            ->where('semester', trim($semester))
-            ->where('status_pengajuan', '>=', '3')
-            ->where('status_pengajuan', '<=', '7')
-            ->get();
-        }else{
+                ->where('kode_prodi', 'like', $kode_prodi . '%')
+                ->where('semester', trim($semester))
+                ->where('status_pengajuan', '>=', '3')
+                ->where('status_pengajuan', '<=', '7')
+                ->get();
+        } else {
             $data_pengajuan = DB::table('tb_pengajuan_dispensasi')
-            ->where('semester', trim($semester))
-            ->where('status_pengajuan', '>=', '3')
-            ->where('status_pengajuan', '<=', '7')
-            ->get();
+                ->where('semester', trim($semester))
+                ->where('status_pengajuan', '>=', '3')
+                ->where('status_pengajuan', '<=', '7')
+                ->get();
         }
-        
+
 
         foreach ($data_pengajuan as $ajuan) {
             $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
@@ -156,11 +156,11 @@ class PrintController extends Controller
         $row = 1;
         $sheet->setCellValue('A' . $row, 'Daftar Penerima Dispensasi Unit ' . $kode_prodi . ' Semester' . $semester);
         $sheet->getStyle('A' . $row)->applyFromArray($this->center_bold);
-        $sheet->mergeCells('A' . $row . ':I' . $row);
+        $sheet->mergeCells('A' . $row . ':G' . $row);
 
         $row = 3;
-        $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($this->border);
-        $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($this->text_bold);
+        $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray($this->border);
+        $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray($this->text_bold);
 
         $sheet->setCellValue('A' . $row, 'No.');
         $sheet->setCellValue('B' . $row, 'NIM');
