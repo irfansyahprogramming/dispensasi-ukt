@@ -26,12 +26,12 @@ class LoginController extends Controller
     public function attemptLogin (Request $request)
     {
         $credentials = $request->validate([
-            'username' => ['required','string'],
+            'username' => ['required', 'string'],
             'password' => ['required']
-        ]); 
+        ]);
 
-        $url = "http://103.8.12.212:36880/siakad_api/api/as400/signin";
-        
+        $url = env('SIAKAD_URI') . "/signin";
+
         $response = Http::asForm()->post($url, $credentials);
         $response = json_decode($response);
         //return $response;
@@ -40,7 +40,7 @@ class LoginController extends Controller
             $request->flash();
             return redirect()->to('login')->with('login_msg', 'Username atau Password salah');
         }
-        
+
         $set_session = $this->setUserSession($response);
         
         if ($set_session) {

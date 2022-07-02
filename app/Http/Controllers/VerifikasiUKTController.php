@@ -49,8 +49,8 @@ class VerifikasiUKTController extends Controller
         ->where('semester',trim($semester))
         ->where(function ($query){
           $query->where('status_pengajuan','0')
-                ->orWhere('status_pengajuan','1')
-                ->orWhere('status_pengajuan','21');
+                ->orWhere('status_pengajuan','>=','1')
+                ->orWhere('status_pengajuan','>=','21');
         })->get();
         
         foreach($pengajuan as $ajuan){
