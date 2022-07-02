@@ -95,6 +95,7 @@ class LaporanController extends Controller
             'subtitle'          => 'Laporan',
             'home_active'       => '',
             'penerima_active'   => '',
+            'dataukt_active'    => '',
             'dispen_active'     => '',
             'periode_active'     => '',
             'laporan_active'    => 'active',

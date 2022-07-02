@@ -42,7 +42,7 @@ class LoginController extends Controller
         }
         
         $set_session = $this->setUserSession($response);
-        // return $set_session;
+        
         if ($set_session) {
             return redirect()->to('home');
         } else {

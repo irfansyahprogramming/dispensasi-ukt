@@ -70,6 +70,9 @@
                         <th scope="col">Nom.UKT</th>
                         <th scope="col">File Pendukung</th>
                         <th scope="col">Status Pengajuan Dispensasi</th>
+                        <th scope="col">Nominal Ditagihkan</th>
+                        <th scope="col">Potongan</th>
+                        <th scope="col">Angsuran</th>
                         <th scope="col">Proses Dispensasi ke WD2/Dekan</th>
                         <th scope="col">Hapus Data</th>
                     </tr>
@@ -125,13 +128,20 @@
                               <td><span class="badge bg-info text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
                             @endif
 
+                            <td>Rp. {{ number_format($item->ditagihkan,0) }}</td>
+                            <td>Rp. {{ number_format($item->potongan,0) }}</td>
+                            <td>
+                              Angsuran 1 : Rp. {{ number_format( $item->angsuran1,0) }} <br>
+                              Angsuran 2 : Rp. {{ number_format( $item->angsuran2,0) }}
+                            </td>
+
                             <td class="text-center">
                                 @if ($item->status_pengajuan == 2 || $item->status_pengajuan == 22)
-                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-success" onclick="verifData({{ $item->id }})"></i> Edit Status </button>
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-outline-success" onclick="verifData({{ $item->id }})"></i> Edit Status </button>
                                 @elseif ($item->status_pengajuan > 1)
-                                    <button type="button" class="btn btn-sm btn-outline-success"></i> Lock </button>
+                                    <button type="button" class="btn btn-outline-success"></i> Lock </button>
                                 @else
-                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-info" onclick="verifData({{ $item->id }})"><i class="fas fa-edit"></i> Proses</button>
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-outline-info" onclick="verifData({{ $item->id }})"><i class="fas fa-edit"></i> Proses</button>
                                 @endif
                             </td>
                             <td class="btn-group text-center">
@@ -139,7 +149,7 @@
                                     <form action="{{ route('verifikasi_dispensasi.delete', ['id' => $item->id]) }}" method="POST">
                                         @csrf
                                         @method('delete')
-                                        <button type="submit" data-toggle="tooltip" data-placement="top" title="Hapus Data" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin akan menghapus data ini ?')"><i class="fas fa-trash"></i> Hapus</button>
+                                        <button type="submit" data-toggle="tooltip" data-placement="top" title="Hapus Data" class="btn btn-outline-danger" onclick="return confirm('Apakah Anda yakin akan menghapus data ini ?')"><i class="fas fa-trash"></i> Hapus</button>
                                     </form>
                                 @else
                                     <button type="button" class="btn btn-outline-warning disabled"><i class="ace-icon fa fa-trash"></i> Hapus</button>

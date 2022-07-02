@@ -91,6 +91,7 @@ class VerifikasiDekanController extends Controller
             'subtitle'          => 'Verifikasi Dekanat Dispensasi',
             'home_active'       => '',
             'dispen_active'     => 'active',
+            'dataukt_active'    => '',
             'laporan_active'    => '',
             'penerima_active'   => '',
             'user'              => session('user_username'),

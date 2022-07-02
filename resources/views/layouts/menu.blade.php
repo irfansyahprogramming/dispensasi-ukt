@@ -67,6 +67,14 @@
             @elseif (session('user_cmode') == '3')
            
                 <li class="nav-item">
+                    <a href="/dataUKT" class="nav-link {{ $dataukt_active }}">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>
+                            DataBase UKT
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="/verifikasi_dispensasi" class="nav-link {{ $dispen_active }}">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
