@@ -74,7 +74,7 @@ class LaporanController extends Controller
         $listStatus = DB::table('ref_status_pengajuan')->get();
 
         // get mengajar from siakad
-        $url = "http://103.8.12.212:36880/siakad_api/api/as400/programStudi/" . trim(session('user_unit'));
+        $url = env('SIAKAD_URI') . "/programStudi/" . trim(session('user_unit'));
         //echo $url;
         $response = Http::get($url);
         $listProdi = json_decode($response);
@@ -95,6 +95,7 @@ class LaporanController extends Controller
             'subtitle'          => 'Laporan',
             'home_active'       => '',
             'penerima_active'   => '',
+            'dataukt_active'    => '',
             'dispen_active'     => '',
             'periode_active'     => '',
             'laporan_active'    => 'active',

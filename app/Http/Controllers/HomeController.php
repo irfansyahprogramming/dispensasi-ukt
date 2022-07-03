@@ -52,6 +52,7 @@ class HomeController extends Controller
             'subtitle'      => 'Dashboard',
             'home_active'   => 'active',
             'periode_active' => '',
+            'dataukt_active'    => '',
             'dispen_active' => '',
             'penerima_active'   => '',
             'laporan_active' => '',

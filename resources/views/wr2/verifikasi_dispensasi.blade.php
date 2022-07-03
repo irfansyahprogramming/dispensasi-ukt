@@ -72,6 +72,9 @@
                         <th scope="col">Nom.UKT</th>
                         <th scope="col">File Pendukung</th>
                         <th scope="col">Status Pengajuan Dispensasi</th>
+                        <th scope="col">Nominal Ditagihkan</th>
+                        <th scope="col">Potongan</th>
+                        <th scope="col">Angsuran</th>
                         <th scope="col">Proses Dispensasi</th>
                         <th scope="col">Hapus Data</th>
                     </tr>
@@ -125,6 +128,13 @@
                             @else
                               <td><span class="badge bg-info text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
                             @endif
+                            
+                            <td>Rp. {{ number_format($item->ditagihkan,0) }}</td>
+                            <td>Rp. {{ number_format($item->potongan,0) }}</td>
+                            <td>
+                              Angsuran 1 : Rp. {{ number_format( $item->angsuran1,0) }} <br>
+                              Angsuran 2 : Rp. {{ number_format( $item->angsuran2,0) }}
+                            </td>
 
                             <td class="text-center">
                                 @if ($item->status_pengajuan == 3 || $item->status_pengajuan == 23)
@@ -228,7 +238,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body p-0">
-                      <table class="table table-sm">
+                      <table class="table table-sm table-responsive">
                         <thead>
                           <tr>
                             <th style="width: 10px">#</th>

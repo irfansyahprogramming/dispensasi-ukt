@@ -64,6 +64,7 @@ class PeneriamDispensasiController extends Controller
             'subtitle'          => 'Penerima Dispensasi',
             'home_active'       => '',
             'dispen_active'     => '',
+            'dataukt_active'    => '',
             'laporan_active'    => '',
             'periode_active'    => '',
             'penerima_active'   => 'active',

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DataUKTController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
@@ -40,6 +41,13 @@ Route::group(['prefix' => 'periode', 'as' => 'periode.'], function() {
     Route::delete('/{id}', [PeriodeController::class, 'delete'])->name('delete');
 });
 
+Route::group(['prefix' => 'dataUKT', 'as' => 'dataUKT.'], function() {
+    Route::get('/', [DataUKTController::class, 'index'])->name('index');
+    Route::get('/edit/{id}', [DataUKTController::class, 'edit'])->name('edit');
+    Route::post('simpan', [DataUKTController::class, 'simpan'])->name('simpan');
+    Route::delete('/{id}', [DataUKTController::class, 'delete'])->name('delete');
+});
+
 Route::group(['prefix' => 'dispensasi', 'as' => 'dispensasi.'], function () {
     Route::get('/dispensasi', [DispensasiController::class, 'index'])->name('index');
     Route::post('simpan', [DispensasiController::class, 'simpan'])->name('simpan');
@@ -51,7 +59,8 @@ Route::group(['prefix' => 'dispensasi', 'as' => 'dispensasi.'], function () {
 Route::group(['prefix' => 'verifikasi_dispensasi', 'as' => 'verifikasi_dispensasi.'], function () {
     Route::get('/', [VerifikasiUKTController::class, 'index'])->name('index');
     Route::post('simpan', [VerifikasiUKTController::class, 'simpan'])->name('simpan');
-    Route::get('/detil/{id}', [VerifikasiUKTController::class, 'detil'])->name('detil');
+    Route::get('/detil/{id}', [VerifikasiUKTController::class, 'detil'])->name('detil');  
+    Route::get('/dataukt/{in1}/{in2}', [VerifikasiUKTController::class, 'dataukt'])->name('dataukt');
     Route::delete('/{id}', [VerifikasiUKTController::class, 'delete'])->name('delete');
 });
 

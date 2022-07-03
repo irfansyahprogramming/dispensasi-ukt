@@ -52,6 +52,9 @@
                         <th scope="col">File Pendukung</th>
                         <th scope="col">Status Pengajuan Dispensasi</th>
                         <th scope="col">Proses Dispensasi ke WD2/Dekan</th>
+                        <th scope="col">Nominal Ditagihkan</th>
+                        <th scope="col">Potongan</th>
+                        <th scope="col">Angsuran</th>
                         <th scope="col">Hapus Data</th>
                     </tr>
                     </thead>
@@ -86,13 +89,19 @@
                                 @endif
                             </td>
                             <td>{{ $item->status ?? '' }}</td>
+                            <td>Rp. {{ number_format($item->ditagihkan,0) }}</td>
+                            <td>Rp. {{ number_format($item->potongan,0) }}</td>
+                            <td>
+                              Angsuran 1 : Rp. {{ number_format( $item->angsuran1,0) }} <br>
+                              Angsuran 2 : Rp. {{ number_format( $item->angsuran2,0) }}
+                            </td>
                             <td class="text-center">
                                 @if ($item->status_pengajuan == 1 || $item->status_pengajuan == 21)
-                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-success" onclick="verifData({{ $item->id }})"></i> Edit Status </button>
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-outline-success" onclick="verifData({{ $item->id }})"><i class="fas fa-edit"></i> Edit Status </button>
                                 @elseif ($item->status_pengajuan > 1)
-                                    <button type="button" class="btn btn-sm btn-outline-success"></i> Lock </button>
+                                    <button type="button" class="btn btn-outline-success"></i> Lock </button>
                                 @else
-                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-info" onclick="verifData({{ $item->id }})"><i class="fas fa-edit"></i> Proses</button>
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-outline-info" onclick="verifData({{ $item->id }})"><i class="fas fa-edit"></i> Proses</button>
                                 @endif
                             </td>
                             <td class="btn-group text-center">
@@ -100,10 +109,10 @@
                                     <form action="{{ route('verifikasi_dispensasi.delete', ['id' => $item->id]) }}" method="POST">
                                         @csrf
                                         @method('delete')
-                                        <button type="submit" data-toggle="tooltip" data-placement="top" title="Hapus Data" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin akan menghapus data ini ?')"><i class="fas fa-trash"></i> Hapus</button>
+                                        <button type="submit" data-toggle="tooltip" data-placement="top" title="Hapus Data" class="btn btn-outline-danger" onclick="return confirm('Apakah Anda yakin akan menghapus data ini ?')"><i class="fas fa-trash"></i> Hapus</button>
                                     </form>
                                 @else
-                                    <button type="button" class="btn btn-outline-warning disabled"><i class="ace-icon fa fa-trash"></i> Hapus</button>
+                                    <button type="button" class="btn btn-outline-warning disabled"><i class="fas fa-trash"></i> Hapus</button>
                                 @endif
                             </td>
                         </tr>
@@ -137,7 +146,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body p-0">
-                      <table class="table table-sm">
+                      <table class="table table-sm table-responsive">
                         <thead>
                           <tr>
                             <th style="width: 10px">#</th>
@@ -209,25 +218,85 @@
                           <tr>
                             <td colspan="2">Kelayakan Berkas Dokumen</td>
                             <td colspan="2">
-                                <form action="{{ route('verifikasi_dispensasi.simpan') }}" class="row g-3" method="POST">
-                                    @csrf
-                                    <div class="col-auto">
+                              <div class="row">
+                                <div class="col-sm-12">
+                                <form action="{{ route('verifikasi_dispensasi.simpan') }}" class="form-horizontal" method="POST">
+                                  @csrf
+                                  <div class="form-group">
+                                    <label class="col-form-label" for="pengalihan">Pengalihan Jenis Dispensasi</label>
+                                    <div class="custom-control custom-radio">
+                                      <input class="custom-control-input" type="radio" id="hideMe" name="pengalihan" value="0">
+                                      <label for="hideMe" class="custom-control-label">Tidak Ada Pengalihan</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                      <input class="custom-control-input" type="radio" id="showMe" name="pengalihan" value="1">
+                                      <label for="showMe" class="custom-control-label">Pengalihan Dispensasi</label>
+                                    </div>
+                                  </div>
+                                  <div id="ifYes" style="display: none;">
+                                    <div class="form-group" id="alihan" style="display: none;">
+                                      <label class="col-form-label" for="jenis_dispensasi_peralihan"><i class="fas fa-check"></i>Jenis Dispensasi Pengalihan</label>
+                                      <select class="form-control" id="jenis_dispensasi_peralihan" name="jenis_dispensasi_peralihan" onchange="resetLayak(this.value)">
+                                          <option value="0">Pilih Dispensasi Pengalihan</option>
+                                          @foreach ($list_dispensasi as $item)
+                                             <option value="{{ $item->id }}">{{ $item->jenis_dispensasi }}</option>
+                                          @endforeach
+                                      </select>
+                                    </div>
+                                    <div class="form-group" id="kelUKT" style="display: none;">
+                                      <label for="kelompok_ukt">Kelompok UKT</label>
+                                      <select name="kelompok_ukt" id="kelompok_ukt" class="form-control form-control-border required autocomplete="off">
+                                        <option value="">Pilih Kelompok UKT</option>
+                                        @foreach ($kelompok_ukt as $kel)
+                                          <option value="{{ $kel->id }}">{{ $kel->kelompok }}</option>
+                                        @endforeach
+                                      </select>
+                                      <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="pengalihan">Kelayakan Dispensasi</label>
                                         <input type="hidden" name="id" id="id">
                                         <input type="hidden" name="nim" id="nim">
+                                        <input type="hidden" name="kelompok" id="kelompok">
                                         <input type="hidden" name="semester" id="semester">
-                                        <select class="form-control col" id="sellayak" name="sellayak">
+                                        <input type="hidden" name="jenis_dispensasi_awal" id="jenis_dispensasi_awal">
+                                        <input type="hidden" name="biayaKuliah" id="biayaKuliah">
+                                        <input type="hidden" name="prodi_mhs" id="prodi_mhs">
+                                        <input type="hidden" name="angkatan" id="angkatan">
+                                        <select class="form-control" id="sellayak" name="sellayak" onchange="sumNominal();">
                                             <option value="0">Pilih Kelayakan Berkas</option>
                                             <option value="1">Layak</option>
                                             <option value="2">Tidak Layak</option>
                                         </select>
                                     </div>
-                                    <div class="col-auto">
-                                      <textarea class="form-control col" rows="3" cols="50" id="txtAlasan" name="txtAlasan" placeholder="Alasan Bila Tidak Layak"></textarea>
-                                  </div>
-                                    <div class="col-auto text-right">
-                                        <button type="submit" class="btn btn-primary col" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin dengan status terpilih ?')"><i class="fas fa-arrow"></i> Proses</button>
+                                    <div class="form-group">
+                                      <label class="col-form-label" for="nominal">Nominal Pembayaran</label>
+                                      <input type="text" name="nominal" id="nominal" class="form-control" readonly>
                                     </div>
+                                    <div class="form-group">
+                                      <label class="col-form-label" for="potongan">Nominal Potongan</label>
+                                      <input type="text" name="potongan" id="potongan" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-form-label" for="angsuran1">Nominal Angsuran 1</label>
+                                      <input type="text" name="angsuran1" id="angsuran1" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-form-label" for="angsuran2">Nominal Angsuran 2</label>
+                                      <input type="text" name="angsuran2" id="angsuran2" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-form-label" for="txtAlasan">Keterangan</label>
+                                      <textarea class="form-control" rows="3" cols="50" id="txtAlasan" name="txtAlasan" placeholder="Alasan Bila Tidak Layak"></textarea>
+                                    </div>
+                                    <div class="form-group text-right">
+                                      <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin dengan status terpilih ?')"><i class="fas fa-arrow"></i> Proses</button>
+                                    </div>
+                                  </div>
                                 </form>
+                                </div>
+                              </div>
+                                
                             </td>
                           </tr>
                           
@@ -239,15 +308,6 @@
             </div>
             <div class="modal-footer py-2">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div id="modal-verifikasi-pengajuan" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-            <div class="modal-body">
             </div>
           </div>
         </div>
@@ -284,6 +344,182 @@
             "responsive": true,
         });
     });
+
+    $('#showMe').click(function() {
+        reset();
+        $('#ifYes').slideDown();
+        $('#alihan').slideDown();
+        $('#kelUKT').slideUp();
+    });
+    $('#hideMe').click(function() {
+        reset();
+        $('#ifYes').slideDown();
+        $('#alihan').slideUp();
+
+        var jenisDispensasiUKTAwal = $('#jenis_dispensasi_awal').val();
+        if (jenisDispensasiUKTAwal == '7'){
+          $('#kelUKT').slideDown();
+        }else{
+          $('#kelUKT').slideUp();
+        }
+    });
+
+    function reset(){
+        var mySelect = document.getElementById('sellayak');
+        mySelect.selectedIndex = 0;
+        var alihan = document.getElementById('jenis_dispensasi_peralihan');
+        alihan.selectedIndex = 0;
+        $('#nominal').val('0');
+    }
+    function resetLayak(id){
+        var layak = document.getElementById('sellayak');
+        layak.selectedIndex = 0;
+        var kel_ukt = document.getElementById('kelompok_ukt');
+        kel_ukt.selectedIndex = 0;
+        $('#nominal').val('0');
+        
+        if (id == '7'){
+          $('#kelUKT').slideDown();
+        }else{
+          $('#kelUKT').slideUp();
+        }
+
+        $('#potongan').val('0');
+        $('#nominal').val('0') ;
+        $('#angsuran1').val('0');
+        $('#angsuran2').val('0') ;
+    }
+
+    function sumNominal(){
+      
+      let biayaKuliah = $('#biayaKuliah').val();
+      if ($('#sellayak').val() == '2'){
+          $('#potongan').val('0');
+          $('#nominal').val(biayaKuliah) ;
+          $('#angsuran1').val('0');
+          $('#angsuran2').val('0') ;
+          exit;
+      }
+      
+      let potongan = 0;
+      let nominal = 0;
+      let angsuran1 = 0;
+      let angsuran2 = 0;
+      
+      var alihkan = $("input[type='radio'][name='pengalihan']:checked").val();
+      var kelompok = $('#kelompok').val();
+      var kelompokbe4 = kelompok - 1; 
+      var prodi = $('#prodi_mhs').val();
+      var angkatan = $('#angkatan').val();
+      var DataUKT = dataUKT(prodi,angkatan);
+      
+      var jenisDispensasiUKTAlihan = $('#jenis_dispensasi_peralihan').val();
+      var jenisDispensasiUKTAwal = $('#jenis_dispensasi_awal').val();
+      
+      if (DataUKT.status == false){
+          alert(DataUKT.pesan);
+          $("#modal-verifikasi-pengajuan").modal('hide');
+          exit();
+      }
+
+      const ukt = [];
+      ukt[0] = 0;
+      ukt[1] = DataUKT.ukt_1;
+      ukt[2] = DataUKT.ukt_2;
+      ukt[3] = DataUKT.ukt_3;
+      ukt[4] = DataUKT.ukt_4;
+      ukt[5] = DataUKT.ukt_5;
+      ukt[6] = DataUKT.ukt_6;
+      ukt[7] = DataUKT.ukt_7;
+      ukt[9] = DataUKT.ukt_8;
+      ukt[10] = DataUKT.ukt_beasiswa;
+      ukt[11] = DataUKT.ukt_kerjasama;
+
+      var nom_ukt = parseFloat(biayaKuliah);     
+      var nom_uktbe4 = 0;
+      let selisih = 0;
+      
+      if (alihkan == '1'){
+        if (jenisDispensasiUKTAlihan == '1'){
+            potongan = nom_ukt * 0.5;
+            nominal = biayaKuliah - potongan;
+        }else if (jenisDispensasiUKTAlihan == '2'){
+            nom_uktbe4 = parseFloat(ukt[kelompokbe4]);
+            selisih = nom_ukt - nom_uktbe4;
+            potongan = selisih * 0.8;
+            nominal = biayaKuliah - potongan;
+        }else if (jenisDispensasiUKTAlihan == '3' || jenisDispensasiUKTAlihan == '6'){
+            potongan = biayaKuliah;
+        }else if (jenisDispensasiUKTAlihan == '4'){
+            angsuran1 = biayaKuliah * 0.5;
+            angsuran2 = biayaKuliah * 0.5;
+        }else if (jenisDispensasiUKTAlihan == '5'){
+            potongan = potongan;
+            nominal = biayaKuliah;
+        }else if (jenisDispensasiUKTAlihan == '7'){
+            var keluktbaru = $('#kelompok_ukt').val();
+            var nom_ukt_baru = ukt[keluktbaru];
+            nominal = nom_ukt_baru;
+        }else{
+            potongan = potongan;
+            nominal = biayaKuliah;
+        }
+
+      }else{
+        if (jenisDispensasiUKTAwal == '1'){
+            potongan = nom_ukt * 0.5;
+            nominal = biayaKuliah - potongan;
+        }else if (jenisDispensasiUKTAwal == '2'){
+            nom_uktbe4 = parseFloat(ukt[kelompokbe4]);
+            selisih = nom_ukt - nom_uktbe4;
+            potongan = selisih * 0.8;
+            nominal = biayaKuliah - potongan;
+        }else if (jenisDispensasiUKTAwal == '3' || jenisDispensasiUKTAwal == '6'){
+            potongan = biayaKuliah;
+        }else if (jenisDispensasiUKTAwal == '4'){
+            angsuran1 = biayaKuliah * 0.5;
+            angsuran2 = biayaKuliah * 0.5;
+        }else if (jenisDispensasiUKTAwal == '5'){
+            potongan = potongan;
+            nominal = biayaKuliah;
+        }else if (jenisDispensasiUKTAwal == '7'){
+            var keluktbaru = $('#kelompok_ukt').val();
+            var nom_ukt_baru = ukt[keluktbaru];
+            nominal = nom_ukt_baru;
+        }else{
+            potongan = potongan;
+            nominal = biayaKuliah;
+        }
+      }
+
+      $('#potongan').val(potongan);
+      $('#nominal').val(nominal) ;
+      $('#angsuran1').val(angsuran1);
+      $('#angsuran2').val(angsuran2) ;
+      
+    }
+    
+    function dataUKT(prodi,angkatan){
+        var radiusServer = "/verifikasi_dispensasi/dataukt/" +prodi+"/"+angkatan;
+        var asdf = null;
+        //Ajax Load data from ajax
+        $.ajax({
+            url : radiusServer,
+            type: "GET",
+            dataType: "JSON",
+            async: false,
+            success: function(res){
+              asdf = res;
+              console.log(asdf);
+              // alert(asdf.pesan);
+            },
+            error: function(res){
+              console.log(res);
+            }
+        });
+        return asdf;
+    }
+
     function uploadBukti(id){
         
         document.getElementById("bukti1").style.display = "none";
@@ -322,7 +558,13 @@
                 var nom = data.nominal_ukt;
                 $('[name="id"]').val(data.id);
                 $('[name="nim"]').val(data.nim);
+                $('[name="kelompok"]').val(data.kelompok_ukt);
                 $('[name="semester"]').val(data.semester);
+                $('[name="jenis_dispensasi_awal"]').val (data.jenis_dispensasi);
+                $('[name="biayaKuliah"]').val(data.nominal_ukt);
+                $('[name="prodi_mhs"]').val(data.kode_prodi);
+                $('[name="angkatan"]').val(data.angkatan_siakad);
+                
                 
                 $('#nim').html (data.nim);
                 $('#nim_siakad').html (data.nim_siakad);

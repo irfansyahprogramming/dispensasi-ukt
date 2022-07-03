@@ -156,11 +156,11 @@ class PrintController extends Controller
         $row = 1;
         $sheet->setCellValue('A' . $row, 'Daftar Penerima Dispensasi Unit ' . $kode_prodi . ' Semester' . $semester);
         $sheet->getStyle('A' . $row)->applyFromArray($this->center_bold);
-        $sheet->mergeCells('A' . $row . ':I' . $row);
+        $sheet->mergeCells('A' . $row . ':G' . $row);
 
         $row = 3;
-        $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($this->border);
-        $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($this->text_bold);
+        $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray($this->border);
+        $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray($this->text_bold);
 
         $sheet->setCellValue('A' . $row, 'No.');
         $sheet->setCellValue('B' . $row, 'NIM');
@@ -178,7 +178,7 @@ class PrintController extends Controller
 
         foreach ($data_pengajuan as $pengajuan) {
             // cetak border
-            $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($this->border);
+            $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray($this->border);
 
             // insert to cell
             $sheet->getStyle('A' . $row)->applyFromArray($this->center);
@@ -204,6 +204,8 @@ class PrintController extends Controller
 
             // $sheet->getStyle('I' . $row)->applyFromArray($this->center);
             // $sheet->setCellValue('I' . $row, $pengajuan->status ?? '');
+
+            $row++;
         }
 
         // write to file

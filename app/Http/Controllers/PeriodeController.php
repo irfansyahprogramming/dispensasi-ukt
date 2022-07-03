@@ -40,6 +40,7 @@ class PeriodeController extends Controller
             'mode'              => $mode,
             'subtitle'          => 'Periode',
             'home_active'       => '',
+            'dataukt_active'    => '',
             'dispen_active'     => '',
             'laporan_active'    => '',
             'periode_active'    => 'active',
