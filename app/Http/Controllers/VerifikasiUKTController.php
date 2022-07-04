@@ -37,29 +37,25 @@ class VerifikasiUKTController extends Controller
             $tombol = "disabled";
             $semester = "";
         }
-<<<<<<< HEAD
+
         // get juknis
         $list_dispensasi = DB::table('ref_jenisdipensasi')
         ->get();
         $kel_ukt = DB::table('ref_kelompok_ukt')
         ->get();
-=======
->>>>>>> f85d5425806301c66617d62a62afe37ba385d915
-
         $badges = Functions::pengajuan($semester);
 
         $pengajuan = DB::table('tb_pengajuan_dispensasi')
-            ->where('kode_prodi', 'like', trim(session('user_unit')) . '%')
-            ->where('semester', trim($semester))
-            ->where(function ($query) {
-                $query->where('status_pengajuan', '0')
-                    ->orWhere('status_pengajuan', '1')
-                    ->orWhere('status_pengajuan', '21');
-            })->get();
-
-        foreach ($pengajuan as $ajuan) {
-            $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
-
+        ->where('kode_prodi','like',trim(session('user_unit')).'%')
+        ->where('semester',trim($semester))
+        ->where(function ($query){
+          $query->where('status_pengajuan','0')
+                ->orWhere('status_pengajuan','>=','1')
+                ->orWhere('status_pengajuan','>=','21');
+        })->get();
+        
+        foreach($pengajuan as $ajuan){
+            $ajuan->nom_ukt = number_format($ajuan->nominal_ukt,0);
             $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
             $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
             $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
@@ -103,8 +99,6 @@ class VerifikasiUKTController extends Controller
         $id = $request->id;
         $kelayakan = $request->sellayak;
         $alasan = $request->txtAlasan;
-<<<<<<< HEAD
-        
         $pengalihan = $request->pengalihan;
         if ($pengalihan == '1'){
             $awal_pengajuan = $request->jenis_dispensasi_awal;
@@ -123,8 +117,6 @@ class VerifikasiUKTController extends Controller
         $ditagihkan   = $request->nominal;
         $angsuran1    = $request->angsuran1;
         $angsuran2    = $request->angsuran2;
-=======
->>>>>>> f85d5425806301c66617d62a62afe37ba385d915
 
         try {
             DB::beginTransaction();
@@ -172,14 +164,9 @@ class VerifikasiUKTController extends Controller
             return redirect()->route('verifikasi_dispensasi.index')->with('toast_error', 'Error : ' . $ex->getMessage());
         }
     }
-<<<<<<< HEAD
-    public function detil($id){
-=======
 
     public function detil($id)
     {
->>>>>>> f85d5425806301c66617d62a62afe37ba385d915
-        //echo $id;
 
         $data = PengajuanDispensasiUKTModel::where('id', $id)->first();
 
@@ -224,18 +211,11 @@ class VerifikasiUKTController extends Controller
                 foreach ($dataMhs->isi as $mhs) {
                     $data->nim_siakad = $mhs->nim;
                     $data->nama_siakad = $mhs->namaLengkap;
-<<<<<<< HEAD
                     $data->prodi_siakad = $mhs->jenjangProdi." ".$mhs->namaProdi;
                     $data->angkatan_siakad = $mhs->angkatan;
                     $data->kontak_siakad = $mhs->hpm." / ".$mhs->email;
                     $data->alamat_siakad = $mhs->alamat." RT. ".$mhs->rt." RW.".$mhs->rw."<br/> Kelurahan ".$mhs->lurah."<br/>  ".$mhs->namaKecamatan."<br/>  ".$mhs->namaKabkot."<br/>  ".$mhs->namaPropinsi." Kode pos ".$mhs->kdpos;
                     $data->nom_ukt_siakad = number_format($mhs->biayaKuliah,0);
-=======
-                    $data->prodi_siakad = $mhs->jenjangProdi . " " . $mhs->namaProdi;
-                    $data->kontak_siakad = $mhs->hpm . " / " . $mhs->email;
-                    $data->alamat_siakad = $mhs->alamat . " RT. " . $mhs->rt . " RW." . $mhs->rw . "<br/> Kelurahan " . $mhs->lurah . "<br/>  " . $mhs->namaKecamatan . "<br/>  " . $mhs->namaKabkot . "<br/>  " . $mhs->namaPropinsi . " Kode pos " . $mhs->kdpos;
-                    $data->nom_ukt_siakad = number_format($mhs->biayaKuliah, 0);
->>>>>>> f85d5425806301c66617d62a62afe37ba385d915
                 }
             } else {
                 $data->nim_siakad = "<i class='fas fa-x'></i>";
