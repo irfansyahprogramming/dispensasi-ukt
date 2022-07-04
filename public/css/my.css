@@ -1,0 +1,21 @@
+.bg-unj {
+    background-color: #008f91 !important;
+}
+
+.brand-link {
+    height: 57px !important;
+}
+
+.sidebar .nav-item > .nav-link {
+    color: white !important;
+    font-size: 0.825rem;
+    padding: 0.5rem 0.5rem;
+}
+
+.sidebar .nav-item > .nav-link.active {
+    color: black !important;
+}
+
+.content {
+    padding: 0 0.5rem 0 0.5rem;
+}

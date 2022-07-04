@@ -32,9 +32,9 @@
           <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
             <i class="fas fa-minus"></i>
           </button>
-          <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+          {{-- <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
             <i class="fas fa-times"></i>
-          </button>
+          </button> --}}
         </div>
       </div>
       <div class="card-body">
@@ -93,8 +93,7 @@
           </table>
         </div>
       </div>
-      <div class="card-footer">
-      </div>
+
     </div>
 
     <div id="modal-Cetak" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">

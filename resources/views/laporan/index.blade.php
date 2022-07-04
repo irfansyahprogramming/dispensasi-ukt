@@ -32,13 +32,13 @@
           <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
             <i class="fas fa-minus"></i>
           </button>
-          <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+          {{-- <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
             <i class="fas fa-times"></i>
-          </button>
+          </button> --}}
         </div>
       </div>
       <div class="card-body">
-        <div class="mt-4">
+        <div class="mt-0">
           <button class="btn btn-outline-primary" id="btnFilter" data-toggle="modal" data-target="#modal-FilterData"><i class="ace-icon fa fa-list"></i> Filter</button>
         </div>
 
@@ -70,8 +70,7 @@
           </table>
         </div>
       </div>
-      <div class="card-footer">
-      </div>
+
     </div>
 
     <div id="modal-FilterData" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">

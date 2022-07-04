@@ -40,22 +40,25 @@ class VerifikasiUKTController extends Controller
 
         // get juknis
         $list_dispensasi = DB::table('ref_jenisdipensasi')
-        ->get();
+            ->get();
         $kel_ukt = DB::table('ref_kelompok_ukt')
-        ->get();
+            ->get();
+
+
         $badges = Functions::pengajuan($semester);
 
         $pengajuan = DB::table('tb_pengajuan_dispensasi')
-        ->where('kode_prodi','like',trim(session('user_unit')).'%')
-        ->where('semester',trim($semester))
-        ->where(function ($query){
-          $query->where('status_pengajuan','0')
-                ->orWhere('status_pengajuan','>=','1')
-                ->orWhere('status_pengajuan','>=','21');
-        })->get();
-        
-        foreach($pengajuan as $ajuan){
-            $ajuan->nom_ukt = number_format($ajuan->nominal_ukt,0);
+
+            ->where('kode_prodi', 'like', trim(session('user_unit')) . '%')
+            ->where('semester', trim($semester))
+            ->where(function ($query) {
+                $query->where('status_pengajuan', '0')
+                    ->orWhere('status_pengajuan', '>=', '1')
+                    ->orWhere('status_pengajuan', '>=', '21');
+            })->get();
+
+        foreach ($pengajuan as $ajuan) {
+            $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
             $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
             $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
             $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
@@ -99,17 +102,18 @@ class VerifikasiUKTController extends Controller
         $id = $request->id;
         $kelayakan = $request->sellayak;
         $alasan = $request->txtAlasan;
+
         $pengalihan = $request->pengalihan;
-        if ($pengalihan == '1'){
+        if ($pengalihan == '1') {
             $awal_pengajuan = $request->jenis_dispensasi_awal;
             $jenis_dispensasi = $request->jenis_dispensasi_peralihan;
-        }else{
+        } else {
             $awal_pengajuan = 0;
             $jenis_dispensasi = $request->jenis_dispensasi_awal;
         }
-        if ($request->kelompok_ukt){
+        if ($request->kelompok_ukt) {
             $kel_ukt_baru = $request->kelompok_ukt;
-        }else{
+        } else {
             $kel_ukt_baru = 0;
         }
 
@@ -117,6 +121,8 @@ class VerifikasiUKTController extends Controller
         $ditagihkan   = $request->nominal;
         $angsuran1    = $request->angsuran1;
         $angsuran2    = $request->angsuran2;
+
+
 
         try {
             DB::beginTransaction();
@@ -216,6 +222,7 @@ class VerifikasiUKTController extends Controller
                     $data->kontak_siakad = $mhs->hpm." / ".$mhs->email;
                     $data->alamat_siakad = $mhs->alamat." RT. ".$mhs->rt." RW.".$mhs->rw."<br/> Kelurahan ".$mhs->lurah."<br/>  ".$mhs->namaKecamatan."<br/>  ".$mhs->namaKabkot."<br/>  ".$mhs->namaPropinsi." Kode pos ".$mhs->kdpos;
                     $data->nom_ukt_siakad = number_format($mhs->biayaKuliah,0);
+
                 }
             } else {
                 $data->nim_siakad = "<i class='fas fa-x'></i>";
@@ -229,27 +236,27 @@ class VerifikasiUKTController extends Controller
         }
         return json_encode($data);
     }
-    public function dataukt($prodi,$angkatan){
+    public function dataukt($prodi, $angkatan)
+    {
         // return $angkatan;
         $data = array();
-        $arrDataUKT = DataUKT::where('kode_prodi',$prodi)->where('angkatan',$angkatan)->first();
+        $arrDataUKT = DataUKT::where('kode_prodi', $prodi)->where('angkatan', $angkatan)->first();
 
-        if(isset($arrDataUKT->kode_prodi))
-        {
-            $data ['status'] = true;
-            $data ['ukt_1'] = $arrDataUKT->ukt_1;
-            $data ['ukt_2'] = $arrDataUKT->ukt_2;
-            $data ['ukt_3'] = $arrDataUKT->ukt_3;
-            $data ['ukt_4'] = $arrDataUKT->ukt_4;
-            $data ['ukt_5'] = $arrDataUKT->ukt_5;
-            $data ['ukt_6'] = $arrDataUKT->ukt_6;
-            $data ['ukt_7'] = $arrDataUKT->ukt_7;
-            $data ['ukt_8'] = $arrDataUKT->ukt_8;
-            $data ['ukt_beasiswa'] = $arrDataUKT->ukt_beasiswa;
-            $data ['ukt_kerjasama'] = $arrDataUKT->ukt_kerjasama;
-        }else{
-            $data ['status'] = false;
-            $data ['pesan'] = 'Belum ada data di Data UKT, Mohon isi dahulu';
+        if (isset($arrDataUKT->kode_prodi)) {
+            $data['status'] = true;
+            $data['ukt_1'] = $arrDataUKT->ukt_1;
+            $data['ukt_2'] = $arrDataUKT->ukt_2;
+            $data['ukt_3'] = $arrDataUKT->ukt_3;
+            $data['ukt_4'] = $arrDataUKT->ukt_4;
+            $data['ukt_5'] = $arrDataUKT->ukt_5;
+            $data['ukt_6'] = $arrDataUKT->ukt_6;
+            $data['ukt_7'] = $arrDataUKT->ukt_7;
+            $data['ukt_8'] = $arrDataUKT->ukt_8;
+            $data['ukt_beasiswa'] = $arrDataUKT->ukt_beasiswa;
+            $data['ukt_kerjasama'] = $arrDataUKT->ukt_kerjasama;
+        } else {
+            $data['status'] = false;
+            $data['pesan'] = 'Belum ada data di Data UKT, Mohon isi dahulu';
         }
         header('Content-type: application/json');
         return json_encode($data);
