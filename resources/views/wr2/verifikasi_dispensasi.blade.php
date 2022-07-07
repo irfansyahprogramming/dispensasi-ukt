@@ -28,7 +28,7 @@
   <section class="content">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Verifikasi Dispensasi UKT Semester {{ $semester }}</h3>
+        <h3 class="card-title">Verifikasi Keringanan UKT Semester {{ $semester }}</h3>
 
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -67,15 +67,15 @@
                 <th scope="col">NIM</th>
                 <th scope="col">Nama</th>
                 <th scope="col">Program Studi</th>
-                <th scope="col">Jenis Dispensasi</th>
+                <th scope="col">Jenis Keringanan</th>
                 <th scope="col">Kel.UKT</th>
                 <th scope="col">Nom.UKT</th>
                 <th scope="col">File Pendukung</th>
-                <th scope="col">Status Pengajuan Dispensasi</th>
+                <th scope="col">Status Pengajuan</th>
                 <th scope="col">Nominal Ditagihkan</th>
                 <th scope="col">Potongan</th>
                 <th scope="col">Angsuran</th>
-                <th scope="col">Proses Dispensasi</th>
+                <th scope="col">Proses Keringanan UKT</th>
                 <th scope="col">Hapus Data</th>
               </tr>
             </thead>
@@ -169,7 +169,7 @@
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header py-2">
-            <h5 class="modal-title">Filter Daftar Pengajuan Dispensasi UKT</h5>
+            <h5 class="modal-title">Filter Daftar Pengajuan Keringanan UKT</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -198,9 +198,9 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="jenis">Jenis Dispensasi</label>
+                  <label for="jenis">Jenis Keringanan</label>
                   <select class="form-control" id="jenis" name="jenis">
-                    <option value="All">Semua Jenis Dispensasi</option>
+                    <option value="All">Semua Jenis Keringanan</option>
                     @foreach ($listJenis as $jns)
                       <option value="{{ $jns->id }}" {{ $jns->id == old('jenis') ? 'selected' : '' }}>{{ $jns->jenis_dispensasi }}</option>
                     @endforeach
@@ -221,7 +221,7 @@
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header py-2">
-            <h5 class="modal-title">Form Verifikasi Data Dispensasi UKT</h5>
+            <h5 class="modal-title">Form Verifikasi Data Keringanan UKT Semester {{ $semester }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -231,10 +231,10 @@
               <div class="alert alert-info">Verifikasi data pengajuan dengan data SIAKAD</div>
             </div>
 
-            <div class="card">
-              <div class="card-header">
+            <div class="card shadow shadow-none">
+              {{-- <div class="card-header">
                 <h3 class="card-title">Verifkasi Data Pengajuan Dispensasi UKT Semester {{ $semester }}</h3>
-              </div>
+              </div> --}}
               <!-- /.card-header -->
               <div class="card-body p-0">
                 <table class="table table-sm table-responsive">
@@ -314,7 +314,7 @@
               </tr>
               <tr>
                 <td>9.</td>
-                <td>Jenis Dispensasi</td>
+                <td>Jenis Keringanan</td>
                 <td>
                   <div class="text-left" id="jenis_dispensasi"></div>
                 </td>
@@ -487,7 +487,7 @@
 
 
           $("#modal-verifikasiWR2-pengajuan").modal('show');
-          $('.modal-title').text('Verifikasi Berkas Pengajuan Dispensasi UKT'); // Set title to Bootstrap modal title
+          $('.modal-title').text('Verifikasi Berkas Pengajuan Keringanan UKT'); // Set title to Bootstrap modal title
 
 
         },

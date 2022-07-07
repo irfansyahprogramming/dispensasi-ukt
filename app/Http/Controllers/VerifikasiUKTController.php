@@ -65,11 +65,11 @@ class VerifikasiUKTController extends Controller
         }
 
         $arrData = [
-            'title'             => 'Dispensasi',
+            'title'             => 'Home',
             'active'            => 'Dispensasi UKT',
             'user'              => $user,
             'mode'              => $mode,
-            'subtitle'          => 'Verifikasi Dispensasi',
+            'subtitle'          => 'Verifikasi Keringanan UKT',
             'home_active'       => '',
             'dispen_active'     => 'active',
             'dataukt_active'    => '',

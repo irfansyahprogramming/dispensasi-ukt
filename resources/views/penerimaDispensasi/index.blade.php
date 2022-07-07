@@ -26,7 +26,7 @@
   <section class="content">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Penerima Dispensasi UKT Semester {{ $semester }}</h3>
+        <h3 class="card-title">Penerima Keringanan UKT Semester {{ $semester }}</h3>
 
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -48,11 +48,11 @@
                 <th scope="col">NIM</th>
                 <th scope="col">Nama</th>
                 <th scope="col">Program Studi</th>
-                <th scope="col">Jenis Dispensasi</th>
+                <th scope="col">Jenis Keringanan</th>
                 <th scope="col">Kel.UKT</th>
                 <th scope="col">Nom.UKT</th>
                 <th scope="col">File Pendukung</th>
-                <th scope="col">Status Pengajuan Dispensasi</th>
+                <th scope="col">Status Pengajuan Keringanan UKT</th>
               </tr>
             </thead>
             <tbody>
@@ -100,7 +100,7 @@
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header py-2">
-            <h5 class="modal-title">Cetak Penerima Dispensasi UKT</h5>
+            <h5 class="modal-title">Cetak Penerima Keringanan UKT</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>

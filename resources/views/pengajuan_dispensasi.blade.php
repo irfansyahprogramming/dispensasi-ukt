@@ -26,7 +26,7 @@
   <section class="content">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Pengajuan Dispensasi UKT</h3>
+        <h3 class="card-title">Pengajuan Keringanan UKT</h3>
 
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -43,7 +43,7 @@
 
           @if ($tombol == '')
             @if ($kipk == 'no' && $kerjasama == 'no')
-              <button class="btn btn-outline-primary" id="btnTambahPengajuan" data-toggle="modal" data-target="#modal-Dispensasi"><i class="ace-icon fa fa-plus"></i> Pengajuan Dispensasi UKT</button>
+              <button class="btn btn-outline-primary" id="btnTambahPengajuan" data-toggle="modal" data-target="#modal-Dispensasi"><i class="ace-icon fa fa-plus"></i> Pengajuan Keringanan UKT</button>
             @else
               <button class="btn btn-danger"><i class="ace-icon fa fa-ban"></i> Anda sedang berstatus Beasiswa atau mendapatkan Bantuan Pendidikan</button>
             @endif
@@ -67,12 +67,12 @@
               <tr>
                 <th scope="col">No</th>
                 <th scope="col">Semester</th>
-                <th scope="col">Jenis Dispensasi</th>
+                <th scope="col">Jenis Keringanan</th>
                 <th scope="col">Kelompok UKT</th>
                 <th scope="col">Nominal UKT</th>
                 <th scope="col">Pekerjaan Yang Membiayai</th>
                 <th scope="col">Jabatan Pekerjaan Yang Membiayai</th>
-                <th scope="col">Status Pengajuan Dispensasi</th>
+                <th scope="col">Status Pengajuan</th>
                 <th scope="col">Aksi</th>
               </tr>
             </thead>
@@ -114,7 +114,7 @@
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header py-2">
-            <h5 class="modal-title">Form Pengajuan Dispensasi UKT</h5>
+            <h5 class="modal-title">Form Pengajuan Keringanan UKT</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -130,7 +130,7 @@
                 <div class="alert alert-info text-center">
                   <ul class="list-unstyled text-left">Catatan :
                     <li>Data Mahasiswa diambil dari SIAKAD, bila ada perbedaan data Mahasiswa anda, silakan perbaiki biodata anda di SIAKAD</li>
-                    <li>Permohonan Dispensasi Berlaku hanya sekali permohonan</li>
+                    <li>Permohonan Keringanan UKT Berlaku hanya sekali permohonan</li>
                   </ul>
                 </div>
                 <div class="row form-group">
@@ -166,10 +166,10 @@
                   <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
                 </div>
                 <div class="form-group">
-                  <label for="jenis_dispensasi">Jenis Dispensasi</label>
+                  <label for="jenis_dispensasi">Jenis Keringanan UKT</label>
                   <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">-->
                   <select name="jenis_dispensasi" id="jenis_dispensasi" class="form-control form-control-border required autocomplete="off" onchange="uploadBukti(this.value)">
-                    <option value="">Pilih Jenis Dispensasi</option>
+                    <option value="">Pilih Jenis Keringanan UKT</option>
                     @foreach ($list_dispensasi as $item)
                       <option value="{{ $item->id }}">{{ $item->jenis_dispensasi }}</option>
                     @endforeach
@@ -211,7 +211,7 @@
                   <input type="text" class="form-control form-control-border" name="jabatan" id="jabatan" placeholder="Jabatan Pekerjaan yang membiayai">
                 </div>
                 <div class="form-group">
-                  <label for="jabatan">File Pendukung Pengajuan Dispensasi UKT</label>
+                  <label for="jabatan">File Pendukung Pengajuan Keringanan UKT</label>
                   <br />
                   <b>Surat Pernyataan <div id="nama_file_pernyataan"></div> </b>
                   <input type="file" class="form-control form-control-border" name="file_pernyataan" id="file_pernyataan">
@@ -360,7 +360,7 @@
 
 
           $("#modal-Dispensasi").modal('show');
-          $('.modal-title').text('Edit Pengajuan Dispensasi UKT'); // Set title to Bootstrap modal title
+          $('.modal-title').text('Edit Pengajuan Keringanan UKT'); // Set title to Bootstrap modal title
 
           document.getElementById("bukti1").style.display = "none";
           document.getElementById("bukti2").style.display = "none";

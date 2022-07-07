@@ -7,7 +7,7 @@
   <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/x-icon">
 
   <!--====================================================================================================================================-->
-  <title>Dispensasi UKT</title>
+  <title>Aplikasi Keringanan UKT - Universitas Negeri Jakarta</title>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -133,7 +133,7 @@
                 @csrf
 
                 <div class="form-group mb-4">
-                  <h5 class="text-center font-weight-bold unj-color cinzel">Aplikasi Dispensasi UKT</h5>
+                  <h5 class="text-center font-weight-bold unj-color cinzel">Aplikasi Keringanan UKT</h5>
                   <h5 class="text-center font-weight-bold unj-color cinzel">Universitas Negeri Jakarta</h5>
 
                 </div>

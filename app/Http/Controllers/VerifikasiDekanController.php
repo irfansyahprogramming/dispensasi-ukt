@@ -83,11 +83,11 @@ class VerifikasiDekanController extends Controller
         $request->flash();
 
         $arrData = [
-            'title'             => 'Dispensasi',
+            'title'             => 'Home',
             'active'            => 'Dispensasi UKT',
             'user'              => $user,
             'mode'              => $mode,
-            'subtitle'          => 'Verifikasi Dekanat Dispensasi',
+            'subtitle'          => 'Verifikasi Data Keringanan UKT',
             'home_active'       => '',
             'dispen_active'     => 'active',
             'dataukt_active'    => '',

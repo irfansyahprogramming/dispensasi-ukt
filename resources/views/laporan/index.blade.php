@@ -26,7 +26,7 @@
   <section class="content">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Laporan Dispensasi UKT Semester {{ $semester }}</h3>
+        <h3 class="card-title">Laporan Keringanan UKT Semester {{ $semester }}</h3>
 
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -50,8 +50,8 @@
                 <th scope="col">NIM</th>
                 <th scope="col">Nama</th>
                 <th scope="col">Program Studi</th>
-                <th scope="col">Jenis Dispensasi</th>
-                <th scope="col">Status Pengajuan Dispensasi</th>
+                <th scope="col">Jenis Keringanan</th>
+                <th scope="col">Status Pengajuan Keringanan UKT</th>
               </tr>
             </thead>
             <tbody>
