@@ -2,7 +2,7 @@
   <!-- Brand Logo -->
   <a href="/home" class="brand-link border-bottom border-warning">
     <img src="{{ asset('img/logo_unj_without_text.png') }}" alt="Logo UNJ" class="brand-image img-circle elevation-3 mt-0 mr-2" height="80" width="auto">
-    <span class="brand-text font-weight-bold cinzel">Dispensasi UKT</span>
+    <span class="brand-text font-weight-bold cinzel" style="font-size: 90%">Keringanan UKT</span>
   </a>
 
   <!-- Sidebar -->
@@ -36,7 +36,7 @@
             <a href="/data_dispensasi" class="nav-link {{ $dispen_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Manajemen Data Dispensasi
+                Manajemen Data Keringanan UKT
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -46,7 +46,7 @@
             <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Penerima Dispensasi
+                Penerima Keringanan UKT
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -55,13 +55,13 @@
             <a href="/laporan" class="nav-link {{ $laporan_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Laporan Dispensasi
+                Laporan Keringanan UKT
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
           </li>
         @elseif (session('user_cmode') == '3')
-          <li class="nav-item">
+          <li class="nav-item" title="Database Kelompok UKT">
             <a href="/dataUKT" class="nav-link {{ $dataukt_active }}">
               <i class="nav-icon fas fa-database"></i>
               <p>
@@ -69,39 +69,39 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" title="Verifikasi Pengajuan Keringanan UKT yang masuk">
             <a href="/verifikasi_dispensasi" class="nav-link {{ $dispen_active }}">
               <i class="nav-icon fas fa-check"></i>
               <p>
-                Verifikasi Dispensasi UKT
+                Verifikasi Pengajuan
                 <span class="badge bg-danger ml-2 right">{{ $badges->where('status_pengajuan', 0)->count('id') == 0 ? '' : $badges->where('status_pengajuan', 0)->count('id') }}</span>
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" title="Daftar Penerima Keringanan UKT">
             <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Penerima Dispensasi
+                Daftar Penerima
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" title="Cetak Laporan Penerima Keringanan UKT">
             <a href="/laporan" class="nav-link {{ $laporan_active }}">
               <i class="nav-icon fas fa-list-alt"></i>
               <p>
-                Laporan Dispensasi
+                Laporan Keringanan UKT
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
           </li>
         @elseif (session('user_cmode') == '4')
-          <li class="nav-item">
+          <li class="nav-item" title="Daftar Penerima Keringanan UKT">
             <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Penerima Dispensasi
+                Daftar Penerima
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -110,17 +110,17 @@
             <a href="/laporan" class="nav-link {{ $laporan_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Laporan Dispensasi
+                Laporan Keringanan UKT
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
           </li>
         @elseif (session('user_cmode') == '11')
-          <li class="nav-item">
+          <li class="nav-item" title="Daftar Penerima Keringanan UKT">
             <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Penerima Dispensasi
+                Daftar Penerima
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -129,17 +129,17 @@
             <a href="/laporan" class="nav-link {{ $laporan_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Laporan Dispensasi
+                Laporan Keringanan UKT
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
           </li>
         @elseif (session('user_cmode') == '13')
-          <li class="nav-item">
+          <li class="nav-item" title="Daftar Penerima Keringanan UKT">
             <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Penerima Dispensasi
+                Daftar Penerima
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -148,7 +148,7 @@
             <a href="/laporan" class="nav-link {{ $laporan_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Laporan Dispensasi
+                Laporan Keringanan UKT
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -163,11 +163,11 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" title="Daftar Penerima Keringanan UKT">
             <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Penerima Dispensasi
+                Daftar Penerima
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -176,7 +176,7 @@
             <a href="/laporan" class="nav-link {{ $laporan_active }}">
               <i class="nav-icon fas fa-list-alt"></i>
               <p>
-                Laporan Dispensasi
+                Laporan Keringanan UKT
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -201,11 +201,11 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" title="Daftar Penerima Keringanan UKT">
             <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Penerima Dispensasi
+                Daftar Penerima
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -214,7 +214,7 @@
             <a href="/laporan" class="nav-link {{ $laporan_active }}">
               <i class="nav-icon fas fa-list-alt"></i>
               <p>
-                Laporan Dispensasi
+                Laporan Keringanan UKT
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -224,17 +224,17 @@
             <a href="/dispensasi" class="nav-link {{ $dispen_active }}">
               <i class="nav-icon fas fa-list"></i>
               <p>
-                Dispensasi UKT
+                Keringanan UKT
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
           </li>
         @else
-          <li class="nav-item">
+          <li class="nav-item" title="Daftar Penerima Keringanan UKT">
             <a href="/pengajuan_dispensasi" class="nav-link {{ $dispen_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Data Dispensasi UKT
+                Daftar Penerima
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>

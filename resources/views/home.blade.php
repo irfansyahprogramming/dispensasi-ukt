@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="card-body">
-        Selamat Datang di Aplikasi Dispensasi UKT Mahasiswa
+        Selamat Datang di Aplikasi Keringanan UKT Mahasiswa Universitas Negeri Jakarta
       </div>
 
     </div>

@@ -89,11 +89,11 @@ class VerifikasiWR2Controller extends Controller
         $request->flash();
 
         $arrData = [
-            'title'             => 'Dispensasi',
+            'title'             => 'Home',
             'active'            => 'Dispensasi UKT',
             'user'              => $user,
             'mode'              => $mode,
-            'subtitle'          => 'Verifikasi Wakil Rektor 2 Dispensasi',
+            'subtitle'          => 'Verifikasi Wakil Rektor II',
             'home_active'       => '',
             'periode_active'       => '',
             'dispen_active'     => 'active',

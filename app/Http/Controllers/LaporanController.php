@@ -88,11 +88,11 @@ class LaporanController extends Controller
         }
 
         $arrData = [
-            'title'             => 'Laporan',
+            'title'             => 'Home',
             'active'            => 'Laporan Dispensasi UKT',
             'user'              => $user,
             'mode'              => $mode,
-            'subtitle'          => 'Laporan',
+            'subtitle'          => 'Laporan Keringanan UKT',
             'home_active'       => '',
             'penerima_active'   => '',
             'dataukt_active'    => '',

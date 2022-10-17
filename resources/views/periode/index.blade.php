@@ -27,7 +27,7 @@
   <section class="content">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Periode Pengajuan Dispensasi UKT</h3>
+        <h3 class="card-title">Periode Pengajuan Keringanan UKT</h3>
 
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -55,8 +55,8 @@
           <table id="dataTabel" class="table table-hover">
             <thead>
               <tr>
-                <th scope="col">No</th>
-                <th scope="col">Aktif</th>
+                <th scope="col" class="text-center" style="width: 1%">No</th>
+                <th scope="col" class="text-center" style="width: 5%">Aktif</th>
                 <th scope="col">Kode Semester</th>
                 <th scope="col">Semester</th>
                 <th scope="col">Mulai Pembukaan</th>
@@ -67,8 +67,8 @@
             <tbody>
               @foreach ($periode as $item)
                 <tr>
-                  <td>{{ $loop->iteration }}</td>
-                  <td>
+                  <td class="text-center align-top">{{ $loop->iteration }}</td>
+                  <td class="text-center align-top">
                     <div class="form-check form-switch">
                       <form id="formCheck" action="{{ route('periode.aktifin') }}" method="POST">
                         @csrf
@@ -218,7 +218,7 @@
           $('[name="end_date"]').val(convertDate(data.end_date));
 
           $("#modal-Periode").modal('show');
-          $('.modal-title').text('Edit Periode Pengajuan Dispensasi UKT');
+          $('.modal-title').text('Edit Periode Pengajuan Keringanan UKT');
         },
         error: function(jqXHR, textStatus, errorThrown) {
           alert('Error get data from ajax');
