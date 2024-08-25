@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/x-icon">
+  <link rel="icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
 
   <!--====================================================================================================================================-->
   <title>Aplikasi Keringanan UKT - Universitas Negeri Jakarta</title>
@@ -126,7 +126,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center mb-2">
-              <img src="{{ asset('img/logo_unj_green_small.png') }}" width="auto" height="250" />
+              <img src="{{ asset('img/logo_unj_ptnbj_no_text.png') }}" width="auto" height="250" />
             </div>
             <div class="col-md-6">
               <form action="{{ route('login.attemptLogin') }}" method="post">
