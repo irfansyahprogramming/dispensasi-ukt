@@ -3,8 +3,8 @@
 @section('style')
   <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+  {{-- <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}"> --}}
 @endsection
 
 @section('contain')
@@ -70,12 +70,12 @@
                   <td class="text-center align-top">{{ $loop->iteration }}</td>
                   <td class="text-center align-top">
                     <div class="form-check form-switch">
-                      <form id="formCheck" action="{{ route('periode.aktifin') }}" method="POST">
+                      <form id="formCheck_{{ $item->id }}" action="{{ route('periode.aktifin') }}" method="POST">
                         @csrf
                         @method('post')
                         <input type="hidden" id="id_periode" name="id_periode" value="{{ $item->id }}">
                         <input type="hidden" id="aktifCheck" name="aktifCheck" value="{{ $item->aktif }}">
-                        <input class="form-check-input" type="checkbox" role="switch" value="{{ $item->aktif }}" {{ $item->aktif == '1' ? 'checked' : '' }} onclick="document.getElementById('formCheck').submit()">
+                        <input class="form-check-input" type="checkbox" role="switch" value="{{ $item->aktif }}" {{ $item->aktif == '1' ? 'checked' : '' }} onclick="document.getElementById('formCheck_{{ $item->id }}').submit()">
                       </form>
 
                     </div>

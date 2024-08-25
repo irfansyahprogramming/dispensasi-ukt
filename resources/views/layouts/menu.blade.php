@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-warning bg-unj elevation-4">
   <!-- Brand Logo -->
   <a href="/home" class="brand-link border-bottom border-warning">
-    <img src="{{ asset('img/logo_unj_without_text.png') }}" alt="Logo UNJ" class="brand-image img-circle elevation-3 mt-0 mr-2" height="80" width="auto">
+    <img src="{{ asset('img/favicon-unj-ptnbh.png') }}" alt="Logo UNJ" class="brand-image img-circle elevation-3 mt-0 mr-2" height="80" width="auto">
     <span class="brand-text font-weight-bold cinzel" style="font-size: 90%">Keringanan UKT</span>
   </a>
 
@@ -46,7 +46,7 @@
             <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Penerima Keringanan UKT
+                Pengajuan
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -55,7 +55,7 @@
             <a href="/laporan" class="nav-link {{ $laporan_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Laporan Keringanan UKT
+                Rekapitulasi
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -73,7 +73,7 @@
             <a href="/verifikasi_dispensasi" class="nav-link {{ $dispen_active }}">
               <i class="nav-icon fas fa-check"></i>
               <p>
-                Verifikasi Pengajuan
+                Data Pengajuan
                 <span class="badge bg-danger ml-2 right">{{ $badges->where('status_pengajuan', 0)->count('id') == 0 ? '' : $badges->where('status_pengajuan', 0)->count('id') }}</span>
               </p>
             </a>

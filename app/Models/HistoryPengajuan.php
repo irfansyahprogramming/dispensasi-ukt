@@ -15,7 +15,7 @@ class HistoryPengajuan extends Model
 
     protected $quarded = ['id','id_pengajuan','created_at', 'updated_at'];
 
-    protected $fillable = ['id_pengajuan','v_mode','status_ajuan','alasan_verif'];
+    protected $fillable = ['id_pengajuan','v_mode','status_ajuan','status_pengajuan','alasan_verif'];
 
     // public function Ajuan(){
     //     return $this->belongsTo(Ajuan::class)->withDefault();

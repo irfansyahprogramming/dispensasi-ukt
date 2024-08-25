@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Functions;
+use App\Helpers\Services;
 use App\Models\BukaDispensasi;
 use App\Models\HistoryPengajuan;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use PhpParser\Node\Stmt\TryCatch;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use App\Models\PengajuanDispensasiUKTModel;
+use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 
 class DispensasiController extends Controller
 {
@@ -50,18 +52,20 @@ class DispensasiController extends Controller
             $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
         }
 
-        $url = env('SIAKAD_URI') . "/dataMahasiswa/" . session('user_username') . "/" . session('user_token');
-        $response = Http::get($url);
-        $dataMhs = json_decode($response);
+        // $url = env('SIAKAD_URI') . "/dataMahasiswa/" . session('user_username') . "/" . session('user_token');
+        // $response = Http::get($url);
+        // $dataMhs = json_decode($response);
+        $getDataMhs = Services::getDataMahasiswa(session('user_username'),session('user_token'));
+        $arrMhs = $getDataMhs['isi'];
 
-        if ($dataMhs->status == true) {
-            foreach ($dataMhs->isi as $mhs) {
-                $nama_lengkap = $mhs->nama;
-                $kodeProdi = $mhs->kodeProdi;
-                $nama_prodi = $mhs->namaProdi;
-                $jenjang = $mhs->jenjangProdi;
-                $hp = $mhs->hpm;
-                $email = $mhs->email;
+        if ($getDataMhs['status'] == true) {
+            foreach ($arrMhs as $mhs) {
+                $nama_lengkap = $mhs['nama'];
+                $kodeProdi = $mhs['kodeProdi'];
+                $nama_prodi = $mhs['namaProdi'];
+                $jenjang = $mhs['jenjangProdi'];
+                $hp = $mhs['hpm'];
+                $email = $mhs['email'];
             }
         } else {
             $nama_lengkap = 'Kosong';
@@ -78,11 +82,14 @@ class DispensasiController extends Controller
         $dataBeasiswa = json_decode($responseb);
         //echo $urlb;
 
+        $dataBeasiswa = Services::getBeasiswa(session('user_username'),$semester,session('user_toke'));
+
+
         // print_r ($dataBeasiswa);
-        if ($dataBeasiswa->status == true) {
-            foreach ($dataBeasiswa->isi as $bea) {
-                $kipk = $bea->beasiswa;
-                $kerjasama = $bea->kerjasama;
+        if ($dataBeasiswa['status'] == true) {
+            foreach ($dataBeasiswa['isi'] as $bea) {
+                $kipk = $bea['beasiswa'];
+                $kerjasama = $bea['kerjasama'];
             }
         } else {
             $kipk = 'no';
@@ -91,7 +98,7 @@ class DispensasiController extends Controller
 
         $user = session('user_name');
         $mode = session('user_mode');
-
+        $status = '0';
         $arrData = [
             'title'             => 'Dispensasi',
             'active'            => 'Dispensasi UKT',
@@ -113,7 +120,8 @@ class DispensasiController extends Controller
             'tombol'            => $tombol,
             'kipk'              => $kipk,
             'kerjasama'         => $kerjasama,
-            'pengajuan'         => $pengajuan
+            'pengajuan'         => $pengajuan,
+            'status'            => $status
         ];
 
         return view('pengajuan_dispensasi', $arrData);

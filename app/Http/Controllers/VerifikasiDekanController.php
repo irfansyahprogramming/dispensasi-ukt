@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Functions;
+use App\Helpers\Services;
 use App\Models\BukaDispensasi;
 use App\Models\HistoryPengajuan;
 use App\Models\PengajuanDispensasiUKTModel;
@@ -74,11 +75,12 @@ class VerifikasiDekanController extends Controller
         $listStatus = DB::table('ref_status_pengajuan')->get();
 
         // get mengajar from siakad
-        $url = env('SIAKAD_URI') . "/programStudi/" . trim(session('user_unit'));
-        //echo $url;
-        $response = Http::get($url);
-        $listProdi = json_decode($response);
+        // $url = env('SIAKAD_URI') . "/programStudi/" . trim(session('user_unit'));
+        // //echo $url;
+        // $response = Http::get($url);
+        // $listProdi = json_decode($response);
 
+        $listProdi = Services::getProdi(trim(session('user_unit')));
         // flash request data
         $request->flash();
 
@@ -148,7 +150,8 @@ class VerifikasiDekanController extends Controller
                     ],
                     [
                         'alasan_verif'      => $alasan,
-                        'status_ajuan'      => $kelayakan
+                        'status_ajuan'      => $kelayakan,
+                        'status_pengajuan'  => $status_pengajuan
                     ]
                 );
             }
@@ -253,7 +256,8 @@ class VerifikasiDekanController extends Controller
                             ],
                             [
                                 'alasan_verif'      => null,
-                                'status_ajuan'      => '1'
+                                'status_ajuan'      => '1',
+                                'status_pengajuan'  => '2'
                             ]
                         );
                     }
@@ -293,7 +297,7 @@ class VerifikasiDekanController extends Controller
                     $store = PengajuanDispensasiUKTModel::where([
                         'id'    => $id
                     ])->update([
-                        'status_pengajuan'  => '22'
+                        'status_pengajuan'  => '21'
                     ]);
 
                     if ($store) {
@@ -304,7 +308,8 @@ class VerifikasiDekanController extends Controller
                             ],
                             [
                                 'alasan_verif'      => null,
-                                'status_ajuan'      => '2'
+                                'status_ajuan'      => '2',
+                                'status_pengajuan'  => '21'
                             ]
                         );
                     }

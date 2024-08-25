@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Functions;
+use App\Helpers\Services;
 use App\Models\BukaDispensasi;
 use App\Models\HistoryPengajuan;
 use App\Models\PengajuanDispensasiUKTModel;
@@ -79,12 +80,13 @@ class VerifikasiWR2Controller extends Controller
         $listJenis = DB::table('ref_jenisdipensasi')->get();
         $listStatus = DB::table('ref_status_pengajuan')->get();
 
-        // get mengajar from siakad
-        $url = env('SIAKAD_URI') . "/programStudi/All";
-        //echo $url;
-        $response = Http::get($url);
-        $listProdi = json_decode($response);
+        // // get mengajar from siakad
+        // $url = env('SIAKAD_URI') . "/programStudi/All";
+        // //echo $url;
+        // $response = Http::get($url);
+        // $listProdi = json_decode($response);
 
+        $listProdi = Services::getProdi('All');
         // flash request data
         $request->flash();
 
@@ -154,7 +156,8 @@ class VerifikasiWR2Controller extends Controller
                     ],
                     [
                         'alasan_verif'      => $alasan,
-                        'status_ajuan'      => $kelayakan
+                        'status_ajuan'      => $kelayakan,
+                        'status_pengajuan'  => $status_pengajuan
                     ]
                 );
             }
@@ -179,8 +182,11 @@ class VerifikasiWR2Controller extends Controller
             $data->status = DB::table('ref_status_pengajuan')->where('id', $data->status_pengajuan)->first()->status_ajuan;
             $data->kelompok = DB::table('ref_kelompok_ukt')->where('id', $data->kelompok_ukt)->first()->kelompok;
 
-            $data->file_pendukung = "<a href = " . asset('storage/' . $data->file_pernyataan) . " target='_blank'>File Pernyataan Kebenaran</a>";
+            $data->file_pendukung = "<a href = " . asset('storage/' . $data->file_permohonan) . " target='_blank'>File Permohonan</a>";
 
+            if ($data->file_pernyataan <> null) {
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pernyataan) . " target='_blank'>File pernyataan</a>";
+            }
             if ($data->file_keterangan <> null) {
                 $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_keterangan) . " target='_blank'>File Keterangan Terdampak</a>";
             }
@@ -261,7 +267,8 @@ class VerifikasiWR2Controller extends Controller
                             ],
                             [
                                 'alasan_verif'      => null,
-                                'status_ajuan'      => '1'
+                                'status_ajuan'      => '1',
+                                'status_pengajuan'  => '3'
                             ]
                         );
                     }
@@ -301,7 +308,7 @@ class VerifikasiWR2Controller extends Controller
                     $store = PengajuanDispensasiUKTModel::where([
                         'id'    => $id
                     ])->update([
-                        'status_pengajuan'  => '23'
+                        'status_pengajuan'  => '22'
                     ]);
 
                     if ($store) {
@@ -312,7 +319,8 @@ class VerifikasiWR2Controller extends Controller
                             ],
                             [
                                 'alasan_verif'      => null,
-                                'status_ajuan'      => '2'
+                                'status_ajuan'      => '2',
+                                'status_pengajuan'  => '22'
                             ]
                         );
                     }

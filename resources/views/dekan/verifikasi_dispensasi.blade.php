@@ -100,6 +100,9 @@
                   <td>{{ $item->kelompok }}</td>
                   <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                   <td>
+                    @if ($item->file_permohonan)
+                      <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Permohonan Dokumen">Surat Permohonan</a><br />
+                    @endif
                     @if ($item->file_pernyataan)
                       <a href="{{ asset('storage/' . $item->file_pernyataan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
                     @endif
@@ -191,8 +194,8 @@
                   <label for="prodi">Program Studi</label>
                   <select class="form-control" id="prodi" name="prodi">
                     <option value="All">Semua Prodi</option>
-                    @foreach ($listProdi->isi as $prd)
-                      <option value="{{ $prd->kodeProdi }}" {{ $prd->kodeProdi == old('prodi') ? 'selected' : '' }}>{{ $prd->kodeProdi }} - {{ $prd->jenjangProdi }} {{ $prd->namaProdi }}</option>
+                    @foreach ($listProdi['isi'] as $prd)
+                      <option value="{{ $prd['kodeProdi'] }}" {{ $prd['kodeProdi'] == old('prodi') ? 'selected' : '' }}>{{ $prd['kodeProdi'] }} - {{ $prd['jenjangProdi'] }} {{ $prd['namaProdi'] }}</option>
                     @endforeach
                   </select>
                 </div>

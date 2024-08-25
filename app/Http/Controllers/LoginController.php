@@ -29,7 +29,7 @@ class LoginController extends Controller
             'password' => ['required']
         ]);
 
-        $url = env('SIAKAD_URI') . "/signin";
+        $url = env('SIAKAD_URI') . "/as400/signin";
 
         $response = Http::asForm()->post($url, $credentials);
         $response = json_decode($response);

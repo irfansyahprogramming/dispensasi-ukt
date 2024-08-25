@@ -70,6 +70,9 @@
                   <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                   <td>
                     @if ($item->file_pernyataan)
+                      <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
+                    @endif
+                    @if ($item->file_pernyataan)
                       <a href="{{ asset('storage/' . $item->file_pernyataan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
                     @endif
                     @if ($item->file_keterangan)

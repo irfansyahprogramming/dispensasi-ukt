@@ -4,14 +4,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/x-icon">
+  <link rel="icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
   <title>Aplikasi Keringanan UKT | {{ $mode }}</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
   <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
   <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('dist/css/adminlte.css') }}">
   <link rel="stylesheet" href="{{ asset('css/my.css') }}">
 
   <style>
@@ -52,11 +54,14 @@
 
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
   <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
   <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
   <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
   <script src="{{ asset('dist/js/demo.js') }}"></script>
   <script>
     $(function() {
+
+      $('.select2').select2();
       var Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -117,7 +122,7 @@
 
     function formatNumber(n) {
       // format number 1000000 to 1,234,567
-      return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     }
 
 
@@ -140,12 +145,12 @@
       var caret_pos = input.prop("selectionStart");
 
       // check for decimal
-      if (input_val.indexOf(".") >= 0) {
+      if (input_val.indexOf(",") >= 0) {
 
         // get position of first decimal
         // this prevents multiple decimals from
         // being entered
-        var decimal_pos = input_val.indexOf(".");
+        var decimal_pos = input_val.indexOf(",");
 
         // split number by decimal point
         var left_side = input_val.substring(0, decimal_pos);
@@ -166,14 +171,14 @@
         right_side = right_side.substring(0, 2);
 
         // join number by .
-        input_val = "Rp" + left_side + "." + right_side;
+        input_val = "Rp " + left_side + "," + right_side;
 
       } else {
         // no decimal entered
         // add commas to number
         // remove all non-digits
         input_val = formatNumber(input_val);
-        input_val = "Rp" + input_val;
+        input_val = "Rp " + input_val;
 
         // final formatting
         if (blur === "blur") {

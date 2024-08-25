@@ -100,8 +100,8 @@
                   <label for="prodi">Program Studi</label>
                   <select class="form-control" id="prodi" name="prodi">
                     <option value="All">Semua Prodi</option>
-                    @foreach ($listProdi->isi as $prd)
-                      <option value="{{ $prd->kodeProdi }}" {{ $prd->kodeProdi == old('prodi') ? 'selected' : '' }}>{{ $prd->jenjangProdi }} {{ $prd->namaProdi }}</option>
+                    @foreach ($listProdi['isi'] as $prd)
+                      <option value="{{ $prd['kodeProdi'] }}" {{ $prd['kodeProdi'] == old('prodi') ? 'selected' : '' }}>{{ $prd['jenjangProdi'] }} {{ $prd['namaProdi'] }}</option>
                     @endforeach
                   </select>
                 </div>

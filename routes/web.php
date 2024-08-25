@@ -88,7 +88,9 @@ Route::group(['prefix' => 'verifikasiWR2_dispensasi', 'as' => 'verifikasiWR2_dis
 Route::group(['prefix' => 'penerima_dispensasi', 'as' => 'penerima_dispensasi.'], function () {
     Route::get('/', [PeneriamDispensasiController::class, 'index'])->name('index');
     Route::get('/cetak/{id}', [PeneriamDispensasiController::class, 'cetak'])->name('cetak');
-
+    Route::post('simpan', [PeneriamDispensasiController::class, 'store'])->name('simpan');
+    Route::get('/data/{id}', [PeneriamDispensasiController::class, 'getData'])->name('data');
+    Route::get('/dataEdit/{id}', [PeneriamDispensasiController::class, 'getDataEdit'])->name('dataEdit');
     // cetak penerima dispensasi
     Route::get('/print/{semester}/{kode_prodi}', [PrintController::class, 'cetakPenerimaDispensasi'])->name('print');
 });

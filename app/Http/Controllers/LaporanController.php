@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Functions;
+use App\Helpers\Services;
 use App\Models\BukaDispensasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,84 +34,47 @@ class LaporanController extends Controller
 
         $badges = Functions::pengajuan($semester);
 
-        $pengajuan = DB::table('tb_pengajuan_dispensasi');
-        // ->where('kode_prodi','like',trim(session('user_unit')).'%')
-        // ->where('semester',trim($semester))
-
-        // for filtering
-        // by semester
-        if (isset($request->semester) and $request->semester != 'All') {
-            $pengajuan = $pengajuan->where('semester', trim($request->semester));
-        } else {
-            $pengajuan = $pengajuan->where('semester', trim($semester));
-        }
-
-        // by prodi
-        if (isset($request->prodi) and $request->prodi != 'All') {
-            $pengajuan = $pengajuan->where('kode_prodi', trim($request->prodi));
-        } else {
-            $pengajuan = $pengajuan->where('kode_prodi', 'like', trim(session('user_unit')) . '%');
-        }
-
-        // by jenis pengajuan
-        if (isset($request->jenis) and $request->jenis != 'All') {
-            $pengajuan = $pengajuan->where('jenis_dispensasi', $request->jenis);
-        }
-
-        // by status pengajuan
-        if (isset($request->status) and $request->status != 'All') {
-            $pengajuan = $pengajuan->where('status_pengajuan', $request->status);
-        }
-
-        // get data pengajuan
-        $pengajuan = $pengajuan->get();
-
-        // flash request data
-        $request->flash();
-
-
-        $listSemester = DB::table('ref_periode')->get();
-        $listJenis = DB::table('ref_jenisdipensasi')->get();
-        $listStatus = DB::table('ref_status_pengajuan')->get();
-
-        // get mengajar from siakad
-        $url = env('SIAKAD_URI') . "/programStudi/" . trim(session('user_unit'));
-        //echo $url;
-        $response = Http::get($url);
-        $listProdi = json_decode($response);
-        //var_dump($listProdi);
-
-        foreach ($pengajuan as $ajuan) {
-            $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
-            $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
-            $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
-            $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
-        }
+        $rekapPengajuan =    DB::table('tr_history_pengajuan')
+                        ->join('tb_pengajuan_dispensasi','tr_history_pengajuan.id_pengajuan','=','tb_pengajuan_dispensasi.id')
+                        ->join('ref_jenisdipensasi','tb_pengajuan_dispensasi.jenis_dispensasi','=','ref_jenisdipensasi.id')
+                        ->select(
+                            'ref_jenisdipensasi.jenis_dispensasi',
+                            DB::raw('SUM(case when tr_history_pengajuan.status_pengajuan = 0 then 1 else 0 end) as ajuan0'),
+                            DB::raw('SUM(case when tr_history_pengajuan.status_pengajuan = 1 then 1 else 0 end) as ajuan1'),
+                            DB::raw('SUM(case when tr_history_pengajuan.status_pengajuan = 2 then 1 else 0 end) as ajuan2'),
+                            DB::raw('SUM(case when tr_history_pengajuan.status_pengajuan = 3 then 1 else 0 end) as ajuan3'),
+                            DB::raw('sum(case when tr_history_pengajuan.status_pengajuan = 4 then 1 else 0 end) as ajuan4'),
+                            DB::raw('sum(case when tr_history_pengajuan.status_pengajuan = 5 then 1 else 0 end) as ajuan5'),
+                            DB::raw('sum(case when tr_history_pengajuan.status_pengajuan = 6 then 1 else 0 end) as ajuan6'),
+                            DB::raw('sum(case when tr_history_pengajuan.status_pengajuan = 7 then 1 else 0 end) as ajuan7')
+                        )
+                        ->where('ref_jenisdipensasi.aktif','=','1')
+                        ->where('tb_pengajuan_dispensasi.semester','=',$semester)
+                        ->where('tb_pengajuan_dispensasi.kode_prodi','like',trim(session('user_unit')) . '%')
+                        ->groupBy('ref_jenisdipensasi.jenis_dispensasi')
+                        ->orderBy('ref_jenisdipensasi.id')
+                        ->get();
+        
 
         $arrData = [
             'title'             => 'Home',
-            'active'            => 'Laporan Dispensasi UKT',
+            'active'            => 'Rekapitulasi Dispensasi UKT',
             'user'              => $user,
             'mode'              => $mode,
-            'subtitle'          => 'Laporan Keringanan UKT',
+            'subtitle'          => 'Rekap Dispensasi UKT',
             'home_active'       => '',
             'penerima_active'   => '',
             'dataukt_active'    => '',
             'dispen_active'     => '',
-            'periode_active'     => '',
+            'periode_active'    => '',
             'laporan_active'    => 'active',
             'nim'               => session('user_username'),
             'semester'          => $semester,
-            'listSemester'      => $listSemester,
-            'listProdi'         => $listProdi,
-            'listJenis'         => $listJenis,
-            'listStatus'         => $listStatus,
-            'tombol'            => $tombol,
-            'pengajuan'         => $pengajuan,
+            'rekap'             => $rekapPengajuan,
             'badges'            => $badges
         ];
 
-        return view('laporan.index', $arrData);
+        return view('laporan.rekap', $arrData);
         //return view('pengajuan_dispensasi',compact('list_dispensasi','kel_ukt','pengajuan','subtitle'));
     }
 }

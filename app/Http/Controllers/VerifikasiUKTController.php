@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Functions;
+use App\Helpers\Services;
 use App\Models\BukaDispensasi;
 use App\Models\DataUKT;
 use App\Models\HistoryPengajuan;
@@ -158,7 +159,8 @@ class VerifikasiUKTController extends Controller
                     ],
                     [
                         'alasan_verif'      => $alasan,
-                        'status_ajuan'      => $status_pengajuan
+                        'status_ajuan'      => $kelayakan,
+                        'status_pengajuan'  => $status_pengajuan
                     ]
                 );
             }
@@ -182,8 +184,10 @@ class VerifikasiUKTController extends Controller
             $data->status = DB::table('ref_status_pengajuan')->where('id', $data->status_pengajuan)->first()->status_ajuan;
             $data->kelompok = DB::table('ref_kelompok_ukt')->where('id', $data->kelompok_ukt)->first()->kelompok;
 
-            $data->file_pendukung = "<a href = " . asset('storage/' . $data->file_pernyataan) . " target='_blank'>File Pernyataan Kebenaran</a>";
-
+            $data->file_pendukung = "<a href = " . asset('storage/' . $data->file_permohonan) . " target='_blank'>File Permohonan</a>";
+            if ($data->file_pernyataan <> null) {
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pernyataan) . " target='_blank'>File Pernyataan Kebenaran</a>";
+            }
             if ($data->file_keterangan <> null) {
                 $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_keterangan) . " target='_blank'>File Keterangan Terdampak</a>";
             }
@@ -208,20 +212,21 @@ class VerifikasiUKTController extends Controller
                 $data->alasan_verif = "";
             }
 
-            //get data siakad
-            $url = env('SIAKAD_URI') . "/dataMahasiswa/" . $data->nim . "/" . session('user_token');
-            $response = Http::get($url);
-            $dataMhs = json_decode($response);
+            // //get data siakad
+            // $url = env('SIAKAD_URI') . "/dataMahasiswa/" . $data->nim . "/" . session('user_token');
+            // $response = Http::get($url);
+            // $dataMhs = json_decode($response);
+            $dataMhs = Services::getDataMahasiswa($data->nim,session('user_token'));
 
-            if ($dataMhs->status == true) {
-                foreach ($dataMhs->isi as $mhs) {
-                    $data->nim_siakad = $mhs->nim;
-                    $data->nama_siakad = $mhs->namaLengkap;
-                    $data->prodi_siakad = $mhs->jenjangProdi." ".$mhs->namaProdi;
-                    $data->angkatan_siakad = $mhs->angkatan;
-                    $data->kontak_siakad = $mhs->hpm." / ".$mhs->email;
-                    $data->alamat_siakad = $mhs->alamat." RT. ".$mhs->rt." RW.".$mhs->rw."<br/> Kelurahan ".$mhs->lurah."<br/>  ".$mhs->namaKecamatan."<br/>  ".$mhs->namaKabkot."<br/>  ".$mhs->namaPropinsi." Kode pos ".$mhs->kdpos;
-                    $data->nom_ukt_siakad = number_format($mhs->biayaKuliah,0);
+            if ($dataMhs['status'] == true) {
+                foreach ($dataMhs['isi'] as $mhs) {
+                    $data->nim_siakad = $mhs['nim'];
+                    $data->nama_siakad = $mhs['namaLengkap'];
+                    $data->prodi_siakad = $mhs['jenjangProdi']." ".$mhs['namaProdi'];
+                    $data->angkatan_siakad = $mhs['angkatan'];
+                    $data->kontak_siakad = $mhs['hpm']." / ".$mhs['email'];
+                    $data->alamat_siakad = $mhs['alamat']." RT. ".$mhs['rt']." RW.".$mhs['rw']."<br/> Kelurahan ".$mhs['lurah']."<br/>  ".$mhs['namaKecamatan']."<br/>  ".$mhs['namaKabkot']."<br/>  ".$mhs['namaPropinsi']." Kode pos ".$mhs['kdpos'];
+                    $data->nom_ukt_siakad = number_format($mhs['biayaKuliah'],0);
 
                 }
             } else {

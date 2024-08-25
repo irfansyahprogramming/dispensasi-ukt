@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Functions;
 use App\Models\BukaDispensasi;
-use App\Models\PengajuanDispensasiUKTModel;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-
 
 class HomeController extends Controller
 {
@@ -23,22 +20,22 @@ class HomeController extends Controller
         $mode = session('user_mode');
         $cmode = session('user_cmode');
         
-        $periode = BukaDispensasi::where('aktif','1')->first();
-        if ($periode){
-            $tombol = "";
-            $semester = $periode->semester;
-        }else{
-            $tombol = "disabled";
-            $semester = "";
-        }
-
+        // $periode = BukaDispensasi::where('aktif','1')->first();
+        // if ($periode){
+        //     $tombol = "";
+        //     $semester = $periode->semester;
+        // }else{
+        //     $tombol = "disabled";
+        //     $semester = "";
+        // }
+        $semester = "";
         $badges = Functions::pengajuan($semester);
 
         if ($cmode == '20'){
             // $pengajuan = collect(PengajuanDispensasiUKTModel::where('semester',$semester)->get());
-            $pengajuan = DB::table('v_list_pengajuan')->where('semester',$semester)->get();
+            $pengajuan = DB::table('tb_pengajuan_dispensasi')->where('semester',$semester)->get();
         }else{
-            $pengajuan = DB::table('v_list_pengajuan')->where('kode_prodi', 'like', trim(session('user_unit')) .'%')->where('semester',$semester)->get();
+            $pengajuan = DB::table('tb_pengajuan_dispensasi')->where('kode_prodi', 'like', trim(session('user_unit')) .'%')->where('semester',$semester)->get();
             // $pengajuan = PengajuanDispensasiUKTModel::where('kode_prodi', 'like', trim(session('user_unit')) . '%')->where('semester',$semester)->get();
             
         }

@@ -48,11 +48,19 @@ class Functions
 
   public static function pengajuan($semester)
   {
-    $pengajuan = DB::table('tb_pengajuan_dispensasi')
-    ->where('kode_prodi','like',trim(session('user_unit')).'%')
-    ->where('semester',trim($semester))
-    ->get();
+    if ($semester == ''){
+      $pengajuan = DB::table('tb_pengajuan_dispensasi')
+      ->where('kode_prodi','like',trim(session('user_unit')).'%')
+      ->get();  
+    }else{
+      $pengajuan = DB::table('tb_pengajuan_dispensasi')
+      ->where('kode_prodi','like',trim(session('user_unit')).'%')
+      ->where('semester',trim($semester))
+      ->get();
+  
+    }
 
+   
     return $pengajuan;
   }
 }
