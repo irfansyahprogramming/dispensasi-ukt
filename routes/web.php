@@ -100,6 +100,7 @@ Route::group(['prefix' => 'penerima_dispensasi', 'as' => 'penerima_dispensasi.']
     Route::get('/dataEdit/{id}', [PeneriamDispensasiController::class, 'getDataEdit'])->name('dataEdit');
     // cetak penerima dispensasi
     Route::get('/print/{semester}/{kode_prodi}', [PrintController::class, 'cetakPenerimaDispensasi'])->name('print');
+    Route::delete('delete/{id}', [PeneriamDispensasiController::class, 'delete'])->name('delete');
 });
 
 // Route::get('/laporan', [LaporanController::class, 'index'])->name('index');

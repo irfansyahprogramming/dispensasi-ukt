@@ -291,8 +291,7 @@ class PeneriamDispensasiController extends Controller
             return redirect()->back()->with('toast_error', 'Masa Studi Sudah Habis');
             exit;
         }
-        // @dd($response[0]['pembayaran']);
-
+        
         if ($response[0]['pembayaran'] != null){
             return redirect()->back()->with('toast_error', 'Anda Sudah Membayar');
             exit;
@@ -325,16 +324,33 @@ class PeneriamDispensasiController extends Controller
     
                 ]
             );
-    
-            // print_r($simpan);
+            
+            $pengajuan = DB::table('tb_pengajuan_dispensasi')
+            // ->where('semester', trim($semester))
+            ->where('nim', '=', $nim)
+            ->where('semester','=',$semester)
+            ->get();
+            
             $path = 'file_pendukung/' . $semester . '/' . $nim;
-            $path_pernyataan_saved = null;
-            $path_keterangan_saved = null;
-            $path_penghasilan_saved = null;
-            $path_phk_saved = null;
-            $path_pailit_saved = null;
-            $path_pratranskrip_saved = null;
-    
+                
+            if ($pengajuan){
+                foreach ($pengajuan as $ajuan) {
+                    $path_pernyataan_saved = $ajuan->file_pernyataan;
+                    $path_permohonan_saved = $ajuan->file_permohonan;
+                    $path_penghasilan_saved = $ajuan->file_penghasilan;
+                    $path_phk_saved = $ajuan->file_phk;
+                    $path_pailit_saved = $ajuan->file_pailit;
+                    $path_pratranskrip_saved = $ajuan->file_pratranskrip;
+                }
+            }else{
+                $path_pernyataan_saved = null;
+                $path_permohonan_saved = null;
+                $path_penghasilan_saved = null;
+                $path_phk_saved = null;
+                $path_pailit_saved = null;
+                $path_pratranskrip_saved = null;
+            }
+            
             if (isset($request->file_permohonan)) {
                 $nama_dok = $request->file_permohonan->getClientOriginalName();
                 $slug = Functions::seo_friendly_url($nama_dok);
@@ -360,7 +376,9 @@ class PeneriamDispensasiController extends Controller
             }
     
             if ($jenis_dispensasi === '1') {
+                
                 if (isset($request->file_pra_transkrip)) {
+                    // var_dump($request->file_pra_transkrip);
                     $nama_dok = $request->file_pra_transkrip->getClientOriginalName();
                     $slug = Functions::seo_friendly_url($nama_dok);
                     $ext = $request->file_pra_transkrip->extension();
@@ -463,6 +481,7 @@ class PeneriamDispensasiController extends Controller
                     return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan PHK/Kematian');
                 }
             }
+            // @dd($path_pratranskrip_saved);
     
             PengajuanDispensasiUKTModel::where([
                 'semester'          => $semester,
@@ -476,7 +495,7 @@ class PeneriamDispensasiController extends Controller
                 'file_pailit'       => $path_pailit_saved,
                 'file_pratranskrip' => $path_pratranskrip_saved
             ]);
-    
+            
             $dataAjuan = PengajuanDispensasiUKTModel::where('semester', $semester)->where('nim', $nim)->first();
             $history = HistoryPengajuan::updateOrCreate(
                 [
@@ -489,6 +508,7 @@ class PeneriamDispensasiController extends Controller
                     'status_pengajuan'  => '0'
                 ]
             );
+            
             // return $history;
             DB::commit();
             return redirect()->route('penerima_dispensasi.index')->with('toast_success', 'Pengajuan Dispensasi berhasil ');
@@ -528,4 +548,5 @@ class PeneriamDispensasiController extends Controller
         // print_r($arrMhs);
         return json_encode($arrMhs);
     }
+
 }

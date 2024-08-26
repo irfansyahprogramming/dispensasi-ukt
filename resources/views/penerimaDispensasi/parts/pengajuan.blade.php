@@ -46,6 +46,9 @@
                 <td>{{ $item->kelompok }}</td>
                 <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                 <td>
+                @if ($item->file_permohonan)
+                    <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Permohonan">Surat Permohonan</a><br />
+                @endif
                 @if ($item->file_pernyataan)
                     <a href="{{ asset('storage/' . $item->file_pernyataan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
                 @endif
@@ -68,8 +71,15 @@
                 <td><div class="alert alert-success">{{ $item->status ?? '' }}</div> </td>
                 @if($semester <> '' && $mode == "Program Studi")
                 <td>
-                  <button type="button" id="btnEdit" onclick="edit({{ $item->id }})" class="btn btn-block btn-sm btn-outline-warning"><i class="fa fa-pencil"> Edit</i></button>
-                  <button type="button" id="btnHapus" onclick="hapus({{ $item->id }})" class="btn btn-block btn-sm btn-outline-danger"><i class="fa fa-eraser"> Hapus</i></button>
+                  <div class="btn-group">
+                    <button type="button" id="btnEdit" class="btn btn-outline-warning" onclick="edit({{ $item->id }})"><i class="fas fa-edit"></i> Edit</button>
+
+                    <form action="{{ route('penerima_dispensasi.delete', ['id' => $item->id]) }}" method="POST">
+                      {{ csrf_field() }}
+                      {{ method_field('delete') }}
+                      <button type="submit" data-toggle="tooltip" data-placement="top" title="Hapus Pengajuan" class="btn btn-outline-danger" onclick="return confirm('Apakah Anda yakin akan menghapus pengajuan mahasiswa ini ?')"><i class="fas fa-trash"></i> Hapus </button>
+                    </form>
+
                 </td>
                 @endif
             </tr>
@@ -284,6 +294,14 @@ function edit(id){
       $('[name="kode_program_studi"]').val(data[0].kodeProdi);
       $('[name="sks_belum"]').val(data[0].sks_belum);
       $('[name="jenis_dispensasi"]').val(data[0].jenis_dispensasi).change();
+
+      $('#nama_file_permohonan').html(data[0].file_permohonan);
+      $('#nama_file_pernyataan').html(data[0].file_pernyataan);
+      $('#nama_file_penghasilan').html(data[0].file_penghasilan);
+      $('#nama_file_bukti_pailit').html(data[0].file_failit);
+      $('#nama_file_pra_transkrip').html(data[0].file_pratranskrip);
+      $('#nama_file_kurang_penghasilan').html(data[0].file_phk);
+
     },
     error: function(jqXHR, textStatus, errorThrown) {
       alert('Error get data from ajax');
@@ -352,6 +370,11 @@ function showIdentitas(nim){
         } else {}
         //..
       }
+    }
+
+    function hapus(id)
+    {
+      alert("Hapus");
     }
 </script>
 @endsection
