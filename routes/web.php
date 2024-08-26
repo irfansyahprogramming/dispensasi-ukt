@@ -12,6 +12,7 @@ use App\Http\Controllers\PrintController;
 use App\Http\Controllers\VerifikasiDekanController;
 use App\Http\Controllers\VerifikasiUKTController;
 use App\Http\Controllers\VerifikasiWR2Controller;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,12 @@ use App\Http\Controllers\VerifikasiWR2Controller;
 | contains the "web" middleware group. Now create something great!
 |
 */
+$app_url = config("app.url");
+if (app()->environment('prod') && !empty($app_url)) {
+    URL::forceRootUrl($app_url);
+    $schema = explode(':', $app_url)[0];
+    URL::forceScheme($schema);
+}
 
 Route::get('/', [LoginController::class, 'index']);
 Route::get('/login', [LoginController::class, 'index'])->name('login');

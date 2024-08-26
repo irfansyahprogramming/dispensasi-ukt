@@ -101,7 +101,7 @@
                     </select>
                   </div>
                 </div>
-              {{-- </form> --}}
+              </form>
 
             </div>
           </div>
@@ -204,7 +204,7 @@
                 <div class="form-group">
                   <label for="jenis_dispensasi">Jenis Keringanan UKT</label>
                   <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">-->
-                  <select name="jenis_dispensasi" id="jenis_dispensasi" class="select2 form-control form-control-border required autocomplete="off" onchange="uploadBukti(this.value)">
+                  <select name="jenis_dispensasi" id="jenis_dispensasi" class="form-control form-control-border required autocomplete="off" onchange="uploadBukti(this.value)">
                     <option value="">Pilih Jenis Keringanan UKT</option>
                     @foreach ($list_dispensasi as $item)
                       <option value="{{ $item->id }}">{{ $item->jenis_dispensasi }}</option>
@@ -234,8 +234,8 @@
 
                   </div>
                   <div id="bukti2" style="display: none;">
-                    <b>Surat Keterangan dari Kelurahan untuk yang terdampak <div id="nama_file_keterangan"></div></b>
-                    <input type="file" class="form-control form-control-border" name="file_keterangan" id="file_keterangan">
+                    {{-- <b>Surat Keterangan dari Kelurahan untuk yang terdampak <div id="nama_file_keterangan"></div></b>
+                    <input type="file" class="form-control form-control-border" name="file_keterangan" id="file_keterangan"> --}}
                     <b>Slip Gaji/Surat Keterangan Penghasilan yang disahkan oleh Lurah/Kepala Desa <div id="nama_file_penghasilan"></div></b>
                     <input type="file" class="form-control form-control-border" name="file_penghasilan" id="file_penghasilan">
 

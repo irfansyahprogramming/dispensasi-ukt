@@ -61,7 +61,13 @@
   <script>
     $(function() {
 
-      $('.select2').select2();
+      $('.select2').select2({
+        dropdownParent: $('#modal-Pengajuan')
+      });
+
+      // $('select2').on('select2:open', function(e){
+      //     $('.custom-dropdown').parent().css('z-index', 99999);
+      // });
       var Toast = Swal.mixin({
         toast: true,
         position: 'top-end',

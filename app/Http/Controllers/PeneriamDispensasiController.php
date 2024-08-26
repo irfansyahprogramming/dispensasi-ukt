@@ -262,8 +262,30 @@ class PeneriamDispensasiController extends Controller
             return redirect()->back()->with('toast_error', 'jumlah SKS yang belum selesai masih kosong ');
             exit;
         }
+
+        //get status mahasiswa 
+        $status_mahasiswa = Services::getStatusMahasiswa($semester,$nim,session('user_token'));
+        $response = $status_mahasiswa['isi'];
         
+        if ($response[0]['beasiswa'] == 'Ya'){
+            return redirect()->back()->with('toast_error', 'Beasiswa tidak mendapatkan dispensasi');
+            exit;
+        }
+
+        if ($response[0]['bayaran_sebelumnya'] == 0){
+            return redirect()->back()->with('toast_error', 'Lunasi dahulu pembayaran sebelumnya');
+            exit;
+        }
+
+        if ($response[0]['habis_studi'] <= 0){
+            return redirect()->back()->with('toast_error', 'Masa Studi Sudah Habis');
+            exit;
+        }
         
+        if ($response[0]['pembayaran'] >= 0 || $response[0]['pembayaran'] <> 'null'){
+            return redirect()->back()->with('toast_error', 'Anda Sudah Membayar');
+            exit;
+        }
 
         try {
             DB::beginTransaction();

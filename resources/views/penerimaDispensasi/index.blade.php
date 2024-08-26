@@ -96,7 +96,7 @@
   <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
   <script>
     $(function() {
-
+            
       $("#dataTabel1").DataTable({
         "responsive": true,
         "lengthChange": false,
