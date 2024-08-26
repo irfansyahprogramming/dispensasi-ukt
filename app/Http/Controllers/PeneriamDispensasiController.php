@@ -7,6 +7,7 @@ use App\Helpers\Services;
 use App\Models\BukaDispensasi;
 use App\Models\HistoryPengajuan;
 use App\Models\PengajuanDispensasiUKTModel;
+use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,15 +33,23 @@ class PeneriamDispensasiController extends Controller
         $kel_ukt = DB::table('ref_kelompok_ukt')
             ->get();
 
+        $now = new DateTime("now");
         if ($periode) {
-            $tombol = "";
+            
             $semester = $periode->semester;
+            $awal = new DateTime($periode->start_date);
+            $akhir = new DateTime($periode->end_date);
+            if ($now->getTimestamp() >= $awal->getTimestamp() && $now->getTimestamp() <= $akhir->getTimestamp()){
+                $tombol = "";
+            }else{
+                $tombol = "disabled";
+            }
         } else {
             $tombol = "disabled";
             $semester = "All";
         }
 
-        // @dd($unit);
+        // @dd($tombol);
         if ($mode == 'Program Studi'){
             $getDataMhs = Services::getMahasiswaPerProdi($unit,$semester,session('user_token'));
             // print_r ($getDataMhs);
@@ -181,7 +190,8 @@ class PeneriamDispensasiController extends Controller
             'laporan_active'    => '',
             'periode_active'    => '',
             'penerima_active'   => 'active',
-            'users'              => session('user_username'),
+            'users'             => session('user_username'),
+            'tombol'            => $tombol,
             'semester'          => $semester,
             'kelompok_ukt'      => $kel_ukt,
             'pengajuan'         => $pengajuan,
@@ -281,8 +291,9 @@ class PeneriamDispensasiController extends Controller
             return redirect()->back()->with('toast_error', 'Masa Studi Sudah Habis');
             exit;
         }
-        
-        if ($response[0]['pembayaran'] >= 0 || $response[0]['pembayaran'] <> 'null'){
+        // @dd($response[0]['pembayaran']);
+
+        if ($response[0]['pembayaran'] != null){
             return redirect()->back()->with('toast_error', 'Anda Sudah Membayar');
             exit;
         }
@@ -361,16 +372,16 @@ class PeneriamDispensasiController extends Controller
                     return redirect()->back()->with('toast_error', 'Gagal Upload File Pra Transkrip');
                 }
             } elseif ($jenis_dispensasi === '2') {
-                if (isset($request->file_keterangan)) {
-                    $nama_dok = $request->file_keterangan->getClientOriginalName();
-                    $slug = Functions::seo_friendly_url($nama_dok);
-                    $ext = $request->file_keterangan->extension();
-                    $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
-                    $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
-                }
-                if (!$path_keterangan_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
-                }
+                // if (isset($request->file_keterangan)) {
+                //     $nama_dok = $request->file_keterangan->getClientOriginalName();
+                //     $slug = Functions::seo_friendly_url($nama_dok);
+                //     $ext = $request->file_keterangan->extension();
+                //     $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                //     $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
+                // }
+                // if (!$path_keterangan_saved) {
+                //     return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
+                // }
     
                 if (isset($request->file_penghasilan)) {
                     $nama_dok = $request->file_penghasilan->getClientOriginalName();
@@ -396,16 +407,16 @@ class PeneriamDispensasiController extends Controller
                     return redirect()->back()->with('toast_error', 'Gagal Upload File Kebangkrutan');
                 }
             } elseif ($jenis_dispensasi === '3' || $jenis_dispensasi === '4' || $jenis_dispensasi === '5' || $jenis_dispensasi === '6') {
-                if (isset($request->file_keterangan)) {
-                    $nama_dok = $request->file_keterangan->getClientOriginalName();
-                    $slug = Functions::seo_friendly_url($nama_dok);
-                    $ext = $request->file_keterangan->extension();
-                    $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
-                    $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
-                }
-                if (!$path_keterangan_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
-                }
+                // if (isset($request->file_keterangan)) {
+                //     $nama_dok = $request->file_keterangan->getClientOriginalName();
+                //     $slug = Functions::seo_friendly_url($nama_dok);
+                //     $ext = $request->file_keterangan->extension();
+                //     $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                //     $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
+                // }
+                // if (!$path_keterangan_saved) {
+                //     return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
+                // }
     
                 if (isset($request->file_penghasilan)) {
                     $nama_dok = $request->file_penghasilan->getClientOriginalName();
@@ -419,16 +430,16 @@ class PeneriamDispensasiController extends Controller
                     return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan');
                 }
             } else {
-                if (isset($request->file_keterangan)) {
-                    $nama_dok = $request->file_keterangan->getClientOriginalName();
-                    $slug = Functions::seo_friendly_url($nama_dok);
-                    $ext = $request->file_keterangan->extension();
-                    $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
-                    $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
-                }
-                if (!$path_keterangan_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
-                }
+                // if (isset($request->file_keterangan)) {
+                //     $nama_dok = $request->file_keterangan->getClientOriginalName();
+                //     $slug = Functions::seo_friendly_url($nama_dok);
+                //     $ext = $request->file_keterangan->extension();
+                //     $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                //     $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
+                // }
+                // if (!$path_keterangan_saved) {
+                //     return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
+                // }
                 if (isset($request->file_penghasilan)) {
                     $nama_dok = $request->file_penghasilan->getClientOriginalName();
                     $slug = Functions::seo_friendly_url($nama_dok);
@@ -459,7 +470,7 @@ class PeneriamDispensasiController extends Controller
             ])->update([
                 'file_permohonan'   => $path_permohonan_saved,
                 'file_pernyataan'   => $path_pernyataan_saved,
-                'file_keterangan'   => $path_keterangan_saved,
+                // 'file_keterangan'   => $path_keterangan_saved,
                 'file_penghasilan'  => $path_penghasilan_saved,
                 'file_phk'          => $path_phk_saved,
                 'file_pailit'       => $path_pailit_saved,
