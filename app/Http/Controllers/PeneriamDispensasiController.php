@@ -67,7 +67,8 @@ class PeneriamDispensasiController extends Controller
         $unit = trim(session('user_unit'));
         
         $pengajuan = DB::table('tb_pengajuan_dispensasi')
-            // ->where('semester', trim($semester))
+            ->where('semester', trim($semester))
+            ->where('kode_prodi','like',trim($unit).'%')
             ->where('status_pengajuan', '=', '0')
             ->orderBy('id','desc')
             ->get();
@@ -91,7 +92,8 @@ class PeneriamDispensasiController extends Controller
         }
 
         $verval_wr2 = DB::table('tb_pengajuan_dispensasi')
-        // ->where('semester', trim($semester))
+            ->where('semester', trim($semester))
+            ->where('kode_prodi','like', trim($unit).'%')
             ->where('status_pengajuan', '>=', '2')
             ->where('status_pengajuan', '<=', '3')
             ->orderBy('id','desc')
@@ -104,7 +106,7 @@ class PeneriamDispensasiController extends Controller
         }
 
         $verval_wr1 = DB::table('tb_pengajuan_dispensasi')
-        // ->where('semester', trim($semester))
+            ->where('semester', trim($semester))
             ->where('status_pengajuan', '>=', '4')
             ->where('status_pengajuan', '<=', '5')
             ->orderBy('id','desc')
@@ -117,7 +119,7 @@ class PeneriamDispensasiController extends Controller
         }
 
         $verval_bakh = DB::table('tb_pengajuan_dispensasi')
-        // ->where('semester', trim($semester))
+            ->where('semester', trim($semester))
             ->where('status_pengajuan', '>=', '6')
             // ->where('status_pengajuan', '<=', '7')
             ->orderBy('id','desc')
@@ -130,7 +132,7 @@ class PeneriamDispensasiController extends Controller
         }
 
         $finish = DB::table('tb_pengajuan_dispensasi')
-        // ->where('semester', trim($semester))
+            ->where('semester', trim($semester))
             // ->where('status_pengajuan', '>=', '6')
             ->where('status_pengajuan', '=', '7')
             ->orderBy('id','desc')
