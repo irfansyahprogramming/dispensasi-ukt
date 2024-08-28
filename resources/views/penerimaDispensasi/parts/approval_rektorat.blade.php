@@ -1,7 +1,7 @@
 {{-- <button class="btn btn-outline-primary" id="btnCetakPenerima" data-toggle="modal" data-target="#modal-Cetak"><i class="ace-icon fa fa-plus"></i> Cetak Pengajuan </button> --}}
 <div>Verifikasi dan Validasi Kantor Wakil Rektor 2</div>
 <div class="mt-4table-responsive">
-    <table id="dataTabel" class="table table-hover">
+    <table id="table" class="table table-hover">
     <thead>
         <tr>
         <th scope="col">No</th>
@@ -88,3 +88,28 @@
     </div>
 </div>
 {{-- </div> --}}
+@section('script')
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script>
+$(function(){
+  $('#table').dataTable({
+    // "paging": true,
+    "lengthChange": true,
+    // "searching": true,
+    "ordering": true,
+    // "info": true,
+    // "autoWidth": false,
+    // "responsive": true,
+    // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+  });
+})
+</script>
+@endsection
