@@ -294,9 +294,10 @@ $(function(){
     "ordering": true,
     // "info": true,
     // "autoWidth": false,
-    // "responsive": true,
+    "responsive": true,
     // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
   });
+  $('#table1').dataTable();
 })
 function edit(id){
   

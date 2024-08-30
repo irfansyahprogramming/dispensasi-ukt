@@ -11,6 +11,6 @@ class DataUKT extends Model
 
     protected $quarded = ['id'];
 
-    protected $fillable = ['kode_prodi','angkatan', 'ukt_1', 'ukt_2', 'ukt_3', 'ukt_4', 'ukt_5', 'ukt_6', 'ukt_6', 'ukt_7', 'ukt_8', 'ukt_beasiswa', 'ukt_kerjasama'];
+    protected $fillable = ['kode_prodi','angkatan', 'ukt_1', 'ukt_2', 'ukt_3', 'ukt_4', 'ukt_5', 'ukt_6', 'ukt_6', 'ukt_7', 'ukt_8', 'ukt_beasiswa', 'ukt_kerjasama','spp_awal','spp_lanjut'];
 
 }

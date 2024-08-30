@@ -60,7 +60,7 @@
                 <th scope="col" rowspan="2">No</th>
                 <th scope="col" rowspan="2">Program Studi</th>
                 <th scope="col" rowspan="2">Angkatan</th>
-                <th scope="col" colspan="10" class="text-center">Nominal Kelompok UKT</th>
+                <th scope="col" colspan="12" class="text-center">Nominal Kelompok UKT</th>
                 <th scope="col" rowspan="2">Aksi</th>
               </tr>
               <tr>
@@ -74,6 +74,8 @@
                 <th scope="col">VIII</th>
                 <th scope="col">Beasiswa</th>
                 <th scope="col">Kerjasama</th>
+                <th scope="col">SPP Pascasarjana Awal</th>
+                <th scope="col">SPP Pascasarjana Setelah 5 Semester</th>
               </tr>
             </thead>
             <tbody>
@@ -92,6 +94,8 @@
                   <td>{{ $item->ukt_8 }}</td>
                   <td>{{ $item->ukt_beasiswa }}</td>
                   <td>{{ $item->ukt_kerjasama }}</td>
+                  <td>{{ $item->spp_awal }}</td>
+                  <td>{{ $item->spp_lanjut }}</td>
                   <td class="btn-group text-center">
                     <button type="button" data-toggle="tooltip" data-placement="top" title="Edit Data" class="btn btn-sm btn-outline-warning" onclick="editDataUKT({{ $item->id }})"><i class="fas fa-edit"></i> </button>
 
@@ -182,6 +186,14 @@
                   <label for="ukt_kerjasama">Kelompok Kerjasama</label>
                   <input type="number" name="ukt_kerjasama" class="form-control form-control-border" id="ukt_kerjasama" placeholder="0">
                 </div>
+                <div class="form-group">
+                  <label for="spp_awal">SPP Pascasarjana Awal</label>
+                  <input type="number" name="spp_awal" class="form-control form-control-border" id="spp_awal" placeholder="0">
+                </div>
+                <div class="form-group">
+                  <label for="spp_lanjut">SPP Pascasarjana setelah 5 semester</label>
+                  <input type="number" name="spp_lanjut" class="form-control form-control-border" id="spp_lanjut" placeholder="0">
+                </div>
 
               </div>
           </div>
@@ -256,6 +268,8 @@
           $('[name="ukt_8"]').val(data.ukt_8.toFixed(0));
           $('[name="ukt_beasiswa"]').val(data.ukt_beasiswa.toFixed(0));
           $('[name="ukt_kerjasama"]').val(data.ukt_kerjasama.toFixed(0));
+          $('[name="spp_awal"]').val(data.spp_awal.toFixed(0));
+          $('[name="spp_lanjut"]').val(data.spp_lanjut.toFixed(0));
 
 
           $("#modal-dataUKT").modal('show');

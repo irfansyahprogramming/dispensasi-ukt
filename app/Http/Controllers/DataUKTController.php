@@ -95,6 +95,8 @@ class DataUKTController extends Controller
             'ukt_6'               => ['required'],
             'ukt_7'               => ['required'],
             'ukt_8'               => ['required'],
+            'spp_awal'            => ['required'],
+            'spp_lanjut'          => ['required'],
         ]);
 
         try {
@@ -115,7 +117,9 @@ class DataUKTController extends Controller
                     'ukt_7'         => $request->ukt_7,
                     'ukt_8'         => $request->ukt_8,
                     'ukt_beasiswa'  => $request->ukt_beasiswa,
-                    'ukt_kerjasama' => $request->ukt_kerjasama
+                    'ukt_kerjasama' => $request->ukt_kerjasama,
+                    'spp_awal'      => $request->spp_awal,
+                    'spp_lanjut'    => $request->spp_lanjut
                 ]
             );
 

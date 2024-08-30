@@ -471,12 +471,12 @@ class PeneriamDispensasiController extends Controller
                 if (!$path_penghasilan_saved) {
                     return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan');
                 }
-                if (isset($request->file_phk)) {
-                    $nama_dok = $request->file_phk->getClientOriginalName();
+                if (isset($request->file_kurang_penghasilan)) {
+                    $nama_dok = $request->file_kurang_penghasilan->getClientOriginalName();
                     $slug = Functions::seo_friendly_url($nama_dok);
-                    $ext = $request->file_phk->extension();
+                    $ext = $request->file_kurang_penghasilan->extension();
                     $filename = 'f_phk_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
-                    $path_phk_saved = $request->file_phk->storeAs($path, $filename, 'public');
+                    $path_phk_saved = $request->file_kurang_penghasilan->storeAs($path, $filename, 'public');
                 }
     
                 if (!$path_phk_saved) {
