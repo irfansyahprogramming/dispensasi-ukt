@@ -311,6 +311,7 @@ function edit(id){
       // alert(data[0].nim);
       $('[name="nim"]').val(data[0].nim).change();
       $('[name="nim"]').trigger('chosen:updated');
+      $('[name="id"]').val(data[0].id);
       $('[name="pekerjaan"]').val(data[0].pekerjaan);
       $('[name="jabatan"]').val(data[0].jabatan_kerja);
       $('[name="kode_program_studi"]').val(data[0].kodeProdi);

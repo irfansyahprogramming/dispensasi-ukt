@@ -238,6 +238,7 @@ class PeneriamDispensasiController extends Controller
             'jabatan'           => ['required']
         ]);
         
+        $id = $request->id;
         $semester = $request->semester;
         $jenis_dispensasi = $request->jenis_dispensasi;
         $nim = $request->nim;
@@ -253,9 +254,14 @@ class PeneriamDispensasiController extends Controller
         
         $lenMoney = strlen($nominal);
         $money = substr($nominal, 4, ($lenMoney - 3));
+        if (isset($request->id)){
+            // @dd($lenMoney);
+            $money = substr($nominal, 3, ($lenMoney - 3));
+            // @dd($lenMoney."-".$money);
+        }
         $nominal_ukt = intval(str_replace('.', '', $money));
         // $money = explode($nominal," ");
-        // @dd($nominal_ukt);
+        // @dd($money."-".$nominal_ukt);
         
         if (isset($request->semester_ke)) {
             $semesterke = $request->semester_ke;
