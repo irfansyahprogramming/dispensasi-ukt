@@ -235,12 +235,12 @@ class PeneriamDispensasiController extends Controller
             'kelompok_ukt'              => ['required'],
             'nominal_ukt'               => ['required'],
             'pekerjaan'                 => ['required'],
-            'jabatan'                   => ['required'],
-            'file_permohonan'           => ['file|max:512'],
-            'file_pernyataan'           => ['file|max:512'],
-            'file_pra_transkrip'        => ['file|max:512'],
-            'file_penghasilan'          => ['file|max:512'],
-            'file_kurang_penghasilan'   => ['file|max:512']
+            'jabatan'                   => ['required']
+            // 'file_permohonan'           => ['file|max:512'],
+            // 'file_pernyataan'           => ['file|max:512'],
+            // 'file_pra_transkrip'        => ['file|max:512'],
+            // 'file_penghasilan'          => ['file|max:512'],
+            // 'file_kurang_penghasilan'   => ['file|max:512']
         ]);
 
         $id = $request->id;
