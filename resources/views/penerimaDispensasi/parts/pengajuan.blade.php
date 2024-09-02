@@ -12,7 +12,7 @@
   <button class="btn btn-outline-primary" id="btnCetakPenerima" data-toggle="modal" data-target="#modal-Cetak"><i class="ace-icon fa fa-plus"></i> Cetak Pengajuan </button>
     {{-- @dd($mode); --}}
     @if($semester <> '' && $mode == "Program Studi")
-        <button class="btn btn-outline-success {{ $tombol }}" id="btnTambahPengajuan" data-toggle="modal" data-target="#modal-Pengajuan"><i class="ace-icon fa fa-edit"></i> Tambah Pengajuan </button>
+        <button class="btn btn-outline-success {{ $tombol }}" id="btnTambahPengajuan" data-toggle="modal" data-target="#modal-Pengajuan" {{ $tombol }}><i class="ace-icon fa fa-edit"></i> Tambah Pengajuan </button>
     @endif
         
     <div class="mt-4 table-responsive">

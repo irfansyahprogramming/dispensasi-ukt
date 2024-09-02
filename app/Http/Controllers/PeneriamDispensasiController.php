@@ -81,6 +81,7 @@ class PeneriamDispensasiController extends Controller
 
         $verval_dekan = DB::table('tb_pengajuan_dispensasi')
         // ->where('semester', trim($semester))
+            ->where('kode_prodi','like', trim($unit).'%')
             ->where('status_pengajuan', '=', '1')
             ->orderBy('id','desc')
             ->get();
@@ -93,7 +94,6 @@ class PeneriamDispensasiController extends Controller
 
         $verval_wr2 = DB::table('tb_pengajuan_dispensasi')
             ->where('semester', trim($semester))
-            ->where('kode_prodi','like', trim($unit).'%')
             ->where('status_pengajuan', '>=', '2')
             ->where('status_pengajuan', '<=', '3')
             ->orderBy('id','desc')
@@ -221,23 +221,28 @@ class PeneriamDispensasiController extends Controller
     {
         // print_r($request->all());
         $credentials = $request->validate([
-            'semester'          => ['required'],
-            'jenis_dispensasi'  => ['required'],
-            'nim'               => ['required'],
-            'nama_lengkap'      => ['required', 'string'],
-            'kode_program_studi'=> ['required'],
-            'program_studi'     => ['required'],
-            'jenjang'           => ['required'],
-            'semester_ke'       => ['required'],
-            'alamat'            => ['required', 'string', 'max:255'],
-            'nomor_hp'          => ['required'],
-            'email'             => ['required', 'email'],
-            'kelompok_ukt'      => ['required'],
-            'nominal_ukt'       => ['required'],
-            'pekerjaan'         => ['required'],
-            'jabatan'           => ['required']
+            'semester'                  => ['required'],
+            'jenis_dispensasi'          => ['required'],
+            'nim'                       => ['required'],
+            'nama_lengkap'              => ['required', 'string'],
+            'kode_program_studi'        => ['required'],
+            'program_studi'             => ['required'],
+            'jenjang'                   => ['required'],
+            'semester_ke'               => ['required'],
+            'alamat'                    => ['required', 'string', 'max:255'],
+            'nomor_hp'                  => ['required'],
+            'email'                     => ['required', 'email'],
+            'kelompok_ukt'              => ['required'],
+            'nominal_ukt'               => ['required'],
+            'pekerjaan'                 => ['required'],
+            'jabatan'                   => ['required'],
+            'file_permohonan'           => ['file|max:512'],
+            'file_pernyataan'           => ['file|max:512'],
+            'file_pra_transkrip'        => ['file|max:512'],
+            'file_penghasilan'          => ['file|max:512'],
+            'file_kurang_penghasilan'   => ['file|max:512']
         ]);
-        
+
         $id = $request->id;
         $semester = $request->semester;
         $jenis_dispensasi = $request->jenis_dispensasi;

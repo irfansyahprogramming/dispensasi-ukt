@@ -9,6 +9,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PeneriamDispensasiController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\PrintController;
+use App\Http\Controllers\TerbitkanSKController;
 use App\Http\Controllers\VerifikasiDekanController;
 use App\Http\Controllers\VerifikasiUKTController;
 use App\Http\Controllers\VerifikasiWR2Controller;
@@ -89,6 +90,15 @@ Route::group(['prefix' => 'verifikasiWR2_dispensasi', 'as' => 'verifikasiWR2_dis
     Route::delete('/{id}', [VerifikasiWR2Controller::class, 'delete'])->name('delete');
     Route::post('layakpost', [VerifikasiWR2Controller::class, 'layakpost'])->name('layakpost');
     Route::post('tidaklayakpost', [VerifikasiWR2Controller::class, 'tidaklayakpost'])->name('tidaklayakpost');
+});
+
+Route::group(['prefix' => 'penerbitan_sk', 'as' => 'penerbitan_sk.'], function () {
+    Route::get('/', [TerbitkanSKController::class, 'index'])->name('index');
+    Route::post('simpan', [TerbitkanSKController::class, 'simpan'])->name('simpan');
+    Route::get('/detil/{id}', [TerbitkanSKController::class, 'detil'])->name('detil');
+    Route::delete('/{id}', [TerbitkanSKController::class, 'delete'])->name('delete');
+    Route::post('layakpost', [TerbitkanSKController::class, 'layakpost'])->name('layakpost');
+    Route::post('tidaklayakpost', [TerbitkanSKController::class, 'tidaklayakpost'])->name('tidaklayakpost');
 });
 
 // Route::get('/penerima_dispensasi', [PeneriamDispensasiController::class, 'index'])->name('index');

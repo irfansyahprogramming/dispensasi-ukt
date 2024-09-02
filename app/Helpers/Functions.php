@@ -49,17 +49,37 @@ class Functions
   public static function pengajuan($semester)
   {
     if ($semester == ''){
-      $pengajuan = DB::table('tb_pengajuan_dispensasi')
-      ->where('kode_prodi','like',trim(session('user_unit')).'%')
-      ->get();  
+      if (trim(session('user_cmode')) == "2" || trim(session('user_cmode')) == "3")
+      {  
+        $pengajuan = DB::table('tb_pengajuan_dispensasi')
+        ->leftJoin('tr_history_pengajuan','tr_history_pengajuan.id_pengajuan','tb_pengajuan_dispensasi.id')
+        ->where('tb_pengajuan_dispensasi.kode_prodi','like',trim(session('user_unit')).'%')
+        ->get();
+
+      }else{
+        $pengajuan = DB::table('tb_pengajuan_dispensasi')->leftJoin('tr_history_pengajuan','tr_history_pengajuan.id_pengajuan','tb_pengajuan_dispensasi.id')
+        ->get();
+      }
+    
     }else{
-      $pengajuan = DB::table('tb_pengajuan_dispensasi')
-      ->where('kode_prodi','like',trim(session('user_unit')).'%')
-      ->where('semester',trim($semester))
-      ->get();
-  
+      
+      if (trim(session('user_cmode')) == "2" || trim(session('user_cmode')) == "3")
+      {  
+        $pengajuan = DB::table('tb_pengajuan_dispensasi')
+        ->leftJoin('tr_history_pengajuan','tr_history_pengajuan.id_pengajuan','tb_pengajuan_dispensasi.id')
+        ->where('kode_prodi','like',trim(session('user_unit')).'%')
+        ->where('tb_pengajuan_dispensasi.semester',trim($semester))
+        ->get();
+
+      }else{
+        $pengajuan = DB::table('tb_pengajuan_dispensasi')
+        ->leftJoin('tr_history_pengajuan','tr_history_pengajuan.id_pengajuan','tb_pengajuan_dispensasi.id')
+        ->where('tb_pengajuan_dispensasi.semester',trim($semester))
+        ->get();
+      }  
     }
 
+    // @dd($pengajuan);
    
     return $pengajuan;
   }

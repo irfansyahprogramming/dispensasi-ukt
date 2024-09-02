@@ -96,12 +96,12 @@
               </p>
             </a>
           </li>
-        @elseif (session('user_cmode') == '4')
+        @elseif (session('user_cmode') == '22')
           <li class="nav-item" title="Daftar Penerima Keringanan UKT">
-            <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
+            <a href="/penerbitan_sk" class="nav-link {{ $penerbitan_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Daftar Penerima
+                Penerbitan SK
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -110,12 +110,31 @@
             <a href="/laporan" class="nav-link {{ $laporan_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Laporan Keringanan UKT
+                Laporan Penerbitan SK
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
           </li>
-        @elseif (session('user_cmode') == '11')
+        @elseif (session('user_cmode') == '4')
+        <li class="nav-item" title="Daftar Penerima Keringanan UKT">
+          <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
+            <i class="nav-icon fas fa-user"></i>
+            <p>
+              Daftar Penerima
+              <!--<span class="right badge badge-danger">New</span>-->
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/laporan" class="nav-link {{ $laporan_active }}">
+            <i class="nav-icon fas fa-user"></i>
+            <p>
+              Laporan Keringanan UKT
+              <!--<span class="right badge badge-danger">New</span>-->
+            </p>
+          </a>
+        </li>
+      @elseif (session('user_cmode') == '11')
           <li class="nav-item" title="Daftar Penerima Keringanan UKT">
             <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
               <i class="nav-icon fas fa-user"></i>

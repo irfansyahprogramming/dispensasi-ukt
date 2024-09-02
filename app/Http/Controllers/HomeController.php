@@ -30,16 +30,29 @@ class HomeController extends Controller
         // }
         $semester = "";
         $badges = Functions::pengajuan($semester);
-
-        if ($cmode == '20'){
-            // $pengajuan = collect(PengajuanDispensasiUKTModel::where('semester',$semester)->get());
-            $pengajuan = DB::table('tb_pengajuan_dispensasi')->where('semester',$semester)->get();
-        }else{
-            $pengajuan = DB::table('tb_pengajuan_dispensasi')->where('kode_prodi', 'like', trim(session('user_unit')) .'%')->where('semester',$semester)->get();
-            // $pengajuan = PengajuanDispensasiUKTModel::where('kode_prodi', 'like', trim(session('user_unit')) . '%')->where('semester',$semester)->get();
-            
-        }
-        // return $pengajuan;
+        // @dd($badges);
+        // $pengajuan = DB::table('tb_pengajuan_dispensasi')->where('semester',$semester)->get();
+        // if ($semester == ''){
+        //     if ($cmode == '2' || $cmode == '3'){
+        //         // $pengajuan = collect(PengajuanDispensasiUKTModel::where('semester',$semester)->get());
+        //         $pengajuan = DB::table('tb_pengajuan_dispensasi')->leftJoin('tr_history_pengajuan','tr_history_pengajuan.id_pengajuan','tb_pengajuan_dispensasi.id')->where('tb_pengajuan_dispensasi.kode_prodi', 'like', trim(session('user_unit')) .'%')->get();
+        //     }else{
+        //         $pengajuan = DB::table('tb_pengajuan_dispensasi')->leftJoin('tr_history_pengajuan','tr_history_pengajuan.id_pengajuan','tb_pengajuan_dispensasi.id')->get();
+        //         // $pengajuan = PengajuanDispensasiUKTModel::where('kode_prodi', 'like', trim(session('user_unit')) . '%')->where('semester',$semester)->get();
+                
+        //     }
+        // }else{
+        //     if ($cmode == '2' || $cmode == '3'){
+        //         // $pengajuan = collect(PengajuanDispensasiUKTModel::where('semester',$semester)->get());
+        //         $pengajuan = DB::table('tb_pengajuan_dispensasi')->leftJoin('tr_history_pengajuan','tr_history_pengajuan.id_pengajuan','tb_pengajuan_dispensasi.id')->where('tb_pengajuan_dispensasi.kode_prodi', 'like', trim(session('user_unit')) .'%')->where('tb_pengajuan_dispensasi.semester',$semester)->get();
+        //     }else{
+        //         $pengajuan = DB::table('tb_pengajuan_dispensasi')->leftJoin('tr_history_pengajuan','tr_history_pengajuan.id_pengajuan','tb_pengajuan_dispensasi.id')->where('tb_pengajuan_dispensasi.semester',$semester)->get();
+        //         // $pengajuan = PengajuanDispensasiUKTModel::where('kode_prodi', 'like', trim(session('user_unit')) . '%')->where('semester',$semester)->get();
+                
+        //     }
+        // }
+        
+        // @dd($pengajuan);
         $arrData = [
             'title'         => 'Home',
             'active'        => 'home',
@@ -53,7 +66,8 @@ class HomeController extends Controller
             'dispen_active' => '',
             'penerima_active'   => '',
             'laporan_active' => '',
-            'pengajuan' => $pengajuan,
+            'penerbitan_active' => '',
+            // 'pengajuan' => $pengajuan,
             'badges' => $badges
             //'posts' => Post::latest()->get()
         ];

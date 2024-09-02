@@ -67,7 +67,7 @@ body {
   color: #212529;
   text-align: left;
   /* background-color: #fff; */
-  background-image:url('../../dist/img/unj-bg.jpg');
+  background-image:url('../../dist/img/unj-bg.png');
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {

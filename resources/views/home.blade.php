@@ -17,7 +17,7 @@
   </section>
 
   <section class="content">
-    @if ($cmode == '3' || $cmode == '4' || $cmode == '11' || $cmode == '13' || $cmode == '14' || $cmode == '20')
+    @if ($cmode == '2' || $cmode == '3' || $cmode == '4' || $cmode == '11' || $cmode == '13' || $cmode == '14' || $cmode == '20')
       @include('layouts.infobox')
     @endif
     <div class="card">
