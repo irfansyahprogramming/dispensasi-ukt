@@ -49,7 +49,7 @@ class Functions
   public static function pengajuan($semester)
   {
     if ($semester == ''){
-      if (trim(session('user_cmode')) == "2" || trim(session('user_cmode')) == "3")
+      if (trim(session('user_cmode')) == "2" || trim(session('user_cmode')) == "3" || trim(session('user_cmode')) == "14")
       {  
         $pengajuan = DB::table('tb_pengajuan_dispensasi')
         ->leftJoin('tr_history_pengajuan','tr_history_pengajuan.id_pengajuan','tb_pengajuan_dispensasi.id')
@@ -63,7 +63,7 @@ class Functions
     
     }else{
       
-      if (trim(session('user_cmode')) == "2" || trim(session('user_cmode')) == "3")
+      if (trim(session('user_cmode')) == "2" || trim(session('user_cmode')) == "3" || trim(session('user_cmode')) == "14")
       {  
         $pengajuan = DB::table('tb_pengajuan_dispensasi')
         ->leftJoin('tr_history_pengajuan','tr_history_pengajuan.id_pengajuan','tb_pengajuan_dispensasi.id')

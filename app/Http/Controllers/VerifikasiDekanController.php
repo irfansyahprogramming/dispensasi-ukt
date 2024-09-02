@@ -37,7 +37,7 @@ class VerifikasiDekanController extends Controller
         }
 
         $badges = Functions::pengajuan($semester);
-
+        
         $pengajuan = DB::table('tb_pengajuan_dispensasi')
             ->where('kode_prodi', 'like', trim(session('user_unit')) . '%');
 
@@ -49,7 +49,7 @@ class VerifikasiDekanController extends Controller
 
         // by prodi
         if (isset($request->prodi) and $request->prodi != 'All') {
-            $pengajuan = $pengajuan->where('kode_prodi', trim($request->prodi));
+            $pengajuan = $pengajuan->where('kode_prodi','like', trim($request->prodi).'%');
         }
 
         // by jenis pengajuan
@@ -59,6 +59,7 @@ class VerifikasiDekanController extends Controller
 
         // get data pengajuan
         $pengajuan = $pengajuan
+            // ->where('kode_prodi','like', trim($unit).'%')
             ->Where('status_pengajuan', '>=', '1')
             ->Where('status_pengajuan', '<=', '23')
             ->get();
