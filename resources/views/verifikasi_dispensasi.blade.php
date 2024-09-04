@@ -37,6 +37,7 @@
             </button> --}}
         </div>
       </div>
+      {{-- <div id="example1_wrapper">Tombol</div> --}}
       <div class="card-body p-2">
         <div class="table-responsive">
           <table id="dataTabel" class="table table-hover" style="width: 100%">
@@ -345,6 +346,9 @@
   <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+  <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+  <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
   <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
@@ -366,6 +370,7 @@
         // "info": true,
         // "autoWidth": false,
         "responsive": true,
+        "buttons": ["copy", "csv", "excel", "pdf", "print"],
         "layout": {
           "bottomEnd": {
               "paging": {
@@ -373,7 +378,7 @@
               }
           }
         }
-      });
+      }).buttons().container().appendTo('#dataTabel_wrapper .col-md-6:eq(0)');
     });
 
     $('#showMe').click(function() {
