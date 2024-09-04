@@ -82,7 +82,8 @@ class PeneriamDispensasiController extends Controller
         $verval_dekan = DB::table('tb_pengajuan_dispensasi')
         // ->where('semester', trim($semester))
             ->where('kode_prodi','like', trim($unit).'%')
-            ->where('status_pengajuan', '=', '1')
+            ->where('status_pengajuan', '>=', '1')
+            ->where('status_pengajuan', '<=', '2')
             ->orderBy('id','desc')
             ->get();
         foreach ($verval_dekan as $dekan) {
