@@ -35,6 +35,7 @@
             </tr>
         </thead>
         <tbody>
+            {{-- @dd($pengajuan) --}}
             @foreach ($pengajuan as $item)
             <tr>
                 <td>{{ $loop->iteration }}</td>

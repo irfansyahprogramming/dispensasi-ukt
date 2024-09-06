@@ -51,9 +51,7 @@ class PeneriamDispensasiController extends Controller
             $semester = "All";
         }
 
-        $dispensasi = PengajuanDispensasiUKTModel::where('semester',$semester);
-        
-        // @dd($pengajuan->get());
+        // 
         if ($mode == 'Program Studi'){
             $getDataMhs = Services::getMahasiswaPerProdi($unit,$semester,session('user_token'));
             // print_r ($getDataMhs);
@@ -65,7 +63,8 @@ class PeneriamDispensasiController extends Controller
         }
        
         $badges = Functions::pengajuan($semester);
-        
+        $dispensasi = PengajuanDispensasiUKTModel::where('semester',$semester);
+
         $unit = trim(session('user_unit'));
         if ($cmode == '3' || $cmode == '14'){
             $pengajuan = $dispensasi->where('kode_prodi','like',trim($unit).'%')
@@ -92,21 +91,21 @@ class PeneriamDispensasiController extends Controller
         }
 
         // @dd($pengajuan);
-
+        $dispensasiFak = PengajuanDispensasiUKTModel::where('semester',$semester);
         if ($cmode == '3' || $cmode == '14'){
-            $verval_dekan = $dispensasi->where('kode_prodi','like',trim($unit).'%')
+            $verval_dekan = $dispensasiFak->where('kode_prodi','like',trim($unit).'%')
             ->where('status_pengajuan', '>=', '1')
             ->where('status_pengajuan', '<=', '2')
             ->orderBy('id','desc')
             ->get();
         }elseif($cmode == '2'){
-            $verval_dekan = $dispensasi->where('kode_prodi',trim($unit))
+            $verval_dekan = $dispensasiFak->where('kode_prodi',trim($unit))
             ->where('status_pengajuan', '>=', '1')
             ->where('status_pengajuan', '<=', '2')
             ->orderBy('id','desc')
             ->get();
         }else{
-            $verval_dekan = $dispensasi->where('status_pengajuan', '>=', '1')
+            $verval_dekan = $dispensasiFak->where('status_pengajuan', '>=', '1')
             ->where('status_pengajuan', '<=', '2')
             ->orderBy('id','desc')
             ->get();
@@ -119,22 +118,22 @@ class PeneriamDispensasiController extends Controller
             $dekan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $dekan->kelompok_ukt)->first()->kelompok;
         }
 
+        $dispensasiWR2 = PengajuanDispensasiUKTModel::where('semester',$semester);
         if ($cmode == '3' || $cmode == '14'){
-            $verval_wr2 = $dispensasi->where('kode_prodi','like',trim($unit).'%')
-            ->where('status_pengajuan', '>=', '2')
-            ->where('status_pengajuan', '<=', '3')
+            $verval_wr2 = $dispensasiWR2
+            ->where('kode_prodi','like',trim($unit).'%')
+            ->where('status_pengajuan', '>', '2')
             ->orderBy('id','desc')
             ->get();
         }elseif($cmode == '2'){
-            $verval_wr2 = $dispensasi->where('kode_prodi',trim($unit))
-            ->where('status_pengajuan', '>=', '2')
-            ->where('status_pengajuan', '<=', '3')
+            $verval_wr2 = $dispensasiWR2
+            ->where('kode_prodi',trim($unit))
+            ->where('status_pengajuan', '>', '2')
             ->orderBy('id','desc')
             ->get();
         }else{
-            $verval_wr2 = $dispensasi
-            ->where('status_pengajuan', '>=', '2')
-            ->where('status_pengajuan', '<=', '3')
+            $verval_wr2 = $dispensasiWR2
+            ->where('status_pengajuan', '>', '2')
             ->orderBy('id','desc')
             ->get();
         }
@@ -146,18 +145,19 @@ class PeneriamDispensasiController extends Controller
             $wr2->kelompok = DB::table('ref_kelompok_ukt')->where('id', $wr2->kelompok_ukt)->first()->kelompok;
         }
 
+        $dispensasiWR1 = PengajuanDispensasiUKTModel::where('semester',$semester);
         if ($cmode == '3' || $cmode == '14'){
-            $verval_wr1 = $dispensasi->where('kode_prodi','like',trim($unit).'%')
+            $verval_wr1 = $dispensasiWR1->where('kode_prodi','like',trim($unit).'%')
             ->where('status_pengajuan', '>=', '3')
             ->orderBy('id','desc')
             ->get();
         }elseif($cmode == '2'){
-            $verval_wr1 = $dispensasi->where('kode_prodi',trim($unit))
+            $verval_wr1 = $dispensasiWR1->where('kode_prodi',trim($unit))
             ->where('status_pengajuan', '>=', '3')
             ->orderBy('id','desc')
             ->get();
         }else{
-            $verval_wr1 = $dispensasi
+            $verval_wr1 = $dispensasiWR1
             ->where('status_pengajuan', '>=', '3')
             ->orderBy('id','desc')
             ->get();
@@ -169,19 +169,45 @@ class PeneriamDispensasiController extends Controller
             $wr1->status = DB::table('ref_status_pengajuan')->where('id', $wr1->status_pengajuan)->first()->status_ajuan;
             $wr1->kelompok = DB::table('ref_kelompok_ukt')->where('id', $wr1->kelompok_ukt)->first()->kelompok;
         }
+
+        $dispensasiHutalak = PengajuanDispensasiUKTModel::where('semester',$semester);
         if ($cmode == '3' || $cmode == '14'){
-            $verval_bakh = $dispensasi->where('kode_prodi','like',trim($unit).'%')
+            $verval_hutalak = $dispensasiHutalak->where('kode_prodi','like',trim($unit).'%')
+            ->where('status_pengajuan', '>', '3')
+            ->orderBy('id','desc')
+            ->get();
+        }elseif($cmode == '2'){
+            $verval_hutalak = $dispensasiHutalak->where('kode_prodi',trim($unit))
+            ->where('status_pengajuan', '>', '3')
+            ->orderBy('id','desc')
+            ->get();
+        }else{
+            $verval_hutalak = $dispensasiHutalak
+            ->where('status_pengajuan', '>', '3')
+            ->orderBy('id','desc')
+            ->get();
+        }
+        
+        foreach ($verval_hutalak as $hutalak) {
+            $hutalak->nom_ukt = number_format($hutalak->nominal_ukt, 0);
+            $hutalak->jenis = DB::table('ref_jenisdipensasi')->where('id', $hutalak->jenis_dispensasi)->first()->jenis_dispensasi;
+            $hutalak->status = DB::table('ref_status_pengajuan')->where('id', $hutalak->status_pengajuan)->first()->status_ajuan;
+            $hutalak->kelompok = DB::table('ref_kelompok_ukt')->where('id', $hutalak->kelompok_ukt)->first()->kelompok;
+        }
+
+        $dispensasiBAKH = PengajuanDispensasiUKTModel::where('semester',$semester);
+        if ($cmode == '3' || $cmode == '14'){
+            $verval_bakh = $dispensasiBAKH->where('kode_prodi','like',trim($unit).'%')
             ->where('status_pengajuan', '>=', '3')
             ->orderBy('id','desc')
             ->get();
         }elseif($cmode == '2'){
-            $verval_bakh = $dispensasi->where('kode_prodi',trim($unit))
+            $verval_bakh = $dispensasiBAKH->where('kode_prodi',trim($unit))
             ->where('status_pengajuan', '>=', '3')
             ->orderBy('id','desc')
             ->get();
         }else{
-            $verval_bakh = $dispensasi
-            ->where('status_pengajuan', '>=', '3')
+            $verval_bakh = $dispensasiBAKH->where('status_pengajuan', '>=', '3')
             ->orderBy('id','desc')
             ->get();
         }
@@ -193,18 +219,19 @@ class PeneriamDispensasiController extends Controller
             $bakh->kelompok = DB::table('ref_kelompok_ukt')->where('id', $bakh->kelompok_ukt)->first()->kelompok;
         }
         
+        $dispensasiFinish = PengajuanDispensasiUKTModel::where('semester',$semester);
         if ($cmode == '3' || $cmode == '14'){
-            $finish = $dispensasi->where('kode_prodi','like',trim($unit).'%')
+            $finish = $dispensasiFinish->where('kode_prodi','like',trim($unit).'%')
             ->where('status_pengajuan', '=', '7')
             ->orderBy('id','desc')
             ->get();
         }elseif($cmode == '2'){
-            $finish = $dispensasi->where('kode_prodi',trim($unit))
+            $finish = $dispensasiFinish->where('kode_prodi',trim($unit))
             ->where('status_pengajuan', '=', '7')
             ->orderBy('id','desc')
             ->get();
         }else{
-            $finish = $dispensasi
+            $finish = $dispensasiFinish
             ->where('status_pengajuan', '=', '7')
             ->orderBy('id','desc')
             ->get();
