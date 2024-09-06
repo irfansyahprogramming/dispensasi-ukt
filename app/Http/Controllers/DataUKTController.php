@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Functions;
+use App\Helpers\Services;
 use App\Models\BukaDispensasi;
 use App\Models\DataUKT;
 use Exception;
@@ -44,13 +45,25 @@ class DataUKTController extends Controller
         foreach ($listUkt as $ukt) {
 
             // get mengajar from siakad
-            $url = "http://103.8.12.212:36880/siakad_api/api/as400/programStudi/" . trim($ukt->kode_prodi);
-            //echo $url;
-            $response = Http::get($url);
-            $kdprodi = json_decode($response);
-            foreach ($kdprodi->isi as $kd) {
-                $ukt->namaprodi = $kd->jenjangProdi . " " . $kd->namaProdi;
+            $getDataProdi = Services::getProdi(trim($ukt->kode_prodi));
+            // @dd($getDataProdi['isi'][0]);
+            if (!isset($getDataProdi['isi'])){
+                $ukt->namaprodi = $ukt->kode_prodi;
+            }else{
+                $arrProdi = $getDataProdi['isi'][0];
+                $ukt->namaprodi = $arrProdi['namaProdi'];
             }
+            
+            
+            // $namaProdi = $getDataProdi['isi'][0]['jenjangProdi']. " ".$getDataProdi['isi'][0]['namaProdi'];
+            // $url = "http://103.8.12.212:36880/siakad_api/api/as400/programStudi/" . trim($ukt->kode_prodi);
+            // //echo $url;
+            // $response = Http::get($url);
+            // $kdprodi = json_decode($response);
+            // foreach ($kdprodi->isi as $kd) {
+            //     $ukt->namaprodi = $kd->jenjangProdi . " " . $kd->namaProdi;
+            // }
+            
         }
 
         $arrUKT = array(

@@ -30,6 +30,7 @@ class HomeController extends Controller
         // }
         $semester = "";
         $badges = Functions::pengajuan($semester);
+        // @dd($badges->get());
         // @dd($badges);
         // $pengajuan = DB::table('tb_pengajuan_dispensasi')->where('semester',$semester)->get();
         // if ($semester == ''){
