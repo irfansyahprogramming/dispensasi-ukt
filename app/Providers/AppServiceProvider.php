@@ -31,7 +31,9 @@ class AppServiceProvider extends ServiceProvider
 
         
         View::composer('layouts.infobox', function ($view) {
-            $count = 10;
+            $count = 0;
+
+
             return $view->with(['count_notif'=>$count] ); 
         });
     }
