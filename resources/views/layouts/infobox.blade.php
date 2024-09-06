@@ -5,7 +5,7 @@
       <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Pengajuan</span>
-        <span class="info-box-number">{{ $badges->where('v_mode', 2)->count('id') }}</span>
+        <span class="info-box-number">{{ $badges->where('mode', 2)->count('id') }}</span>
       </div>
     </div>
   </div>
