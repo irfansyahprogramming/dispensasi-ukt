@@ -101,7 +101,8 @@ class PrintController extends Controller
         if ($request->format == null or $request->format == '') {
             return redirect()->back()->with('toast_warning', 'Silahkan pilih format cetak laporan');
         }
-        if (trim(session('user_cmode')) != '4' && trim(session('user_cmode')) != '11' && trim(session('user_cmode')) != '13' && trim(session('user_cmode')) != '20') {
+        
+        if (trim(session('user_cmode')) != '4' && trim(session('user_cmode')) != '11' && trim(session('user_cmode')) != '13' && trim(session('user_cmode')) != '20' && trim(session('user_cmode')) != '22') {
             $data_pengajuan = DB::table('tb_pengajuan_dispensasi')
                 ->where('kode_prodi', 'like', $kode_prodi . '%')
                 ->where('semester', trim($semester))

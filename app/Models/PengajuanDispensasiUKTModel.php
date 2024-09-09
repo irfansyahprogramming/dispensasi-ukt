@@ -22,10 +22,14 @@ class PengajuanDispensasiUKTModel extends Model
     }
     public function kelompok()
     {
-        return $this->hasOne(RefKelompokModel::class,'kelompok_ukt','id');
+        return $this->hasOne(RefKelompokModel::class,'id','kelompok_ukt');
     }
     public function dispensasi()
     {
-        return $this->hasOne(RefJenisDispensasiModel::class,'jenis_dispensasi','id');
+        return $this->hasOne(RefJenisDispensasiModel::class,'id','jenis_dispensasi');
+    }
+    public function status_ajuan()
+    {
+        return $this->hasOne(RefStatusPengajuanModel::class,'id','status_pengajuan');
     }
 }

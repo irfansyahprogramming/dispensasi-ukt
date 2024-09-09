@@ -9,7 +9,7 @@ class RefJenisDispensasiModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'ref_jenis_dispensasi';
+    protected $table = 'ref_jenisdipensasi';
 
     protected $quarded = ['id'];
 

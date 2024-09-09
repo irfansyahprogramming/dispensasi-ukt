@@ -62,7 +62,7 @@ class PeneriamDispensasiController extends Controller
             $arrMhs = "";
         }
        
-        $badges = Functions::pengajuan($semester);
+        // $badges = Functions::pengajuan($semester);
         $dispensasi = PengajuanDispensasiUKTModel::where('semester',$semester);
 
         $unit = trim(session('user_unit'));
@@ -83,12 +83,15 @@ class PeneriamDispensasiController extends Controller
             ->get();
         }
             
-        foreach ($pengajuan as $ajuan) {
-            $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
-            $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
-            $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
-            $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
-        }
+        // foreach ($pengajuan as $ajuan) {
+        //     $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
+        //     // $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
+        //     // $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
+        //     // $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
+        //     $ajuan->jenis = $ajuan->dispensasi->jenis_dispensasi;
+        //     $ajuan->status = $ajuan->status_ajuan->status_ajuan;
+        //     $ajuan->kelompok = $ajuan->kelompok->kelompok;
+        // }
 
         // @dd($pengajuan);
         $dispensasiFak = PengajuanDispensasiUKTModel::where('semester',$semester);
@@ -111,12 +114,12 @@ class PeneriamDispensasiController extends Controller
             ->get();
         }
 
-        foreach ($verval_dekan as $dekan) {
-            $dekan->nom_ukt = number_format($dekan->nominal_ukt, 0);
-            $dekan->jenis = DB::table('ref_jenisdipensasi')->where('id', $dekan->jenis_dispensasi)->first()->jenis_dispensasi;
-            $dekan->status = DB::table('ref_status_pengajuan')->where('id', $dekan->status_pengajuan)->first()->status_ajuan;
-            $dekan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $dekan->kelompok_ukt)->first()->kelompok;
-        }
+        // foreach ($verval_dekan as $dekan) {
+        //     $dekan->nom_ukt = number_format($dekan->nominal_ukt, 0);
+        //     $dekan->jenis = DB::table('ref_jenisdipensasi')->where('id', $dekan->jenis_dispensasi)->first()->jenis_dispensasi;
+        //     $dekan->status = DB::table('ref_status_pengajuan')->where('id', $dekan->status_pengajuan)->first()->status_ajuan;
+        //     $dekan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $dekan->kelompok_ukt)->first()->kelompok;
+        // }
 
         $dispensasiWR2 = PengajuanDispensasiUKTModel::where('semester',$semester);
         if ($cmode == '3' || $cmode == '14'){
@@ -138,12 +141,12 @@ class PeneriamDispensasiController extends Controller
             ->get();
         }
 
-        foreach ($verval_wr2 as $wr2) {
-            $wr2->nom_ukt = number_format($wr2->nominal_ukt, 0);
-            $wr2->jenis = DB::table('ref_jenisdipensasi')->where('id', $wr2->jenis_dispensasi)->first()->jenis_dispensasi;
-            $wr2->status = DB::table('ref_status_pengajuan')->where('id', $wr2->status_pengajuan)->first()->status_ajuan;
-            $wr2->kelompok = DB::table('ref_kelompok_ukt')->where('id', $wr2->kelompok_ukt)->first()->kelompok;
-        }
+        // foreach ($verval_wr2 as $wr2) {
+        //     $wr2->nom_ukt = number_format($wr2->nominal_ukt, 0);
+        //     $wr2->jenis = DB::table('ref_jenisdipensasi')->where('id', $wr2->jenis_dispensasi)->first()->jenis_dispensasi;
+        //     $wr2->status = DB::table('ref_status_pengajuan')->where('id', $wr2->status_pengajuan)->first()->status_ajuan;
+        //     $wr2->kelompok = DB::table('ref_kelompok_ukt')->where('id', $wr2->kelompok_ukt)->first()->kelompok;
+        // }
 
         $dispensasiWR1 = PengajuanDispensasiUKTModel::where('semester',$semester);
         if ($cmode == '3' || $cmode == '14'){
@@ -163,12 +166,12 @@ class PeneriamDispensasiController extends Controller
             ->get();
         }
         
-        foreach ($verval_wr1 as $wr1) {
-            $wr1->nom_ukt = number_format($wr1->nominal_ukt, 0);
-            $wr1->jenis = DB::table('ref_jenisdipensasi')->where('id', $wr1->jenis_dispensasi)->first()->jenis_dispensasi;
-            $wr1->status = DB::table('ref_status_pengajuan')->where('id', $wr1->status_pengajuan)->first()->status_ajuan;
-            $wr1->kelompok = DB::table('ref_kelompok_ukt')->where('id', $wr1->kelompok_ukt)->first()->kelompok;
-        }
+        // foreach ($verval_wr1 as $wr1) {
+        //     $wr1->nom_ukt = number_format($wr1->nominal_ukt, 0);
+        //     $wr1->jenis = DB::table('ref_jenisdipensasi')->where('id', $wr1->jenis_dispensasi)->first()->jenis_dispensasi;
+        //     $wr1->status = DB::table('ref_status_pengajuan')->where('id', $wr1->status_pengajuan)->first()->status_ajuan;
+        //     $wr1->kelompok = DB::table('ref_kelompok_ukt')->where('id', $wr1->kelompok_ukt)->first()->kelompok;
+        // }
 
         $dispensasiHutalak = PengajuanDispensasiUKTModel::where('semester',$semester);
         if ($cmode == '3' || $cmode == '14'){
@@ -188,12 +191,12 @@ class PeneriamDispensasiController extends Controller
             ->get();
         }
         
-        foreach ($verval_hutalak as $hutalak) {
-            $hutalak->nom_ukt = number_format($hutalak->nominal_ukt, 0);
-            $hutalak->jenis = DB::table('ref_jenisdipensasi')->where('id', $hutalak->jenis_dispensasi)->first()->jenis_dispensasi;
-            $hutalak->status = DB::table('ref_status_pengajuan')->where('id', $hutalak->status_pengajuan)->first()->status_ajuan;
-            $hutalak->kelompok = DB::table('ref_kelompok_ukt')->where('id', $hutalak->kelompok_ukt)->first()->kelompok;
-        }
+        // foreach ($verval_hutalak as $hutalak) {
+        //     $hutalak->nom_ukt = number_format($hutalak->nominal_ukt, 0);
+        //     $hutalak->jenis = DB::table('ref_jenisdipensasi')->where('id', $hutalak->jenis_dispensasi)->first()->jenis_dispensasi;
+        //     $hutalak->status = DB::table('ref_status_pengajuan')->where('id', $hutalak->status_pengajuan)->first()->status_ajuan;
+        //     $hutalak->kelompok = DB::table('ref_kelompok_ukt')->where('id', $hutalak->kelompok_ukt)->first()->kelompok;
+        // }
 
         $dispensasiBAKH = PengajuanDispensasiUKTModel::where('semester',$semester);
         if ($cmode == '3' || $cmode == '14'){
@@ -212,12 +215,12 @@ class PeneriamDispensasiController extends Controller
             ->get();
         }
         
-        foreach ($verval_bakh as $bakh) {
-            $bakh->nom_ukt = number_format($bakh->nominal_ukt, 0);
-            $bakh->jenis = DB::table('ref_jenisdipensasi')->where('id', $bakh->jenis_dispensasi)->first()->jenis_dispensasi;
-            $bakh->status = DB::table('ref_status_pengajuan')->where('id', $bakh->status_pengajuan)->first()->status_ajuan;
-            $bakh->kelompok = DB::table('ref_kelompok_ukt')->where('id', $bakh->kelompok_ukt)->first()->kelompok;
-        }
+        // foreach ($verval_bakh as $bakh) {
+        //     $bakh->nom_ukt = number_format($bakh->nominal_ukt, 0);
+        //     $bakh->jenis = DB::table('ref_jenisdipensasi')->where('id', $bakh->jenis_dispensasi)->first()->jenis_dispensasi;
+        //     $bakh->status = DB::table('ref_status_pengajuan')->where('id', $bakh->status_pengajuan)->first()->status_ajuan;
+        //     $bakh->kelompok = DB::table('ref_kelompok_ukt')->where('id', $bakh->kelompok_ukt)->first()->kelompok;
+        // }
         
         $dispensasiFinish = PengajuanDispensasiUKTModel::where('semester',$semester);
         if ($cmode == '3' || $cmode == '14'){
@@ -237,12 +240,12 @@ class PeneriamDispensasiController extends Controller
             ->get();
         }
         
-        foreach ($finish as $end) {
-            $end->nom_ukt = number_format($end->nominal_ukt, 0);
-            $end->jenis = DB::table('ref_jenisdipensasi')->where('id', $end->jenis_dispensasi)->first()->jenis_dispensasi;
-            $end->status = DB::table('ref_status_pengajuan')->where('id', $end->status_pengajuan)->first()->status_ajuan;
-            $end->kelompok = DB::table('ref_kelompok_ukt')->where('id', $end->kelompok_ukt)->first()->kelompok;
-        }
+        // foreach ($finish as $end) {
+        //     $end->nom_ukt = number_format($end->nominal_ukt, 0);
+        //     $end->jenis = DB::table('ref_jenisdipensasi')->where('id', $end->jenis_dispensasi)->first()->jenis_dispensasi;
+        //     $end->status = DB::table('ref_status_pengajuan')->where('id', $end->status_pengajuan)->first()->status_ajuan;
+        //     $end->kelompok = DB::table('ref_kelompok_ukt')->where('id', $end->kelompok_ukt)->first()->kelompok;
+        // }
         // @dd ($verval_dekan);
 
         if (Session::has('dekan_active')) {
@@ -303,7 +306,7 @@ class PeneriamDispensasiController extends Controller
             'verval_wr1'        => $verval_wr1,
             'verval_bakh'       => $verval_bakh,
             'finish'            => $finish,
-            'badges'            => $badges,
+            // 'badges'            => $badges,
             'list_dispensasi'   => $list_dispensasi,
             'countMhs'          => $lenMhs,
             'arrMhs'            => $arrMhs
@@ -390,6 +393,7 @@ class PeneriamDispensasiController extends Controller
         //get status mahasiswa 
         $status_mahasiswa = Services::getStatusMahasiswa($semester,$nim,session('user_token'));
         $response = $status_mahasiswa['isi'];
+        
         
         if ($response[0]['beasiswa'] == 'Ya'){
             return redirect()->back()->with('toast_error', 'Beasiswa tidak mendapatkan dispensasi');

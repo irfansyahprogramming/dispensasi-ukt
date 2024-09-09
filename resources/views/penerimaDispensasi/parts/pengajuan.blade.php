@@ -43,8 +43,8 @@
                 <td>{{ $item->nim }}</td>
                 <td>{{ $item->nama }}</td>
                 <td>{{ $item->jenjang_prodi }} {{ $item->nama_prodi }}</td>
-                <td>{{ $item->jenis }}</td>
-                <td>{{ $item->kelompok }}</td>
+                <td>{{ $item->dispensasi->jenis_dispensasi }}</td>
+                <td>{{ $item->kelompok->kelompok }}</td>
                 <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                 <td>
                 @if ($item->file_permohonan)
@@ -69,7 +69,7 @@
                     <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
                 @endif
                 </td>
-                <td><div class="alert alert-success">{{ $item->status ?? '' }}</div> </td>
+                <td><div class="alert alert-success">{{ $item->status_ajuan->status_ajuan ?? '' }}</div> </td>
                 @if($semester <> '' && $mode == "Program Studi")
                 <td>
                   <div class="btn-group">
@@ -102,7 +102,7 @@
           <div class="modal-body">
             <div class="modal-body py-2">
               @if($cmode == '4' || $cmode == '13' || $cmode == '20' || $cmode == '22'){
-                <form id="cetak-penerima-dispensasi" action="{{ route('penerima_dispensasi.print', ['semester' => $semester]) }}" method="get" target="_blank">
+                <form id="cetak-penerima-dispensasi" action="{{ route('penerima_dispensasi.print', ['semester' => $semester, 'kode_prodi' => '0']) }}" method="get" target="_blank">
               @else
                 <form id="cetak-penerima-dispensasi" action="{{ route('penerima_dispensasi.print', ['semester' => $semester, 'kode_prodi' => $unit]) }}" method="get" target="_blank">
               @endif

@@ -418,7 +418,7 @@
     function do_this() {
       var checkboxes = document.getElementsByName('idAjuan[]');
       var button = document.getElementById('selectALL');
-      //alert (button.value);
+      // alert (button.value);
       if (button.value == 'select') {
         for (var i in checkboxes) {
           checkboxes[i].checked = 'FALSE';
