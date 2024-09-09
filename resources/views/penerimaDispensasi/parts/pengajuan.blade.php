@@ -101,7 +101,12 @@
           </div>
           <div class="modal-body">
             <div class="modal-body py-2">
-              <form id="cetak-penerima-dispensasi" action="{{ route('penerima_dispensasi.print', ['semester' => $semester, 'kode_prodi' => $unit]) }}" method="get" target="_blank">
+              @if($cmode == '4' || $cmode == '13' || $cmode == '20' || $cmode == '22'){
+                <form id="cetak-penerima-dispensasi" action="{{ route('penerima_dispensasi.print', ['semester' => $semester]) }}" method="get" target="_blank">
+              @else
+                <form id="cetak-penerima-dispensasi" action="{{ route('penerima_dispensasi.print', ['semester' => $semester, 'kode_prodi' => $unit]) }}" method="get" target="_blank">
+              @endif
+              
                 <div class="form-body">
                   <div class="form-group">
                     <label for="kelompok_ukt">Format Cetak Laporan</label>

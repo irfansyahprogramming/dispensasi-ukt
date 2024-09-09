@@ -1,3 +1,4 @@
+{{-- @dd($notif_sisa) --}}
 <aside class="main-sidebar sidebar-dark-warning bg-unj elevation-4">
   <!-- Brand Logo -->
   <a href="/home" class="brand-link border-bottom border-warning">
@@ -74,7 +75,7 @@
               <i class="nav-icon fas fa-check"></i>
               <p>
                 Data Pengajuan
-                <span class="badge bg-danger ml-2 right">{{ $badges->where('status_pengajuan','=', 0)->count('id') ?? 0 }}</span>
+                <span class="badge bg-danger ml-2 right">{{ $notif_sisa ?? 0 }}</span>
               </p>
             </a>
           </li>
@@ -177,7 +178,7 @@
             <a href="/verifikasiDekan_dispensasi" class="nav-link {{ $dispen_active }}">
               <i class="nav-icon fas fa-check"></i>
               <p>
-                Verifikasi Dekan <span class="badge bg-danger ml-2 right">{{ $badges->where('status_pengajuan', 1)->count('id') == 0 ? '' : $badges->where('status_pengajuan', 1)->count('id') }}</span>
+                Verifikasi Dekan <span class="badge bg-danger ml-2 right">{{ $notif_sisa ?? 0 }}</span>
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
@@ -215,7 +216,7 @@
               <i class="nav-icon fas fa-check"></i>
               <p>
                 Verifikasi WR II
-                <span class="badge bg-danger ml-2 right">{{ $badges->where('status_pengajuan', 2)->count('id') == 0 ? '' : $badges->where('status_pengajuan', 2)->count('id') }}</span>
+                <span class="badge bg-danger ml-2 right">{{ $notif_sisa ?? 0 }}</span>
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>

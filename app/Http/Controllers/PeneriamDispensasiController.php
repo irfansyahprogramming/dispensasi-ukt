@@ -284,6 +284,7 @@ class PeneriamDispensasiController extends Controller
             'active'            => 'Dispensasi UKT',
             'user'              => $user,
             'mode'              => $mode,
+            'cmode'             => $cmode,
             'unit'              => $unit,
             'subtitle'          => 'Dispensasi UKT',
             'home_active'       => '',
