@@ -214,18 +214,21 @@ class VerifikasiWR2Controller extends Controller
             }
 
             //get data siakad
-            $url = env('SIAKAD_URI') . "/dataMahasiswa/" . $data->nim . "/" . session('user_token');
-            $response = Http::get($url);
-            $dataMhs = json_decode($response);
+            // $url = env('SIAKAD_URI') . "/dataMahasiswa/" . $data->nim . "/" . session('user_token');
+            // $response = Http::get($url);
+            // $dataMhs = json_decode($response);
 
-            if ($dataMhs->status == true) {
-                foreach ($dataMhs->isi as $mhs) {
-                    $data->nim_siakad = $mhs->nim;
-                    $data->nama_siakad = $mhs->namaLengkap;
-                    $data->prodi_siakad = $mhs->jenjangProdi . " " . $mhs->namaProdi;
-                    $data->kontak_siakad = $mhs->hpm . " / " . $mhs->email;
-                    $data->alamat_siakad = $mhs->alamat . " RT. " . $mhs->rt . " RW." . $mhs->rw . "<br/> Kelurahan " . $mhs->lurah . "<br/>  " . $mhs->namaKecamatan . "<br/>  " . $mhs->namaKabkot . "<br/>  " . $mhs->namaPropinsi . " Kode pos " . $mhs->kdpos;
-                    $data->nom_ukt_siakad = number_format($mhs->biayaKuliah, 0);
+            $status_mahasiswa = Services::getDataMahasiswa($data->nim,session('user_token'));
+            $dataMhs = $status_mahasiswa['isi'];
+            // @dd($dataMhs);
+            if ($status_mahasiswa['status'] == true) {
+                foreach ($dataMhs as $mhs) {
+                    $data->nim_siakad = $mhs['nim'];
+                    $data->nama_siakad = $mhs['namaLengkap'];
+                    $data->prodi_siakad = $mhs['jenjangProdi'] . " " . $mhs['namaProdi'];
+                    $data->kontak_siakad = $mhs['hpm'] . " / " . $mhs['email'];
+                    $data->alamat_siakad = $mhs['alamat'] . " RT. " . $mhs['rt'] . " RW." . $mhs['rw'] . "<br/> Kelurahan " . $mhs['lurah'] . "<br/>  " . $mhs['namaKecamatan'] . "<br/>  " . $mhs['namaKabkot'] . "<br/>  " . $mhs['namaPropinsi'] . " Kode pos " . $mhs['kdpos'];
+                    $data->nom_ukt_siakad = number_format($mhs['biayaKuliah'], 0);
                 }
             } else {
                 $data->nim_siakad = "<i class='fas fa-x'></i>";
