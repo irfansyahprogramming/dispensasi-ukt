@@ -40,6 +40,9 @@
       {{-- <div id="example1_wrapper">Tombol</div> --}}
       <div class="card-body p-2">
         <div class="table-responsive">
+          <div>
+            <button class="btn btn-outline-primary" id="btnFilter" data-toggle="modal" data-target="#modal-FilterData"><i class="ace-icon fa fa-list"></i> Filter</button>
+          </div>
           <table id="dataTabel" class="table table-hover" style="width: 100%">
             <thead>
               <tr>
@@ -66,7 +69,7 @@
                   <td>{{ $item->nim }}</td>
                   <td>{{ $item->nama }}</td>
                   <td>{{ $item->jenjang_prodi }} {{ $item->nama_prodi }}</td>
-                  <td>{{ $item->jenis }}</td>
+                  <td>{{ $item->jenis_dispensasi }}</td>
                   <td>{{ $item->kelompok }}</td>
                   <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                   <td>
@@ -92,7 +95,7 @@
                       <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
                     @endif
                   </td>
-                  <td>{{ $item->status ?? '' }}</td>
+                  <td>{{ $item->status_ajuan ?? '' }}</td>
                   <td>Rp. {{ number_format($item->ditagihkan, 0) }}</td>
                   <td>Rp. {{ number_format($item->potongan, 0) }}</td>
                   <td>
@@ -128,7 +131,58 @@
       </div>
 
     </div>
+    <div id="modal-FilterData" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header py-2">
+            <h5 class="modal-title">Filter Daftar Pengajuan Keringanan UKT</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="filter-laporan-pengajuan" action="{{ route('verifikasi_dispensasi.index') }}" method="GET">
+              <div class="modal-body py-2">
+                <div class="form-body">
+                  <div class="form-group">
+                    <label for="semester">Semester</label>
+                    <select class="form-control" id="semester" name="semester">
+                      <option value="All">Semua Semester</option>
+                      @foreach ($listSemester as $sms)
+                        <option value="{{ $sms->semester }}" {{ $sms->id == old('semester') ? 'selected' : '' }}>{{ $sms->semester }} / {{ $sms->des_semester }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="prodi">Program Studi</label>
+                  <select class="form-control" id="prodi" name="prodi">
+                    <option value="All">Semua Prodi</option>
+                    @foreach ($listProdi['isi'] as $prd)
+                      <option value="{{ $prd['kodeProdi'] }}" {{ $prd['kodeProdi'] == old('prodi') ? 'selected' : '' }}>{{ $prd['kodeProdi'] }} - {{ $prd['jenjangProdi'] }} {{ $prd['namaProdi'] }}</option>
+                    @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="jenis">Jenis Keringanan</label>
+                  <select class="form-control" id="jenis" name="jenis">
+                    <option value="All">Semua Jenis Keringanan</option>
+                    @foreach ($listJenis as $jns)
+                      <option value="{{ $jns->id }}" {{ $jns->id == old('jenis') ? 'selected' : '' }}>{{ $jns->jenis_dispensasi }}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+            </form>
 
+          </div>
+          <div class="modal-footer py-2">
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('filter-laporan-pengajuan').submit();"><i class="fas fa-solid fa-filter"></i> Filter</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="modal-verifikasi-pengajuan" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -340,18 +394,20 @@
 @endsection
 
 @section('script')
-  <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-  <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-  <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
   <script>
     $(function() {
 
@@ -363,18 +419,18 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
       $('#dataTabel').DataTable({
-        // "paging": false,
+        "paging": true,
         // "lengthChange": false,
         "searching": true,
-        // "ordering": true,
-        // "info": true,
-        // "autoWidth": false,
+        // "order": [[0, 'desc']],
+        "order": false,
+        "autoWidth": false,
         "responsive": true,
         "buttons": ["copy", "csv", "excel", "pdf", "print"],
         "layout": {
           "bottomEnd": {
               "paging": {
-                  "type": 'simple'
+                  "type": 'full'
               }
           }
         }

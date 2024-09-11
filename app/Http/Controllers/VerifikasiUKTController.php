@@ -22,7 +22,7 @@ use Mockery\VerificationDirector;
 
 class VerifikasiUKTController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
         if (!Session::has('isLoggedIn')) {
@@ -45,25 +45,59 @@ class VerifikasiUKTController extends Controller
         $kel_ukt = DB::table('ref_kelompok_ukt')
             ->get();
 
+            $pengajuan = DB::table('tb_pengajuan_dispensasi')
+            ->where('kode_prodi', 'like', trim(session('user_unit')) . '%');
 
-        $badges = Functions::pengajuan($semester);
-
-        $pengajuan = DB::table('tb_pengajuan_dispensasi')
-
-            ->where('kode_prodi', 'like', trim(session('user_unit')) . '%')
-            ->where('semester', trim($semester))
-            ->where(function ($query) {
-                $query->where('status_pengajuan', '0')
-                    ->orWhere('status_pengajuan', '>=', '1')
-                    ->orWhere('status_pengajuan', '>=', '21');
-            })->orderBy('status_pengajuan','asc')->get();
-
-        foreach ($pengajuan as $ajuan) {
-            $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
-            $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
-            $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
-            $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
+        if (isset($request->semester) and $request->semester != 'All') {
+            $pengajuan = $pengajuan->where('semester', trim($request->semester));
+        } else {
+            $pengajuan = $pengajuan->where('semester', trim($semester));
         }
+
+        // by prodi
+        if (isset($request->prodi) and $request->prodi != 'All') {
+            $pengajuan = $pengajuan->where('kode_prodi','like', trim($request->prodi).'%');
+        }
+
+        // by jenis pengajuan
+        if (isset($request->jenis) and $request->jenis != 'All') {
+            $pengajuan = $pengajuan->where('jenis_dispensasi', $request->jenis);
+        }
+
+        // $badges = Functions::pengajuan($semester);
+
+        // $pengajuan = DB::table('tb_pengajuan_dispensasi')
+
+        //     ->where('kode_prodi', 'like', trim(session('user_unit')) . '%')
+        //     ->where('semester', trim($semester))
+        //     ->where(function ($query) {
+        //         $query->where('status_pengajuan', '0')
+        //             ->orWhere('status_pengajuan', '>=', '1')
+        //             ->orWhere('status_pengajuan', '>=', '21');
+        //     })->orderBy('status_pengajuan','asc')->get();
+
+        // foreach ($pengajuan as $ajuan) {
+        //     $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
+        //     $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
+        //     $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
+        //     $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
+        // }
+
+        $pengajuan = $pengajuan
+        ->join('ref_jenisdipensasi','ref_jenisdipensasi.id', '=' ,'tb_pengajuan_dispensasi.jenis_dispensasi')
+        ->join('ref_status_pengajuan','ref_status_pengajuan.id', '=', 'tb_pengajuan_dispensasi.status_pengajuan','inner')
+        ->join('ref_kelompok_ukt','ref_kelompok_ukt.id', '=', 'tb_pengajuan_dispensasi.kelompok_ukt','inner')
+        ->where(function ($query) {
+          $query->where('status_pengajuan', '0')
+                ->orWhere('status_pengajuan', '>=', '1')
+                ->orWhere('status_pengajuan', '>=', '21');
+        })->orderBy('status_pengajuan','asc')->get();
+        
+        $listProdi = Services::getProdi(trim(session('user_unit')));
+        $listSemester = DB::table('ref_periode')->get();
+        $listJenis = DB::table('ref_jenisdipensasi')->get();
+        // flash request data
+        $request->flash();
 
         $arrData = [
             'title'             => 'Home',
@@ -80,8 +114,11 @@ class VerifikasiUKTController extends Controller
             'semester'          => $semester,
             'kelompok_ukt'      => $kel_ukt,
             'list_dispensasi'   => $list_dispensasi,
+            'listSemester'      => $listSemester,
+            'listProdi'         => $listProdi,
+            'listJenis'         => $listJenis,
             'pengajuan'         => $pengajuan,
-            'badges'            => $badges
+            // 'badges'            => $badges
         ];
 
         return view('verifikasi_dispensasi', $arrData);

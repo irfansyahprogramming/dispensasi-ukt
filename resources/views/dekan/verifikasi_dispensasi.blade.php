@@ -96,7 +96,7 @@
                   <td>{{ $item->nim }}</td>
                   <td>{{ $item->nama }}</td>
                   <td>{{ $item->jenjang_prodi }} {{ $item->nama_prodi }}</td>
-                  <td>{{ $item->jenis }}</td>
+                  <td>{{ $item->jenis_dispensasi }}</td>
                   <td>{{ $item->kelompok }}</td>
                   <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                   <td>
@@ -124,11 +124,11 @@
                   </td>
 
                   @if ($item->status_pengajuan >= 2 and $item->status_pengajuan <= 7)
-                    <td><span class="badge bg-success text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
+                    <td><span class="badge bg-success text-left"><i class="fas fa-check"></i>{{ $item->status_ajuan ?? '' }}</span></td>
                   @elseif ($item->status_pengajuan >= 22 and $item->status_pengajuan <= 27)
-                    <td><span class="badge bg-danger text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
+                    <td><span class="badge bg-danger text-left"><i class="fas fa-check"></i>{{ $item->status_ajuan ?? '' }}</span></td>
                   @else
-                    <td><span class="badge bg-info text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
+                    <td><span class="badge bg-info text-left"><i class="fas fa-check"></i>{{ $item->status_ajuan ?? '' }}</span></td>
                   @endif
 
                   <td>Rp. {{ number_format($item->ditagihkan, 0) }}</td>
@@ -177,7 +177,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <form id="filter-laporan-pengajuan" action="{{ route('verifikasiWR2_dispensasi.index') }}" method="GET">
+            <form id="filter-laporan-pengajuan" action="{{ route('verifikasiDekan_dispensasi.index') }}" method="GET">
               <div class="modal-body py-2">
                 <div class="form-body">
                   <div class="form-group">
@@ -371,15 +371,20 @@
 @endsection
 
 @section('script')
-  <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
   <script>
     $(function() {
 
@@ -391,21 +396,22 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
       $('#dataTabel').DataTable({
-        // "paging": false,
+        "paging": true,
         // "lengthChange": false,
         "searching": true,
-        // "ordering": true,
-        // "info": true,
-        // "autoWidth": false,
+        // "order": [[0, 'desc']],
+        "order": false,
+        "autoWidth": false,
         "responsive": true,
+        "buttons": ["copy", "csv", "excel", "pdf", "print"],
         "layout": {
           "bottomEnd": {
               "paging": {
-                  "type": 'simple'
+                  "type": 'full'
               }
           }
         }
-      });
+      }).buttons().container().appendTo('#dataTabel_wrapper .col-md-6:eq(0)');
     });
 
     function uploadBukti(id) {

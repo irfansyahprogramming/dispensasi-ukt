@@ -46,9 +46,9 @@
                   <li class="nav-item"><a data-toggle="tab" href="#approve_dekan" class="nav-link font-weight-bold h6 {{ session('dekan_active') ?? '' }} show">Verval Fakultas/DEKAN</a>
                   </li>
                   <li class="nav-item"><a data-toggle="tab" href="#approve_wr2" class="nav-link font-weight-bold {{ session('wr2_active') ?? '' }} h6 show">Verval WAKIL REKTOR 2</a></li>
-                  <li class="nav-item"><a data-toggle="tab" href="#approve_wr1" class="nav-link font-weight-bold {{ session('wr1_active') ?? '' }} h6 show">Proses Pembuatan SK</a></li>
+                  {{-- <li class="nav-item"><a data-toggle="tab" href="#approve_wr1" class="nav-link font-weight-bold {{ session('wr1_active') ?? '' }} h6 show">Proses Pembuatan SK</a></li>
                   <li class="nav-item"><a data-toggle="tab" href="#proses_bakhum" class="nav-link font-weight-bold {{ session('bakhum_active') ?? '' }} h6 show">Proses Tagihan BAKHUM</a></li>
-                  <li class="nav-item"><a data-toggle="tab" href="#selesai" class="nav-link font-weight-bold {{ session('selesai') ?? '' }} h6 show">Selesai</a></li>
+                  <li class="nav-item"><a data-toggle="tab" href="#selesai" class="nav-link font-weight-bold {{ session('selesai') ?? '' }} h6 show">Selesai</a></li> --}}
                 </ul>
               </div>
               <div class="card-body">
@@ -62,7 +62,7 @@
                   <div class="tab-pane {{ session('wr2_active') ?? '' }} show" id="approve_wr2" role="tabpanel">
                     @include('penerimaDispensasi.parts.approval_wr2')
                   </div>
-                  <div class="tab-pane {{ session('wr1_active') ?? '' }} show" id="approve_wr1" role="tabpanel">
+                  {{-- <div class="tab-pane {{ session('wr1_active') ?? '' }} show" id="approve_wr1" role="tabpanel">
                     @include('penerimaDispensasi.parts.approval_wr1')
                   </div>
                   <div class="tab-pane {{ session('bakhum_active') ?? '' }} show" id="proses_bakhum" role="tabpanel">
@@ -70,7 +70,7 @@
                   </div>
                   <div class="tab-pane {{ session('selesai') ?? '' }} show" id="selesai" role="tabpanel">
                       @include('penerimaDispensasi.parts.finish_proses')
-                  </div>
+                  </div> --}}
                 </div>
               </div>
           </div>
@@ -85,10 +85,39 @@
 @endsection
 
 @section('script')
-  
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
   <script>
     $(function() {
-            
+      $('#tableWR2').DataTable({
+        "paging": true,
+        // "lengthChange": false,
+        "searching": true,
+        // "order": [[0, 'desc']],
+        "order": false,
+        "autoWidth": false,
+        "responsive": true,
+        "buttons": ["copy", "csv", "excel", "pdf", "print"],
+        "layout": {
+          "bottomEnd": {
+              "paging": {
+                  "type": 'full'
+              }
+          }
+        }
+      }).buttons().container().appendTo('#dataTabel_wrapper .col-md-6:eq(0)');
       // $("#dataTabel1").DataTable({
       //   "responsive": true,
       //   "lengthChange": false,

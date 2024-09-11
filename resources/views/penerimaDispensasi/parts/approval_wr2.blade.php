@@ -1,7 +1,7 @@
 {{-- <button class="btn btn-outline-primary" id="btnCetakPenerima" data-toggle="modal" data-target="#modal-Cetak"><i class="ace-icon fa fa-plus"></i> Cetak Pengajuan </button> --}}
 <div><h3>Verifikasi dan Validasi Kantor Wakil Rektor 2</h3></div>
 <div class="mt-4table-responsive">
-    <table id="table" class="table table-hover">
+    <table id="tableWR2" class="table table-hover">
     <thead>
         <tr>
         <th scope="col">No</th>
@@ -26,8 +26,8 @@
             <td>{{ $row->nim }}</td>
             <td>{{ $row->nama }}</td>
             <td>{{ $row->jenjang_prodi }} {{ $row->nama_prodi }}</td>
-            <td>{{ $row->dispensasi->jenis_dispensasi }}</td>
-            <td>{{ $row->kelompok->kelompok }}</td>
+            <td>{{ $row->jenis_dispensasi }}</td>
+            <td>{{ $row->kelompok }}</td>
             <td>{{ number_format($row->nominal_ukt, 0) }}</td>
             <td>
             @if ($row->file_pernyataan)
@@ -49,7 +49,7 @@
                 <a href="{{ asset('storage/' . $row->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
             @endif
             </td>
-            <td><div class="alert alert-success">{{ $row->status_ajuan->status_ajuan ?? '' }}</div> </td>
+            <td><div class="alert alert-success">{{ $row->status_ajuan ?? '' }}</div> </td>
         </tr>
         @endforeach
     </tbody>
@@ -92,27 +92,23 @@
 {{-- </div> --}}
 @section('script')
 <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+  <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+  <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+  <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+  <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
 <script>
 $(function(){
-    $('#table').dataTable({
-    // "paging": true,
-    "lengthChange": true,
-    // "searching": true,
-    "ordering": true,
-    // "info": true,
-    // "autoWidth": false,
-    "responsive": true,
-    // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-  });
-  $('#table1').dataTable();
+    
+//   $('#table1').dataTable();
 })
 </script>
 @endsection

@@ -1,7 +1,7 @@
 {{-- <button class="btn btn-outline-primary" id="btnCetakPenerima" data-toggle="modal" data-target="#modal-Cetak"><i class="ace-icon fa fa-plus"></i> Cetak Pengajuan </button> --}}
 <div><h3>Verifikasi dan Validasi Fakultas/Dekan</h3></div>
 <div class="mt-4table-responsive">
-    <table id="table1" class="table table-hover">
+    <table id="tableWD2" class="table table-hover">
     <thead>
         <tr>
         <th scope="col">No</th>
