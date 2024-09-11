@@ -54,7 +54,7 @@
               Tidak Layak
             </button>
           </div>
-          <table id="dataTabel" class="table table-hover">
+          <table id="dataTabel" class="table table-hover table-border">
             <thead>
               <tr>
                 <th scope="col text-center">
@@ -81,6 +81,8 @@
             </thead>
             <tbody>
               @foreach ($pengajuan as $item)
+              {{-- @dd($item) --}}
+
                 <tr>
                   <td>
                     @if ($item->status_pengajuan == '2' or $item->status_pengajuan == '22')
@@ -98,7 +100,7 @@
                   <td>{{ $item->nim }}</td>
                   <td>{{ $item->nama }}</td>
                   <td>{{ $item->jenjang_prodi }} {{ $item->nama_prodi }}</td>
-                  <td>{{ $item->jenis }}</td>
+                  <td>{{ $item->jenis_dispensasi }}</td>
                   <td>{{ $item->kelompok }}</td>
                   <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                   <td>
@@ -125,11 +127,11 @@
                     @endif
                   </td>
                   @if ($item->status_pengajuan >= 3 and $item->status_pengajuan <= 7)
-                    <td><span class="badge bg-success text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
+                    <td><span class="badge bg-success text-left"><i class="fas fa-check"></i>{{ $item->status_ajuan ?? '' }}</span></td>
                   @elseif ($item->status_pengajuan >= 23 and $item->status_pengajuan <= 27)
-                    <td><span class="badge bg-danger text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
+                    <td><span class="badge bg-danger text-left"><i class="fas fa-check"></i>{{ $item->status_ajuan ?? '' }}</span></td>
                   @else
-                    <td><span class="badge bg-info text-left"><i class="fas fa-check"></i>{{ $item->status ?? '' }}</span></td>
+                    <td><span class="badge bg-info text-left"><i class="fas fa-check"></i>{{ $item->status_ajuan ?? '' }}</span></td>
                   @endif
 
                   <td>Rp. {{ number_format($item->ditagihkan, 0) }}</td>
@@ -397,18 +399,18 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
       $('#dataTabel').DataTable({
-        // "paging": false,
+        "paging": true,
         // "lengthChange": false,
         "searching": true,
-        // "ordering": true,
-        // "info": true,
-        // "autoWidth": false,
+        // "order": [[0, 'desc']],
+        "order": false,
+        "autoWidth": false,
         "responsive": true,
         "buttons": ["copy", "csv", "excel", "pdf", "print"],
         "layout": {
           "bottomEnd": {
               "paging": {
-                  "type": 'simple'
+                  "type": 'full'
               }
           }
         }

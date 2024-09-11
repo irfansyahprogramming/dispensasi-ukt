@@ -62,6 +62,7 @@ class VerifikasiDekanController extends Controller
             // ->where('kode_prodi','like', trim($unit).'%')
             ->Where('status_pengajuan', '>=', '1')
             ->Where('status_pengajuan', '<=', '23')
+            ->orderBy('status_pengajuan','asc')
             ->get();
 
         foreach ($pengajuan as $ajuan) {

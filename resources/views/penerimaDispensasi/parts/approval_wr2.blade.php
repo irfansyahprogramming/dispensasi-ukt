@@ -102,16 +102,17 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <script>
 $(function(){
-  $('#table').dataTable({
+    $('#table').dataTable({
     // "paging": true,
     "lengthChange": true,
     // "searching": true,
     "ordering": true,
     // "info": true,
     // "autoWidth": false,
-    // "responsive": true,
+    "responsive": true,
     // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
   });
+  $('#table1').dataTable();
 })
 </script>
 @endsection

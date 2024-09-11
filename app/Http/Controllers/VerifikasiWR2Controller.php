@@ -36,57 +36,48 @@ class VerifikasiWR2Controller extends Controller
             $semester = "";
         }
 
-        $badges = Functions::pengajuan($semester);
+        // $badges = Functions::pengajuan($semester);
+        $listSemester = DB::table('ref_periode')->get();
+        $listJenis = DB::table('ref_jenisdipensasi')->get();
+        $listStatus = DB::table('ref_status_pengajuan')->get();
+        $listProdi = Services::getProdi('All');
 
         $pengajuan = DB::table('tb_pengajuan_dispensasi');
-        // ->where('semester',trim($semester))
-        // ->where('status_pengajuan','2')
-        // ->orWhere('status_pengajuan','3')
-        // ->orWhere('status_pengajuan','23')
-        // ->get();
-
+        
         if (isset($request->semester) and $request->semester != 'All') {
-            $pengajuan = $pengajuan->where('semester', trim($request->semester));
+            $pengajuan = $pengajuan->where('tb_pengajuan_dispensasi.semester', trim($request->semester));
         } else {
-            $pengajuan = $pengajuan->where('semester', trim($semester));
+            $pengajuan = $pengajuan->where('tb_pengajuan_dispensasi.semester', trim($semester));
         }
 
         // by prodi
         if (isset($request->prodi) and $request->prodi != 'All') {
-            $pengajuan = $pengajuan->where('kode_prodi', trim($request->prodi));
+            $pengajuan = $pengajuan->where('tb_pengajuan_dispensasi.kode_prodi', trim($request->prodi));
         }
 
         // by jenis pengajuan
         if (isset($request->jenis) and $request->jenis != 'All') {
-            $pengajuan = $pengajuan->where('jenis_dispensasi', $request->jenis);
+            $pengajuan = $pengajuan->where('tb_pengajuan_dispensasi.jenis_dispensasi', $request->jenis);
         }
 
         // get data pengajuan
         $pengajuan = $pengajuan
+            ->join('ref_jenisdipensasi','ref_jenisdipensasi.id', '=' ,'tb_pengajuan_dispensasi.jenis_dispensasi')
+            ->join('ref_status_pengajuan','ref_status_pengajuan.id', '=', 'tb_pengajuan_dispensasi.status_pengajuan','inner')
+            ->join('ref_kelompok_ukt','ref_kelompok_ukt.id', '=', 'tb_pengajuan_dispensasi.kelompok_ukt','inner')
             ->where(function ($query) {
-                $query->where('status_pengajuan', '2')
-                    ->orWhere('status_pengajuan', '3')
-                    ->orWhere('status_pengajuan', '23');
-            })->get();
+                $query->where('tb_pengajuan_dispensasi.status_pengajuan', '2')
+                    ->orWhere('tb_pengajuan_dispensasi.status_pengajuan', '3')
+                    ->orWhere('tb_pengajuan_dispensasi.status_pengajuan', '23');
+            })->orderBy('tb_pengajuan_dispensasi.status_pengajuan','asc')->get();
 
-        foreach ($pengajuan as $ajuan) {
-            $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
-            $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
-            $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
-            $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
-        }
-
-        $listSemester = DB::table('ref_periode')->get();
-        $listJenis = DB::table('ref_jenisdipensasi')->get();
-        $listStatus = DB::table('ref_status_pengajuan')->get();
-
-        // // get mengajar from siakad
-        // $url = env('SIAKAD_URI') . "/programStudi/All";
-        // //echo $url;
-        // $response = Http::get($url);
-        // $listProdi = json_decode($response);
-
-        $listProdi = Services::getProdi('All');
+        // foreach ($pengajuan as $ajuan) {
+        //     $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
+        //     $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
+        //     $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
+        //     $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
+        // }
+        
         // flash request data
         $request->flash();
 
@@ -107,7 +98,7 @@ class VerifikasiWR2Controller extends Controller
             'listSemester'      => $listSemester,
             'listProdi'         => $listProdi,
             'listJenis'         => $listJenis,
-            'badges'            => $badges
+            // 'badges'            => $badges
         ];
 
         return view('wr2.verifikasi_dispensasi', $arrData);

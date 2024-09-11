@@ -56,7 +56,7 @@ class VerifikasiUKTController extends Controller
                 $query->where('status_pengajuan', '0')
                     ->orWhere('status_pengajuan', '>=', '1')
                     ->orWhere('status_pengajuan', '>=', '21');
-            })->get();
+            })->orderBy('status_pengajuan','asc')->get();
 
         foreach ($pengajuan as $ajuan) {
             $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
