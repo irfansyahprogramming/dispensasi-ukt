@@ -42,7 +42,8 @@ class VerifikasiWR2Controller extends Controller
         $listStatus = DB::table('ref_status_pengajuan')->get();
         $listProdi = Services::getProdi('All');
 
-        $pengajuan = DB::table('tb_pengajuan_dispensasi');
+        $pengajuan = DB::table('tb_pengajuan_dispensasi')
+        ->select('tb_pengajuan_dispensasi.id', 'tb_pengajuan_dispensasi.semester', 'tb_pengajuan_dispensasi.nim', 'tb_pengajuan_dispensasi.nama', 'tb_pengajuan_dispensasi.kode_prodi', 'tb_pengajuan_dispensasi.nama_prodi', 'tb_pengajuan_dispensasi.jenjang_prodi', 'tb_pengajuan_dispensasi.kelompok_ukt', 'tb_pengajuan_dispensasi.nominal_ukt','tb_pengajuan_dispensasi.alamat', 'tb_pengajuan_dispensasi.no_hp','tb_pengajuan_dispensasi.email','tb_pengajuan_dispensasi.pekerjaan', 'tb_pengajuan_dispensasi.jabatan_kerja','tb_pengajuan_dispensasi.pengalihan', 'tb_pengajuan_dispensasi.awal_pengajuan','tb_pengajuan_dispensasi.status_pengajuan', 'tb_pengajuan_dispensasi.semesterke','tb_pengajuan_dispensasi.sks_belum', 'tb_pengajuan_dispensasi.file_pernyataan','tb_pengajuan_dispensasi.file_keterangan', 'tb_pengajuan_dispensasi.file_permohonan','tb_pengajuan_dispensasi.file_penghasilan', 'tb_pengajuan_dispensasi.file_phk','tb_pengajuan_dispensasi.file_pailit', 'tb_pengajuan_dispensasi.file_pratranskrip','tb_pengajuan_dispensasi.potongan' ,'tb_pengajuan_dispensasi.ditagihkan', 'tb_pengajuan_dispensasi.angsuran1', 'tb_pengajuan_dispensasi.angsuran2', 'tb_pengajuan_dispensasi.kel_ukt_baru', 'ref_jenisdipensasi.jenis_dispensasi', 'ref_status_pengajuan.status_ajuan', 'ref_kelompok_ukt.kelompok');
         
         if (isset($request->semester) and $request->semester != 'All') {
             $pengajuan = $pengajuan->where('tb_pengajuan_dispensasi.semester', trim($request->semester));
@@ -62,6 +63,7 @@ class VerifikasiWR2Controller extends Controller
 
         // get data pengajuan
         $pengajuan = $pengajuan
+            
             ->join('ref_jenisdipensasi','ref_jenisdipensasi.id', '=' ,'tb_pengajuan_dispensasi.jenis_dispensasi')
             ->join('ref_status_pengajuan','ref_status_pengajuan.id', '=', 'tb_pengajuan_dispensasi.status_pengajuan','inner')
             ->join('ref_kelompok_ukt','ref_kelompok_ukt.id', '=', 'tb_pengajuan_dispensasi.kelompok_ukt','inner')
@@ -166,7 +168,7 @@ class VerifikasiWR2Controller extends Controller
         //echo $id;
 
         $data = PengajuanDispensasiUKTModel::where('id', $id)->first();
-
+        // @dd($id);
         if (isset($data->jenis_dispensasi)) {
             $data->nom_ukt = number_format($data->nominal_ukt, 0);
             $data->jenis = DB::table('ref_jenisdipensasi')->where('id', $data->jenis_dispensasi)->first()->jenis_dispensasi;
@@ -230,6 +232,7 @@ class VerifikasiWR2Controller extends Controller
                 $data->nom_ukt_siakad = "<i class='fas fa-x'></i>";
             }
         }
+        // @dd($data);
         return json_encode($data);
     }
 

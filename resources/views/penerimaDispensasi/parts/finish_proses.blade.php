@@ -26,8 +26,8 @@
             <td>{{ $row->nim }}</td>
             <td>{{ $row->nama }}</td>
             <td>{{ $row->jenjang_prodi }} {{ $row->nama_prodi }}</td>
-            <td>{{ $row->dispensasi->jenis_dispensasi }}</td>
-            <td>{{ $row->kelompok->kelompok }}</td>
+            <td>{{ $row->jenis_dispensasi }}</td>
+            <td>{{ $row->kelompok }}</td>
             <td>{{ number_format($row->nominal_ukt, 0) }}</td>
             <td>
             @if ($row->file_pernyataan)
@@ -49,7 +49,7 @@
                 <a href="{{ asset('storage/' . $row->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
             @endif
             </td>
-            <td><div class="alert alert-success">{{ $row->status_ajuan->status_ajuan ?? '' }}</div> </td>
+            <td><div class="alert alert-success">{{ $row->status_ajuan ?? '' }}</div> </td>
         </tr>
         @endforeach
     </tbody>

@@ -24,8 +24,8 @@
             <td>{{ $item->nim }}</td>
             <td>{{ $item->nama }}</td>
             <td>{{ $item->jenjang_prodi }} {{ $item->nama_prodi }}</td>
-            <td>{{ $item->dispensasi->jenis_dispensasi }}</td>
-            <td>{{ $item->kelompok->kelompok }}</td>
+            <td>{{ $item->jenis_dispensasi }}</td>
+            <td>{{ $item->kelompok }}</td>
             <td>{{ number_format($item->nominal_ukt, 0) }}</td>
             <td>
             @if ($item->file_pernyataan)
@@ -47,7 +47,7 @@
                 <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
             @endif
             </td>
-            <td><div class="alert alert-success">{{ $item->status_ajuan->status_ajuan ?? '' }}</div> </td>
+            <td><div class="alert alert-success">{{ $item->status_ajuan ?? '' }}</div> </td>
         </tr>
         @endforeach
     </tbody>

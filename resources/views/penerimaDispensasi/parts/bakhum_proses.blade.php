@@ -49,7 +49,7 @@
                 <a href="{{ asset('storage/' . $row->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
             @endif
             </td>
-            <td><div class="alert alert-success">{{ $row->status_ajuan->status_ajuan ?? '' }}</div> </td>
+            <td><div class="alert alert-success">{{ $row->status_ajuan ?? '' }}</div> </td>
         </tr>
         @endforeach
     </tbody>
