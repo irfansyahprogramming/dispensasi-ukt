@@ -45,9 +45,10 @@ class VerifikasiUKTController extends Controller
         $kel_ukt = DB::table('ref_kelompok_ukt')
             ->get();
 
-            $pengajuan = DB::table('tb_pengajuan_dispensasi')
+        $pengajuan = DB::table('tb_pengajuan_dispensasi')
+            ->select('tb_pengajuan_dispensasi.id', 'tb_pengajuan_dispensasi.semester', 'tb_pengajuan_dispensasi.nim', 'tb_pengajuan_dispensasi.nama', 'tb_pengajuan_dispensasi.kode_prodi', 'tb_pengajuan_dispensasi.nama_prodi', 'tb_pengajuan_dispensasi.jenjang_prodi', 'tb_pengajuan_dispensasi.kelompok_ukt', 'tb_pengajuan_dispensasi.nominal_ukt','tb_pengajuan_dispensasi.alamat', 'tb_pengajuan_dispensasi.no_hp','tb_pengajuan_dispensasi.email','tb_pengajuan_dispensasi.pekerjaan', 'tb_pengajuan_dispensasi.jabatan_kerja','tb_pengajuan_dispensasi.pengalihan', 'tb_pengajuan_dispensasi.awal_pengajuan','tb_pengajuan_dispensasi.status_pengajuan', 'tb_pengajuan_dispensasi.semesterke','tb_pengajuan_dispensasi.sks_belum', 'tb_pengajuan_dispensasi.file_pernyataan','tb_pengajuan_dispensasi.file_keterangan', 'tb_pengajuan_dispensasi.file_permohonan','tb_pengajuan_dispensasi.file_penghasilan', 'tb_pengajuan_dispensasi.file_phk','tb_pengajuan_dispensasi.file_pailit', 'tb_pengajuan_dispensasi.file_pratranskrip','tb_pengajuan_dispensasi.potongan' ,'tb_pengajuan_dispensasi.ditagihkan', 'tb_pengajuan_dispensasi.angsuran1', 'tb_pengajuan_dispensasi.angsuran2', 'tb_pengajuan_dispensasi.kel_ukt_baru', 'ref_jenisdipensasi.jenis_dispensasi', 'ref_status_pengajuan.status_ajuan', 'ref_kelompok_ukt.kelompok')
             ->where('kode_prodi', 'like', trim(session('user_unit')) . '%');
-
+            
         if (isset($request->semester) and $request->semester != 'All') {
             $pengajuan = $pengajuan->where('semester', trim($request->semester));
         } else {
@@ -214,7 +215,7 @@ class VerifikasiUKTController extends Controller
     {
 
         $data = PengajuanDispensasiUKTModel::where('id', $id)->first();
-
+        // @dd($data);
         if (isset($data->jenis_dispensasi)) {
             $data->nom_ukt = number_format($data->nominal_ukt, 0);
             $data->jenis = DB::table('ref_jenisdipensasi')->where('id', $data->jenis_dispensasi)->first()->jenis_dispensasi;
