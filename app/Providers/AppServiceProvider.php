@@ -46,9 +46,9 @@ class AppServiceProvider extends ServiceProvider
             $cmode = session('user_cmode');
             $unit = session('user_unit');
             if ($cmode == "2"){
-                $dispensasi = ViewPengajuanData::where('kode_prodi','=',$unit)->where($param)->get();    
+                $dispensasi = ViewPengajuanData::where('kode_prodi','=',trim($unit))->where($param)->get();    
             }elseif ($cmode == "3" || ($cmode == "14")){
-                $dispensasi = ViewPengajuanData::where('kode_prodi','like',$unit.'%')->where($param)->get();    
+                $dispensasi = ViewPengajuanData::where('kode_prodi','like',trim($unit).'%')->where($param)->get();    
             }else{
                 $dispensasi = ViewPengajuanData::where($param)->get();
             }
