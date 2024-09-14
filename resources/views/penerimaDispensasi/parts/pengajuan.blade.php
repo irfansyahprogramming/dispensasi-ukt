@@ -318,7 +318,7 @@ $(function(){
               }
           }
         }
-      }).buttons().container().appendTo('#dataTabel_wrapper .col-md-6:eq(0)');
+      }).buttons().container().appendTo('#table_wrapper .col-md-6:eq(0)');
       $('#tableWR2').DataTable({
         "paging": true,
         // "lengthChange": false,
@@ -335,7 +335,7 @@ $(function(){
               }
           }
         }
-      }).buttons().container().appendTo('#dataTabel_wrapper .col-md-6:eq(0)');
+      }).buttons().container().appendTo('#tableWR2_wrapper .col-md-6:eq(0)');
       $('#tableWD2').DataTable({
         "paging": true,
         // "lengthChange": false,
@@ -352,7 +352,7 @@ $(function(){
               }
           }
         }
-      }).buttons().container().appendTo('#dataTabel_wrapper .col-md-6:eq(0)');
+      }).buttons().container().appendTo('#tableWD2_wrapper .col-md-6:eq(0)');
 })
 function edit(id){
   
