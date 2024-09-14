@@ -36,7 +36,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-3 col-sm-6 col-12">
+  {{-- <div class="col-md-3 col-sm-6 col-12">
     <div class="info-box">
       <span class="info-box-icon bg-info"><i class="fa fa-list"></i></span>
       <div class="info-box-content">
@@ -44,13 +44,13 @@
         <span class="info-box-number">{{ $total_hutalak ?? 0 }}</span>
       </div>
     </div>
-  </div>
+  </div> --}}
   <div class="col-md-3 col-sm-6 col-12">
     <div class="info-box">
       <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
       <div class="info-box-content">
-        <span class="info-box-text">Finish</span>
-        <span class="info-box-number">{{ $total_bakhum ?? 0 }}</span>
+        <span class="info-box-text">Selesai</span>
+        <span class="info-box-number">{{ $total_upttik ?? 0 }}</span>
       </div>
     </div>
   </div>
@@ -85,7 +85,7 @@
     <div class="info-box">
       <span class="info-box-icon bg-warning"><i class="fa fa-heart"></i></span>
       <div class="info-box-content">
-        <span class="info-box-text">Penurunan UKT <small><strong>(disetujui)</strong></small></span>
+        <span class="info-box-text">Perubahan UKT <small><strong>(disetujui)</strong></small></span>
         <span class="info-box-number">{{ $total_turun ?? 0 }}</span>
       </div>
     </div>

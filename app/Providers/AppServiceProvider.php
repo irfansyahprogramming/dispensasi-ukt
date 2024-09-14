@@ -61,6 +61,9 @@ class AppServiceProvider extends ServiceProvider
             $count_total_verifikasi_bakhum = $dispensasi->where('mode','4')->count('id');
             $count_total_verifikasi_upttik = $dispensasi->where('mode','13')->count('id');
             
+            $count_total_setuju_dekan = $dispensasi->where('mode','14')->where('status_ajuan','1')->count('id');
+            $count_total_setuju_wr2 = $dispensasi->where('mode','20')->where('status_ajuan','1')->count('id');
+
             $total_jenis1 = $dispensasi->where('mode',14)->where('id_jenis_dispensasi', 1)->where('status_ajuan','1')->count();
             $total_jenis4 = $dispensasi->where('mode',14)->where('id_jenis_dispensasi', 4)->where('status_ajuan','1')->count();
             $total_jenis5 = $dispensasi->where('mode',14)->where('id_jenis_dispensasi', 5)->where('status_ajuan','1')->count();
@@ -77,15 +80,15 @@ class AppServiceProvider extends ServiceProvider
             }elseif ($cmode == '4'){
                 $badges = $count_total_verifikasi_hutalak - $count_total_verifikasi_bakhum;
             }elseif ($cmode == '13'){
-                $badges = $count_total_verifikasi_bakhum - $count_total_verifikasi_upttik;
+                $badges = $count_total_verifikasi_wr2 - $count_total_verifikasi_upttik;
             }else{
                 $badges = 0;
             }
             $count_all = array (
                 'total_ajuan'       => $count_total_pengajuan,
                 'total_fakultas'    => $count_total_verifikasi_fakultas,
-                'total_dekan'       => $count_total_verifikasi_dekan,
-                'total_wr2'         => $count_total_verifikasi_wr2,
+                'total_dekan'       => $count_total_setuju_dekan,
+                'total_wr2'         => $count_total_setuju_wr2,
                 'total_hutalak'     => $count_total_verifikasi_hutalak,
                 'total_bakhum'      => $count_total_verifikasi_bakhum,
                 'total_upttik'      => $count_total_verifikasi_upttik,
