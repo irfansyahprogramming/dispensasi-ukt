@@ -73,14 +73,18 @@
                 @if($semester <> '' && $mode == "Program Studi")
                 <td>
                   <div class="btn-group">
-                    <button type="button" id="btnEdit" class="btn btn-outline-warning" onclick="edit({{ $item->id }})"><i class="fas fa-edit"></i> Edit</button>
+                    @if ($item->status_pengajuan > 1)
+                      Tidak ada otoritas
+                    @else
+                      
+                      <button type="button" id="btnEdit" class="btn btn-outline-warning" onclick="edit({{ $item->id }})"><i class="fas fa-edit"></i> Edit</button>
 
-                    <form action="{{ route('penerima_dispensasi.delete', ['id' => $item->id]) }}" method="POST">
-                      {{ csrf_field() }}
-                      {{ method_field('delete') }}
-                      <button type="submit" data-toggle="tooltip" data-placement="top" title="Hapus Pengajuan" class="btn btn-outline-danger" onclick="return confirm('Apakah Anda yakin akan menghapus pengajuan mahasiswa ini ?')"><i class="fas fa-trash"></i> Hapus </button>
-                    </form>
-
+                      <form action="{{ route('penerima_dispensasi.delete', ['id' => $item->id]) }}" method="POST">
+                        {{ csrf_field() }}
+                        {{ method_field('delete') }}
+                        <button type="submit" data-toggle="tooltip" data-placement="top" title="Hapus Pengajuan" class="btn btn-outline-danger" onclick="return confirm('Apakah Anda yakin akan menghapus pengajuan mahasiswa ini ?')"><i class="fas fa-trash"></i> Hapus </button>
+                      </form>
+                    @endif
                 </td>
                 @endif
             </tr>
