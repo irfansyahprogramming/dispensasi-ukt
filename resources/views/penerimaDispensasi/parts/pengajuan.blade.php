@@ -105,7 +105,7 @@
           </div>
           <div class="modal-body">
             <div class="modal-body py-2">
-              @if($cmode == '4' || $cmode == '13' || $cmode == '20' || $cmode == '22'){
+              @if($cmode == '1' || $cmode == '4' || $cmode == '13' || $cmode == '20' || $cmode == '22'){
                 <form id="cetak-penerima-dispensasi" action="{{ route('penerima_dispensasi.print', ['semester' => $semester, 'kode_prodi' => '0']) }}" method="get" target="_blank">
               @else
                 <form id="cetak-penerima-dispensasi" action="{{ route('penerima_dispensasi.print', ['semester' => $semester, 'kode_prodi' => $unit]) }}" method="get" target="_blank">

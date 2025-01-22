@@ -34,6 +34,33 @@
 
         @if (session('user_cmode') == '1')
           <li class="nav-item">
+            <a href="/periode" class="nav-link {{ $periode_active }}">
+              <i class="nav-icon fas fa-clock"></i>
+              <p>
+                Buka Periode
+                <!--<span class="right badge badge-danger">New</span>-->
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Pengajuan
+                <!--<span class="right badge badge-danger">New</span>-->
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/laporan" class="nav-link {{ $laporan_active }}">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                Rekapitulasi
+                <!--<span class="right badge badge-danger">New</span>-->
+              </p>
+            </a>
+          </li>
+          {{-- <li class="nav-item">
             <a href="/data_dispensasi" class="nav-link {{ $dispen_active }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
@@ -41,7 +68,7 @@
                 <!--<span class="right badge badge-danger">New</span>-->
               </p>
             </a>
-          </li>
+          </li> --}}
         @elseif (session('user_cmode') == '2')
           <li class="nav-item">
             <a href="/penerima_dispensasi" class="nav-link {{ $penerima_active }}">
