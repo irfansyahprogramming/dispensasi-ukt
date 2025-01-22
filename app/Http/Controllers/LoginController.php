@@ -30,17 +30,30 @@ class LoginController extends Controller
         ]);
 
         $url = env('SIAKAD_URI') . "/as400/signin";
+        $post_data = http_build_query(
+            array(
+                'username'  => $request->username,
+                'password'  => $request->password
+            )
+            );
+        $opts = array('http' =>
+		array(
+			'method'  => 'POST',
+			'header'  => 'Content-type: application/x-www-form-urlencoded',
+			'content' => $post_data));
+		$context  = stream_context_create($opts);
+		$response =file_get_contents($url,false, $context);
 
-        $response = Http::asForm()->post($url, $credentials);
-        $response = json_decode($response);
-        //return $response;
-        if ($response->status != 200) {
+        // $response = Http::asForm()->post($url, $credentials);
+        $result = json_decode($response);
+        // dd ($response);
+        if ($result->status == false) {
             $this->logout($request);
             $request->flash();
             return redirect()->to('login')->with('login_msg', 'Username atau Password salah');
         }
 
-        $set_session = $this->setUserSession($response);
+        $set_session = $this->setUserSession($result);
         
         if ($set_session) {
             return redirect()->to('home');
@@ -50,6 +63,7 @@ class LoginController extends Controller
     }
     protected function setUserSession($user)
     {
+        // dd ($user);
         try {
             $akun = DB::table('ref_mode')->where('id', $user->mode)->first();
             $mode = $akun->mode;
