@@ -334,7 +334,7 @@ class PeneriamDispensasiController extends Controller
             // 'file_penghasilan'          => ['file|max:512'],
             // 'file_kurang_penghasilan'   => ['file|max:512']
         ]);
-
+        // dd($request);
         $id = $request->id;
         $semester = $request->semester;
         $jenis_dispensasi = $request->jenis_dispensasi;
