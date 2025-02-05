@@ -143,6 +143,12 @@
                       </div>
                     </div>
                   </div>
+                  <div class="form-group">
+                    <label>Aktif</label>
+                    <div class="input-group date" data-target-input="nearest">
+                      <input type="checkbox" class="form-control" id="aktif" name="aktif"/>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
@@ -205,6 +211,7 @@
 
     function editPeriode(id) {
       //alert(id);
+      $("#aktif").prop("checked", false);
       //Ajax Load data from ajax
       $.ajax({
         url: "/periode/edit/" + id,
@@ -216,6 +223,12 @@
           $('[name="des_semester"]').val(data.des_semester);
           $('[name="start_date"]').val(convertDate(data.start_date));
           $('[name="end_date"]').val(convertDate(data.end_date));
+          // $('[name="aktif"]').val(data.aktif);
+          if(data.aktif === "1"){
+            // alert(data.aktif);
+            $("#aktif").prop("checked", true);
+            // $('[name="aktif"]').checked = true;
+          }
 
           $("#modal-Periode").modal('show');
           $('.modal-title').text('Edit Periode Pengajuan Keringanan UKT');

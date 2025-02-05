@@ -90,8 +90,17 @@ class PeriodeController extends Controller
         $des_semester = $request->des_semester;
         $start_date = $request->start_date;
         $end_date = $request->end_date;
-        $status_aktif = '0';
-
+        if (!isset($request->aktif) || $request->aktif == "off"){
+            $aktif = 0;    
+        }else{
+            $status_aktif = $request->aktif;
+            if ($request->aktif == "on"){
+                $aktif = "1";
+            }else{
+                $aktif = "0";
+            }
+        }
+        
         $start = date("Y-m-d H:i:s", strtotime($start_date));
         $end = date("Y-m-d H:i:s", strtotime($end_date));
         
@@ -107,7 +116,7 @@ class PeriodeController extends Controller
                     'des_semester'  => $des_semester,
                     'start_date'    => $start,
                     'end_date'      => $end,
-                    'aktif'         => $status_aktif
+                    'aktif'         => $aktif
                 ]
             );
             
