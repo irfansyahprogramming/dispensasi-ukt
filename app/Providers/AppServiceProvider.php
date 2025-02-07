@@ -47,20 +47,27 @@ class AppServiceProvider extends ServiceProvider
             $unit = session('user_unit');
             if ($cmode == "2"){
                 $dispensasi = ViewPengajuanData::where('kode_prodi','=',trim($unit))->where($param)->get();    
-            }elseif ($cmode == "3" || ($cmode == "14")){
+            }elseif ($cmode == "3"){
+                $dispensasi = ViewPengajuanData::where('kode_prodi','like',trim($unit).'%')->where($param)->get();    
+            }elseif ($cmode == "14"){
                 $dispensasi = ViewPengajuanData::where('kode_prodi','like',trim($unit).'%')->where($param)->get();    
             }else{
                 $dispensasi = ViewPengajuanData::where($param)->get();
             }
+            // echo $cmode;
+            // dd($dispensasi);
 
             $count_total_pengajuan = $dispensasi->where('mode','2')->count('id');
-            $count_total_verifikasi_fakultas = $dispensasi->where('mode','3')->count('id');
+            $count_total_ditolak = $dispensasi->where('mode','3')->where('status_ajuan','2')->count('id');
+            $count_total_verifikasi_fakultas = $dispensasi->where('status_ajuan','1')->count('id');
+            // dd($count_total_pengajuan."-".$count_total_verifikasi_fakultas."+".$count_total_ditolak);
             $count_total_verifikasi_dekan = $dispensasi->where('mode','14')->count('id');
             $count_total_verifikasi_wr2 = $dispensasi->where('mode','20')->count('id');
             $count_total_verifikasi_hutalak = $dispensasi->where('mode','22')->count('id');
             $count_total_verifikasi_bakhum = $dispensasi->where('mode','4')->count('id');
             $count_total_verifikasi_upttik = $dispensasi->where('mode','13')->count('id');
             
+            $count_total_setuju_fakultas = $dispensasi->where('mode','3')->where('status_ajuan','1')->count('id');
             $count_total_setuju_dekan = $dispensasi->where('mode','14')->where('status_ajuan','1')->count('id');
             $count_total_setuju_wr2 = $dispensasi->where('mode','20')->where('status_ajuan','1')->count('id');
 
