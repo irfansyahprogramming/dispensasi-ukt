@@ -348,7 +348,10 @@ class PeneriamDispensasiController extends Controller
         $alamat = $request->alamat;
         $kelompok_ukt = $request->kelompok_ukt;
         $nominal = $request->nominal_ukt;
-        
+        if ($nominal == 0) {
+            return redirect()->back()->with('toast_error', 'Nominal 0 tidak dibolehkan');
+            exit;
+        }
         $lenMoney = strlen($nominal);
         $money = substr($nominal, 4, ($lenMoney - 3));
         if (isset($request->id)){
