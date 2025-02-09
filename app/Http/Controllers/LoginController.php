@@ -54,7 +54,7 @@ class LoginController extends Controller
         if ($result->status == false) {
             $this->logout($request);
             $request->flash();
-            return redirect()->to('login')->with('login_msg', 'Username atau Password salah');
+            return redirect()->to('login')->with('login_msg', 'Koneksi SIAKAD gagal | Username atau Password salah ');
         }
 
         $set_session = $this->setUserSession($result);
@@ -62,7 +62,7 @@ class LoginController extends Controller
         if ($set_session) {
             return redirect()->to('home');
         } else {
-            return redirect()->to('login')->with('login_msg', 'Gagal melakukan koneksi ke SIAKAD'.$url);
+            return redirect()->to('login')->with('login_msg', 'Database belum aktif atau User tidak dikenal');
         }
     }
     protected function setUserSession($user)
