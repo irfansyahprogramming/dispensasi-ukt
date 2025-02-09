@@ -62,7 +62,7 @@ class LoginController extends Controller
         if ($set_session) {
             return redirect()->to('home');
         } else {
-            return redirect()->to('login')->with('login_msg', 'Gagal melakukan koneksi ke SIAKAD');
+            return redirect()->to('login')->with('login_msg', 'Gagal melakukan koneksi ke SIAKAD'.$url);
         }
     }
     protected function setUserSession($user)
