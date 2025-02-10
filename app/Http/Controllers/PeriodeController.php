@@ -31,7 +31,7 @@ class PeriodeController extends Controller
         }else{
             $semester = "";
         }
-        $badges = Functions::pengajuan($semester);
+        // $badges = Functions::pengajuan($semester);
 
         $arrData = [
             'title'             => 'Dispensasi',
@@ -46,8 +46,7 @@ class PeriodeController extends Controller
             'periode_active'    => 'active',
             'penerima_active'   => '',
             'user'              => session('user_username'),
-            'periode'           => $periode,
-            'badges'            => $badges
+            'periode'           => $periode
         ];
         // return $arrData;
         return view('periode.index',$arrData);
