@@ -59,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
 
             $count_total_pengajuan = $dispensasi->where('mode','2')->count('id');
             $count_total_ditolak = $dispensasi->where('mode','3')->where('status_ajuan','2')->count('id');
-            $count_total_verifikasi_fakultas = $dispensasi->where('status_ajuan','1')->count('id');
+            $count_total_verifikasi_fakultas = $dispensasi->where('mode','3')->where('status_ajuan','1')->count('id');
             // dd($count_total_pengajuan."-".$count_total_verifikasi_fakultas."+".$count_total_ditolak);
             $count_total_verifikasi_dekan = $dispensasi->where('mode','14')->count('id');
             $count_total_verifikasi_wr2 = $dispensasi->where('mode','20')->count('id');

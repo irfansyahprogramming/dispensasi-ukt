@@ -30,26 +30,26 @@ class LoginController extends Controller
         ]);
 
         $url = env('SIAKAD_URI') . "/as400/signin";
-        $post_data = http_build_query(
-            array(
-                'username'  => $request->username,
-                'password'  => $request->password
-            )
-        );
-        $opts = array('http' =>
-            array(
-                'method'  => 'POST',
-                'header'  => 'Content-type: application/x-www-form-urlencoded',
-                'content' => $post_data
-            )
-        );
+        // // dd ($url);
+        // $post_data = http_build_query(
+        //     array(
+        //         'username'  => $request->username,
+        //         'password'  => $request->password
+        //     )
+        // );
+        // $opts = array('http' =>
+        //     array(
+        //         'method'  => 'POST',
+        //         'header'  => 'Content-type: application/x-www-form-urlencoded',
+        //         'content' => $post_data
+        //     )
+        // );
         
-        $context  = stream_context_create($opts);
-        // dd ($context);
-		$response =file_get_contents($url,false, $context);
+        // $context  = stream_context_create($opts);
+		// $response =file_get_contents($url,false, $context);
+        
+        $response = Http::asForm()->post($url, $credentials);
         // dd ($response);
-
-        // $response = Http::asForm()->post($url, $credentials);
         $result = json_decode($response);
         if ($result->status == false) {
             $this->logout($request);
