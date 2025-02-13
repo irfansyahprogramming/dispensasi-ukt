@@ -36,6 +36,9 @@ class VerifikasiWR2Controller extends Controller
             $semester = "";
         }
 
+        $dataService = $getData;
+        var_dump($dataService);
+
         // $badges = Functions::pengajuan($semester);
         $listSemester = DB::table('ref_periode')->get();
         $listJenis = DB::table('ref_jenisdipensasi')->get();
@@ -73,16 +76,11 @@ class VerifikasiWR2Controller extends Controller
                     ->orWhere('tb_pengajuan_dispensasi.status_pengajuan', '23');
             })->orderBy('tb_pengajuan_dispensasi.status_pengajuan','asc')->get();
 
-        // foreach ($pengajuan as $ajuan) {
-        //     $ajuan->nom_ukt = number_format($ajuan->nominal_ukt, 0);
-        //     $ajuan->jenis = DB::table('ref_jenisdipensasi')->where('id', $ajuan->jenis_dispensasi)->first()->jenis_dispensasi;
-        //     $ajuan->status = DB::table('ref_status_pengajuan')->where('id', $ajuan->status_pengajuan)->first()->status_ajuan;
-        //     $ajuan->kelompok = DB::table('ref_kelompok_ukt')->where('id', $ajuan->kelompok_ukt)->first()->kelompok;
-        // }
-        
         // flash request data
         $request->flash();
-
+        
+        $total_verifikasi = $pengajuan->where('tb_pengajuan_dispensasi.status_pengajuan','3')->count();
+        
         $arrData = [
             'title'             => 'Home',
             'active'            => 'Dispensasi UKT',
@@ -100,7 +98,7 @@ class VerifikasiWR2Controller extends Controller
             'listSemester'      => $listSemester,
             'listProdi'         => $listProdi,
             'listJenis'         => $listJenis,
-            // 'badges'            => $badges
+            'total_wr2'            => $total_verifikasi
         ];
 
         return view('wr2.verifikasi_dispensasi', $arrData);
