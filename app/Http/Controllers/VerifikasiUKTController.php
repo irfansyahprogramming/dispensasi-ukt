@@ -88,11 +88,12 @@ class VerifikasiUKTController extends Controller
         ->join('ref_jenisdipensasi','ref_jenisdipensasi.id', '=' ,'tb_pengajuan_dispensasi.jenis_dispensasi')
         ->join('ref_status_pengajuan','ref_status_pengajuan.id', '=', 'tb_pengajuan_dispensasi.status_pengajuan','inner')
         ->join('ref_kelompok_ukt','ref_kelompok_ukt.id', '=', 'tb_pengajuan_dispensasi.kelompok_ukt','inner')
-        ->where(function ($query) {
-          $query->where('status_pengajuan', '0')
-                ->orWhere('status_pengajuan', '>=', '1')
-                ->orWhere('status_pengajuan', '>=', '21');
-        })->orderBy('status_pengajuan','asc')->get();
+        // ->where(function ($query) {
+        //   $query->where('status_pengajuan', '0')
+        //         ->orWhere('status_pengajuan', '>=', '1')
+        //         ->orWhere('status_pengajuan', '>=', '21');
+        // })
+        ->orderBy('status_pengajuan','asc')->get();
         
         $listProdi = Services::getProdi(trim(session('user_unit')));
         $listSemester = DB::table('ref_periode')->get();

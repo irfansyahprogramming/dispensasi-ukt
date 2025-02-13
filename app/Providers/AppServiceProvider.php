@@ -80,8 +80,8 @@ class AppServiceProvider extends ServiceProvider
             // dd($dispensasi);
 
             $count_total_pengajuan = $dispensasi->where('mode','2')->count('id');
-            $count_total_ditolak = $dispensasi->where('mode','3')->where('status_ajuan','2')->count('id');
-            // $count_total_ditolak = $dispensasi->where('mode','3')->where('status_ajuan','2')->count('id');
+            // $count_total_ditolak = $dispensasi->where('status_ajuan','2')->count('id');
+            $count_total_ditolak = $dispensasi->where('status_ajuan','2')->count('id');
             $count_total_verifikasi_fakultas = $dispensasi->where('mode','3')->count('id');
             $count_total_verifikasi_dekan = $dispensasi->where('mode','14')->count('id');
             // dd($count_total_verifikasi_fakultas."-".$count_total_verifikasi_dekan."+".$count_total_ditolak);
@@ -100,7 +100,7 @@ class AppServiceProvider extends ServiceProvider
             $total_jenis7 = $dispensasi->where('mode',14)->where('id_jenis_dispensasi', 7)->where('status_ajuan','1')->count();
 
             if ($cmode == '3'){
-                $badges = $count_total_pengajuan - $count_total_verifikasi_fakultas;
+                $badges = $count_total_pengajuan - ($count_total_verifikasi_fakultas + $count_total_ditolak);
             }elseif ($cmode == '14'){
                 $badges = $count_total_verifikasi_fakultas - ($count_total_verifikasi_dekan + $count_total_ditolak);
             }elseif ($cmode == '20'){
