@@ -81,6 +81,7 @@ class AppServiceProvider extends ServiceProvider
 
             $count_total_pengajuan = $dispensasi->where('mode','2')->count('id');
             $count_total_ditolak = $dispensasi->where('mode','3')->where('status_ajuan','2')->count('id');
+            // $count_total_ditolak = $dispensasi->where('mode','3')->where('status_ajuan','2')->count('id');
             $count_total_verifikasi_fakultas = $dispensasi->where('mode','3')->count('id');
             $count_total_verifikasi_dekan = $dispensasi->where('mode','14')->count('id');
             // dd($count_total_verifikasi_fakultas."-".$count_total_verifikasi_dekan."+".$count_total_ditolak);
@@ -101,7 +102,7 @@ class AppServiceProvider extends ServiceProvider
             if ($cmode == '3'){
                 $badges = $count_total_pengajuan - $count_total_verifikasi_fakultas;
             }elseif ($cmode == '14'){
-                $badges = $count_total_verifikasi_fakultas - $count_total_verifikasi_dekan;
+                $badges = $count_total_verifikasi_fakultas - ($count_total_verifikasi_dekan + $count_total_ditolak);
             }elseif ($cmode == '20'){
                 $badges = $count_total_verifikasi_dekan - $count_total_verifikasi_wr2;
             }elseif ($cmode == '22'){
