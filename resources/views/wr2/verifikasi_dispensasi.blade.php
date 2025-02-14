@@ -53,7 +53,7 @@
               <i class="fas fa-solid fa-question"></i>
               Tidak Layak
             </button>
-            Total Verifikasi Kantor Wakil Rektor II sebanyak {{ $total_wr2 }}
+            {{-- Total Verifikasi Kantor Wakil Rektor II sebanyak {{ $total_wr2 }} --}}
           </div>
           <table id="dataTabel" class="table table-hover table-border">
             <thead>
