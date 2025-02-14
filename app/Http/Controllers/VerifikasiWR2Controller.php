@@ -36,7 +36,7 @@ class VerifikasiWR2Controller extends Controller
             $semester = "";
         }
 
-        $dataService = $getData;
+        // $dataService = $getData;
         // var_dump($dataService);
 
         // $badges = Functions::pengajuan($semester);
