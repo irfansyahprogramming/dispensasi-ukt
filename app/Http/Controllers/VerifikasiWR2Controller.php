@@ -71,8 +71,7 @@ class VerifikasiWR2Controller extends Controller
             ->join('ref_status_pengajuan','ref_status_pengajuan.id', '=', 'tb_pengajuan_dispensasi.status_pengajuan','inner')
             ->join('ref_kelompok_ukt','ref_kelompok_ukt.id', '=', 'tb_pengajuan_dispensasi.kelompok_ukt','inner')
             ->where(function ($query) {
-                $query->where('tb_pengajuan_dispensasi.status_pengajuan', '0')
-                    ->where('tb_pengajuan_dispensasi.status_pengajuan', '2')
+                $query->where('tb_pengajuan_dispensasi.status_pengajuan', '2')
                     ->orWhere('tb_pengajuan_dispensasi.status_pengajuan', '3')
                     ->orWhere('tb_pengajuan_dispensasi.status_pengajuan', '21')
                     ->orWhere('tb_pengajuan_dispensasi.status_pengajuan', '22')
