@@ -49,8 +49,8 @@
     <div class="info-box">
       <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
       <div class="info-box-content">
-        <span class="info-box-text">Selesai</span>
-        <span class="info-box-number">{{ $total_upttik ?? 0 }}</span>
+        <span class="info-box-text">Ditolak</span>
+        <span class="info-box-number">{{ $total_ditolak ?? 0 }}</span>
       </div>
     </div>
   </div>

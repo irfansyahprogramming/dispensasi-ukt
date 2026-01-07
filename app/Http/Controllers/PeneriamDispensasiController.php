@@ -46,6 +46,11 @@ class PeneriamDispensasiController extends Controller
             }else{
                 $tombol = "disabled";
             }
+
+            // if ($cmode == "20"){
+            //     $tombol = "";
+            // }
+            
         } else {
             $tombol = "disabled";
             $semester = "All";
@@ -244,6 +249,7 @@ class PeneriamDispensasiController extends Controller
             Session::forget('selesai');
         } else if (Session::has('wr2_active')) {
             Session::forget('ajuan_active');
+            Session::forget('input_active');
             Session::forget('dekan_active');
             Session::forget('wr1_active');
             Session::forget('bakhum_active');
@@ -279,6 +285,7 @@ class PeneriamDispensasiController extends Controller
             'unit'              => $unit,
             'subtitle'          => 'Dispensasi UKT',
             'home_active'       => '',
+            'input_active'       => '',
             'dispen_active'     => '',
             'dataukt_active'    => '',
             'laporan_active'    => '',
@@ -307,6 +314,46 @@ class PeneriamDispensasiController extends Controller
         //     return view('penerimaDispensasi.index', $arrData);
         // }
         return view('penerimaDispensasi.index', $arrData);
+    }
+
+    public function input(){
+        $arrData = [
+            'title'             => 'Home',
+            'active'            => 'Dispensasi UKT',
+            'user'              => ,
+            'mode'              => ,
+            'cmode'             => ,
+            'unit'              => ,
+            'subtitle'          => 'Input Data',
+            'home_active'       => '',
+            'input_active'      => 'active',
+            'dispen_active'     => '',
+            'dataukt_active'    => '',
+            'laporan_active'    => '',
+            'periode_active'    => '',
+            'penerima_active'   => '',
+            'users'             => session('user_username'),
+            'tombol'            => ,
+            'semester'          => ,
+            'kelompok_ukt'      => ,
+            'pengajuan'         => ,
+            'verval_dekan'      => ,
+            'verval_wr2'        => ,
+            'verval_wr1'        => ,
+            'verval_bakh'       => ,
+            'finish'            => ,
+            'list_dispensasi'   => ,
+            'countMhs'          => ,
+            'arrMhs'            => 
+        ];
+        // @dd($arrData) ;
+        // return $arrData;
+        // if ($semester == ""){
+        //     return view('penerimaDispensasi.close', $arrData);
+        // }else{
+        //     return view('penerimaDispensasi.index', $arrData);
+        // }
+        return view('penerimaDispensasi.input', $arrData);
     }
 
     public function store(Request $request)

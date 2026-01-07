@@ -73,6 +73,7 @@ class DataUKTController extends Controller
             'mode'              => $mode,
             'subtitle'          => 'Database UKT',
             'home_active'       => '',
+            'input_active'       => '',
             'dispen_active'     => '',
             'dataukt_active'    => 'active',
             'laporan_active'    => '',

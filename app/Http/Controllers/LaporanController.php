@@ -63,6 +63,7 @@ class LaporanController extends Controller
             'mode'              => $mode,
             'subtitle'          => 'Rekap Dispensasi UKT',
             'home_active'       => '',
+            'input_active'       => '',
             'penerima_active'   => '',
             'dataukt_active'    => '',
             'dispen_active'     => '',

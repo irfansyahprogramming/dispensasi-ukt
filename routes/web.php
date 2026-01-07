@@ -104,6 +104,7 @@ Route::group(['prefix' => 'penerbitan_sk', 'as' => 'penerbitan_sk.'], function (
 // Route::get('/penerima_dispensasi', [PeneriamDispensasiController::class, 'index'])->name('index');
 Route::group(['prefix' => 'penerima_dispensasi', 'as' => 'penerima_dispensasi.'], function () {
     Route::get('/', [PeneriamDispensasiController::class, 'index'])->name('index');
+    Route::get('/input', [PeneriamDispensasiController::class, 'input'])->name('input');
     Route::get('/cetak/{id}', [PeneriamDispensasiController::class, 'cetak'])->name('cetak');
     Route::post('simpan', [PeneriamDispensasiController::class, 'store'])->name('simpan');
     Route::get('/data/{id}', [PeneriamDispensasiController::class, 'getData'])->name('data');

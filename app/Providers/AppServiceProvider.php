@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
             }else{
                 $param = array('semester'=>$semester);
             }
-            $getData = DB::table('db_dispensasiukt.tb_pengajuan_dispensasi AS a')
+            $getData = DB::table('tb_pengajuan_dispensasi AS a')
             ->select(
                     'a.id AS id',
                     'a.semester AS semester',
@@ -60,9 +60,9 @@ class AppServiceProvider extends ServiceProvider
                     'a.nama_prodi AS nama_prodi',
                     'a.jenjang_prodi AS jenjang_prodi'
                     )
-                    ->leftJoin('db_dispensasiukt.tr_history_pengajuan AS b','b.id_pengajuan', '=' ,'a.id')
-                    ->leftJoin('db_dispensasiukt.ref_status_pengajuan AS c','c.id', '=', 'a.status_pengajuan')
-                    ->leftJoin('db_dispensasiukt.ref_jenisdipensasi AS d','d.id', '=', 'a.jenis_dispensasi')
+                    ->leftJoin('tr_history_pengajuan AS b','b.id_pengajuan', '=' ,'a.id')
+                    ->leftJoin('ref_status_pengajuan AS c','c.id', '=', 'a.status_pengajuan')
+                    ->leftJoin('ref_jenisdipensasi AS d','d.id', '=', 'a.jenis_dispensasi')
                     ->where('a.semester',$semester);
 
             $cmode = session('user_cmode');
@@ -122,6 +122,7 @@ class AppServiceProvider extends ServiceProvider
                 'total_wr2'         => $count_total_setuju_wr2,
                 'total_hutalak'     => $count_total_verifikasi_hutalak,
                 'total_bakhum'      => $count_total_verifikasi_bakhum,
+                'total_ditolak'      => $count_total_ditolak,
                 'total_upttik'      => $count_total_verifikasi_upttik,
                 'semester'          => $semester,
                 'notif_sisa'        => $badges,

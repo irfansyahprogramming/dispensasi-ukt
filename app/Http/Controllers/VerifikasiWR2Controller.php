@@ -91,6 +91,7 @@ class VerifikasiWR2Controller extends Controller
             'mode'              => $mode,
             'subtitle'          => 'Verifikasi Wakil Rektor II',
             'home_active'       => '',
+            'input_active'       => '',
             'periode_active'       => '',
             'dispen_active'     => 'active',
             'laporan_active'    => '',

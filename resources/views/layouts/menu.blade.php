@@ -238,6 +238,15 @@
               </p>
             </a>
           </li>
+          <li class="nav-item" title="Input Keringanan UKT">
+            <a href="/penerima_dispensasi/input" class="nav-link {{ $input_active }}">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Input Data
+                <!--<span class="right badge badge-danger">New</span>-->
+              </p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="/verifikasiWR2_dispensasi" class="nav-link {{ $dispen_active }}">
               <i class="nav-icon fas fa-check"></i>
