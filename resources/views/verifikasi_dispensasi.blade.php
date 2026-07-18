@@ -58,12 +58,25 @@
                 <th scope="col">Nominal Ditagihkan</th>
                 <th scope="col">Potongan</th>
                 <th scope="col">Angsuran</th>
+                <th scope="col">Status Ajuan</th>
                 <th scope="col">Proses Keringanan UKT</th>
                 <th scope="col" class="text-center">Hapus Data</th>
               </tr>
             </thead>
             <tbody>
               @foreach ($pengajuan as $item)
+                @php
+                  if ($item->status_pengajuan < "21" && $item->status_pengajuan >= "1"){
+                    $status = "Disetujui";
+                    $alert = "alert alert-success";
+                  }elseif ($item->status_pengajuan >= "21"){
+                    $status = "Ditolak";
+                    $alert = "alert alert-danger";
+                  }else{
+                    $status = "Belum diproses";
+                    $alert = "alert alert-warning";
+                  }
+                @endphp
                 <tr>
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ $item->nim }}</td>
@@ -74,25 +87,25 @@
                   <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                   <td>
                     @if ($item->file_pernyataan)
-                      <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
+                    <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
                     @endif
                     @if ($item->file_pernyataan)
-                      <a href="{{ asset('storage/' . $item->file_pernyataan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
+                    <a href="{{ asset('storage/' . $item->file_pernyataan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
                     @endif
                     @if ($item->file_keterangan)
-                      <a href="{{ asset('storage/' . $item->file_keterangan) }}" target="_blank" title="Surat Keterangan dari kelurahan untuk yang terdampak">Surat Keterangan</a><br />
+                    <a href="{{ asset('storage/' . $item->file_keterangan) }}" target="_blank" title="Surat Keterangan dari kelurahan untuk yang terdampak">Surat Keterangan</a><br />
                     @endif
                     @if ($item->file_penghasilan)
-                      <a href="{{ asset('storage/' . $item->file_penghasilan) }}" target="_blank" title="Slip Gaji/Surat Keterangan Penghasilan yang disahkan oleh Lurah/Kepala Desa">Slip Gaji</a><br />
+                    <a href="{{ asset('storage/' . $item->file_penghasilan) }}" target="_blank" title="Slip Gaji/Surat Keterangan Penghasilan yang disahkan oleh Lurah/Kepala Desa">Slip Gaji</a><br />
                     @endif
                     @if ($item->file_pailit)
-                      <a href="{{ asset('storage/' . $item->file_pailit) }}" target="_blank" title="Keputusan Pengadilan yang bersifat tetap untuk yang mengalami pailit/Surat Keterangan dari Kelurahan tentang usaha yang mengalami kebangkrutan">Surat Keterangan Pailit</a><br />
+                    <a href="{{ asset('storage/' . $item->file_pailit) }}" target="_blank" title="Keputusan Pengadilan yang bersifat tetap untuk yang mengalami pailit/Surat Keterangan dari Kelurahan tentang usaha yang mengalami kebangkrutan">Surat Keterangan Pailit</a><br />
                     @endif
                     @if ($item->file_phk)
-                      <a href="{{ asset('storage/' . $item->file_phk) }}" target="_blank" title="Surat Keterangan Kematian/Surat Keterangan PHK/SK Pensiun/Keterangan Dokter jika sakit permanen">Surat PHK/Kematian</a><br />
+                    <a href="{{ asset('storage/' . $item->file_phk) }}" target="_blank" title="Surat Keterangan Kematian/Surat Keterangan PHK/SK Pensiun/Keterangan Dokter jika sakit permanen">Surat PHK/Kematian</a><br />
                     @endif
                     @if ($item->file_pratranskrip)
-                      <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
+                    <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
                     @endif
                   </td>
                   <td>{{ $item->status_ajuan ?? '' }}</td>
@@ -102,6 +115,7 @@
                     Angsuran 1 : Rp. {{ number_format($item->angsuran1, 0) }} <br>
                     Angsuran 2 : Rp. {{ number_format($item->angsuran2, 0) }}
                   </td>
+                  <td><i class="{{ $alert }}">{{ $status }}</i></td>
                   <td class="text-center">
                     @if ($item->status_pengajuan == 1 || $item->status_pengajuan == 21)
                       <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-outline-success" onclick="verifData({{ $item->id }})"><i class="fas fa-edit"></i> Edit Status </button>

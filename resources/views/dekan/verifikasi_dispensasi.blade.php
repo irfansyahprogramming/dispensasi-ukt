@@ -73,12 +73,25 @@
                 <th scope="col">Nominal Ditagihkan</th>
                 <th scope="col">Potongan</th>
                 <th scope="col">Angsuran</th>
+                <th scope="col">Status Ajuan</th>
                 <th scope="col" class="text-center">Proses Keringanan</th>
                 <th scope="col" class="text-center">Hapus Data</th>
               </tr>
             </thead>
             <tbody>
               @foreach ($pengajuan as $item)
+                @php
+                  if ($item->status_pengajuan == "2" || $item->status_pengajuan == "3"){
+                    $status = "Disetujui";
+                    $alert = "alert alert-success";
+                  }elseif ($item->status_pengajuan == "22" || $item->status_pengajuan == "23"){
+                    $status = "Ditolak";
+                    $alert = "alert alert-danger";
+                  }else{
+                    $status = "Belum diproses";
+                    $alert = "alert alert-warning";
+                  }
+                @endphp
                 <tr>
                   <td>
                     @if ($item->status_pengajuan == '1' or $item->status_pengajuan == '22')
@@ -137,7 +150,7 @@
                     Angsuran 1 : Rp. {{ number_format($item->angsuran1, 0) }} <br>
                     Angsuran 2 : Rp. {{ number_format($item->angsuran2, 0) }}
                   </td>
-
+                  <td><i class="{{ $alert }}">{{ $status }}</i></td>
                   <td class="text-center">
                     @if ($item->status_pengajuan == 2 || $item->status_pengajuan == 22)
                       <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-outline-success" onclick="verifData({{ $item->id }})"></i> Edit Status </button>

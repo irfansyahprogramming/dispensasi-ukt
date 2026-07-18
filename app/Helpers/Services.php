@@ -44,6 +44,10 @@ class Services
     {
         return Services::getFromSiakad("/as400/mahasiswaAktifPerSemester/$smt/$nim/$token");
     }
+    public static function dataMahasiswaAktifPerProdi($prodi,$token)
+    {
+        return Services::getFromSiakad("/as400/dataMahasiswaAktifPerProdi/$prodi/$token");
+    }
     public static function getStatusMahasiswa($smt,$nim,$token)
     {
         return Services::getFromSiakad("/as400/mahasiswaStatus/$smt/$nim/$token");

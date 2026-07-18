@@ -30,6 +30,7 @@ class VerifikasiUKTController extends Controller
         }
         $user = session('user_name');
         $mode = session('user_mode');
+        $cmode = session('user_cmode');
         $periode = BukaDispensasi::where('aktif', '1')->first();
         if ($periode) {
             $tombol = "";
@@ -65,6 +66,17 @@ class VerifikasiUKTController extends Controller
             $pengajuan = $pengajuan->where('jenis_dispensasi', $request->jenis);
         }
 
+        // // get verifikasi
+        // $verif = DB::table('tr_histori_pengajuan')
+        //           ->select('status_ajuan')
+        //           ->where('id_pengajuan',$pengajuan->id)
+        //           ->where('v_mode',$mode);
+        // if ($verif){
+        //     $status_verif = $verif->status_ajuan;
+        // }else{
+        //     $status_verif = 0;
+        // }
+        // $status_verif = 0;
         // $badges = Functions::pengajuan($semester);
 
         // $pengajuan = DB::table('tb_pengajuan_dispensasi')
@@ -95,6 +107,10 @@ class VerifikasiUKTController extends Controller
         // })
         ->orderBy('status_pengajuan','asc')->get();
         
+        // $pengajuan = $pengajuan
+        // ->join('tr_histori_pengajuan','tr_history_pengajuan.id_pengajuan','=','tb_pengajuan_dispensasi.id','left')
+        // ->where('tr_history_pengajuan.v_mode',$cmode)->get();
+
         $listProdi = Services::getProdi(trim(session('user_unit')));
         $listSemester = DB::table('ref_periode')->get();
         $listJenis = DB::table('ref_jenisdipensasi')->get();
@@ -120,9 +136,10 @@ class VerifikasiUKTController extends Controller
             'listProdi'         => $listProdi,
             'listJenis'         => $listJenis,
             'pengajuan'         => $pengajuan,
+            // 'status_verif'      => $status_verif,
             // 'badges'            => $badges
         ];
-
+        // var_dump($arrData);
         return view('verifikasi_dispensasi', $arrData);
     }
 

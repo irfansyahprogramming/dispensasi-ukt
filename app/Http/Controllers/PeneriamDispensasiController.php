@@ -294,7 +294,6 @@ class PeneriamDispensasiController extends Controller
             'users'             => session('user_username'),
             'tombol'            => $tombol,
             'semester'          => $semester,
-            'kelompok_ukt'      => $kel_ukt,
             'pengajuan'         => $pengajuan,
             'verval_dekan'      => $verval_dekan,
             'verval_wr2'        => $verval_wr2,
@@ -302,6 +301,7 @@ class PeneriamDispensasiController extends Controller
             'verval_bakh'       => $verval_bakh,
             'finish'            => $finish,
             // 'badges'            => $badges,
+            'kelompok_ukt'      => $kel_ukt,
             'list_dispensasi'   => $list_dispensasi,
             'countMhs'          => $lenMhs,
             'arrMhs'            => $arrMhs
@@ -317,14 +317,52 @@ class PeneriamDispensasiController extends Controller
     }
 
     public function input(){
+        if (!Session::has('isLoggedIn')) {
+            return redirect()->to('login');
+        }
+        $user = session('user_name');
+        $mode = session('user_mode');
+        $cmode = session('user_cmode');
+        $unit = session('user_unit');
+        $periode = BukaDispensasi::where('aktif', '1')->first();
+        $list_dispensasi = DB::table('ref_jenisdipensasi')
+            ->where('aktif', '1')
+            ->get();
+        $kel_ukt = DB::table('ref_kelompok_ukt')
+            ->get();
+
+        $now = new DateTime("now");
+        if ($periode) {
+            
+            $semester = $periode->semester;
+            $awal = new DateTime($periode->start_date);
+            $akhir = new DateTime($periode->end_date);
+            if ($now->getTimestamp() >= $awal->getTimestamp() && $now->getTimestamp() <= $akhir->getTimestamp()){
+                $tombol = "";
+            }else{
+                $tombol = "disabled";
+            }
+        } else {
+            $tombol = "disabled";
+            $semester = "All";
+        }
+
+        $getProdi = Services::getProdi('All');
+        // var_dump ($getProdi['isi']);
+        $len = count($getProdi['isi']);
+        $arrProdi = $getProdi['isi'];
+        // $countProdi = Str::length($arrProdi);
         $arrData = [
             'title'             => 'Home',
             'active'            => 'Dispensasi UKT',
-            'user'              => ,
-            'mode'              => ,
-            'cmode'             => ,
-            'unit'              => ,
             'subtitle'          => 'Input Data',
+            'user'              => $user,
+            'mode'              => $mode,
+            'cmode'             => $cmode,
+            'unit'              => $unit,
+            'semester'          => $semester,
+            'kelompok_ukt'      => $kel_ukt,
+            'list_dispensasi'   => $list_dispensasi,
             'home_active'       => '',
             'input_active'      => 'active',
             'dispen_active'     => '',
@@ -333,26 +371,12 @@ class PeneriamDispensasiController extends Controller
             'periode_active'    => '',
             'penerima_active'   => '',
             'users'             => session('user_username'),
-            'tombol'            => ,
-            'semester'          => ,
-            'kelompok_ukt'      => ,
-            'pengajuan'         => ,
-            'verval_dekan'      => ,
-            'verval_wr2'        => ,
-            'verval_wr1'        => ,
-            'verval_bakh'       => ,
-            'finish'            => ,
-            'list_dispensasi'   => ,
-            'countMhs'          => ,
-            'arrMhs'            => 
+            'arrProdi'          => $arrProdi,
+            'countProdi'        => $len,
+
         ];
-        // @dd($arrData) ;
-        // return $arrData;
-        // if ($semester == ""){
-        //     return view('penerimaDispensasi.close', $arrData);
-        // }else{
-        //     return view('penerimaDispensasi.index', $arrData);
-        // }
+        // @dd($arrProdi) ;
+        // var_dump($arrProdi) ;
         return view('penerimaDispensasi.input', $arrData);
     }
 
@@ -673,6 +697,391 @@ class PeneriamDispensasiController extends Controller
             return redirect()->route('penerima_dispensasi.index')->with('toast_error', 'Error : ' . $ex->getMessage());
         }
     }
+    public function store_wr2(Request $request)
+    {
+        // print_r($request->all());
+        $credentials = $request->validate([
+            'semester'                  => ['required'],
+            'jenis_dispensasi'          => ['required'],
+            'nim'                       => ['required'],
+            'nama_lengkap'              => ['required', 'string'],
+            'kode_program_studi'        => ['required'],
+            'program_studi'             => ['required'],
+            'jenjang'                   => ['required'],
+            'semester_ke'               => ['required'],
+            'alamat'                    => ['required', 'string', 'max:255'],
+            'nomor_hp'                  => ['required'],
+            'email'                     => ['required', 'email'],
+            'kelompok_ukt'              => ['required'],
+            'nominal_ukt'               => ['required'],
+            'pekerjaan'                 => ['required'],
+            'jabatan'                   => ['required']
+            // 'file_permohonan'           => ['file|max:512'],
+            // 'file_pernyataan'           => ['file|max:512'],
+            // 'file_pra_transkrip'        => ['file|max:512'],
+            // 'file_penghasilan'          => ['file|max:512'],
+            // 'file_kurang_penghasilan'   => ['file|max:512']
+        ]);
+        // dd($request);
+        $id = $request->id;
+        $semester = $request->semester;
+        $jenis_dispensasi = $request->jenis_dispensasi;
+        $nim = $request->nim;
+        $nama_lengkap = $request->nama_lengkap;
+        $prodi = $request->kode_program_studi;
+        $namaprodi = $request->program_studi;
+        $jenjang = $request->jenjang;
+        $hp = $request->nomor_hp;
+        $email = $request->email;
+        $alamat = $request->alamat;
+        $kelompok_ukt = $request->kelompok_ukt;
+        $nominal = $request->nominal_ukt;
+        if ($nominal == 0) {
+            return redirect()->back()->with('toast_error', 'Nominal 0 tidak dibolehkan');
+            exit;
+        }
+        $lenMoney = strlen($nominal);
+        $money = substr($nominal, 4, ($lenMoney - 3));
+        if (isset($request->id)){
+            // @dd($lenMoney);
+            $money = substr($nominal, 3, ($lenMoney - 3));
+            // @dd($lenMoney."-".$money);
+        }
+        $nominal_ukt = intval(str_replace('.', '', $money));
+        
+        $moneyBaru = 0;
+        if (isset($request->nominal_ukt_baru)){
+            $nominal_ukt_baru = $request->nominal_ukt_baru;
+            $lenMoneyBaru = strlen($nominal_ukt_baru);
+            $moneyBaru = substr($nominal_ukt_baru, 4, ($lenMoneyBaru - 3));
+            if (isset($request->id)){
+                // @dd($lenMoney);
+                $moneyBaru = substr($nominal_ukt_baru, 3, ($lenMoney - 3));
+                // @dd($lenMoney."-".$money);
+            }
+            $nominal_ukt_baru = intval(str_replace('.', '', $moneyBaru));
+        }
+        
+        // $money = explode($nominal," ");
+        // @dd($money."-".$nominal_ukt);
+        
+        if (isset($request->semester_ke)) {
+            $semesterke = $request->semester_ke;
+            $sks_belum = $request->sks_belum;
+        } else {
+            $semesterke = 0;
+            $sks_belum = 0;
+        }
+
+        $pekerjaan = $request->pekerjaan;
+        $jabatan = $request->jabatan;
+        $status = '3';
+        // $cekSetuju = $request->cekSetuju;
+
+        if ($jenis_dispensasi == '1' && $request->sks_belum =="" ) {
+            return redirect()->back()->with('toast_error', 'jumlah SKS yang belum selesai masih kosong ');
+            exit;
+        }
+        
+        if ($jenis_dispensasi == '7' & $request->kel_ukt_baru == "" && $request->nominal_ukt_baru == "") {
+            return redirect()->back()->with('toast_error', 'Anda belum menentukan Kelompok UKT dan Nominalnya');
+            exit;
+        }
+        
+        //get status mahasiswa 
+        $status_mahasiswa = Services::getStatusMahasiswa($semester,$nim,session('user_token'));
+        $response = $status_mahasiswa['isi'];
+        
+        
+        if ($response[0]['beasiswa'] == 'Ya'){
+            return redirect()->back()->with('toast_error', 'Beasiswa tidak mendapatkan dispensasi');
+            exit;
+        }
+
+        if ($response[0]['bayaran_sebelumnya'] == 0){
+            return redirect()->back()->with('toast_error', 'Lunasi dahulu pembayaran sebelumnya');
+            exit;
+        }
+
+        if ($response[0]['habis_studi'] <= 0){
+            return redirect()->back()->with('toast_error', 'Masa Studi Sudah Habis');
+            exit;
+        }
+        
+        if ($response[0]['pembayaran'] != null){
+            return redirect()->back()->with('toast_error', 'Anda Sudah Membayar');
+            exit;
+        }
+
+        try {
+            DB::beginTransaction();
+            
+            $simpan = PengajuanDispensasiUKTModel::updateOrCreate(
+                [
+                    'semester'          => $semester,
+                    'nim'               => $nim
+                ],
+                [
+                    'jenis_dispensasi'  => $jenis_dispensasi,
+                    'nama'              => $nama_lengkap,
+                    'kode_prodi'        => $prodi,
+                    'nama_prodi'        => $namaprodi,
+                    'jenjang_prodi'     => $jenjang,
+                    'alamat'            => $alamat,
+                    'no_hp'             => $hp,
+                    'email'             => $email,
+                    'semesterke'        => $semesterke,
+                    'sks_belum'         => $sks_belum,
+                    'kelompok_ukt'      => $kelompok_ukt,
+                    'nominal_ukt'       => $nominal_ukt,
+                    'status_pengajuan'  => $status,
+                    'pekerjaan'         => $pekerjaan,
+                    'jabatan_kerja'     => $jabatan
+    
+                ]
+            );
+            
+            $pengajuan = DB::table('tb_pengajuan_dispensasi')
+            // ->where('semester', trim($semester))
+            ->where('nim', '=', $nim)
+            ->where('semester','=',$semester)
+            ->get();
+            
+            $path = 'file_pendukung/' . $semester . '/' . $nim;
+                
+            if ($pengajuan){
+                foreach ($pengajuan as $ajuan) {
+                    $path_pernyataan_saved = $ajuan->file_pernyataan;
+                    $path_permohonan_saved = $ajuan->file_permohonan;
+                    $path_penghasilan_saved = $ajuan->file_penghasilan;
+                    $path_phk_saved = $ajuan->file_phk;
+                    $path_pailit_saved = $ajuan->file_pailit;
+                    $path_pratranskrip_saved = $ajuan->file_pratranskrip;
+                }
+            }else{
+                $path_pernyataan_saved = null;
+                $path_permohonan_saved = null;
+                $path_penghasilan_saved = null;
+                $path_phk_saved = null;
+                $path_pailit_saved = null;
+                $path_pratranskrip_saved = null;
+            }
+            
+            if (isset($request->file_permohonan)) {
+                $nama_dok = $request->file_permohonan->getClientOriginalName();
+                $slug = Functions::seo_friendly_url($nama_dok);
+                $ext = $request->file_permohonan->extension();
+                $filename = 'f_permohonan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                $path_permohonan_saved = $request->file_permohonan->storeAs($path, $filename, 'public');
+            }
+    
+            if (!$path_permohonan_saved) {
+                return redirect()->back()->with('toast_error', 'Gagal Upload File Permohonan');
+            }
+    
+            if (isset($request->file_pernyataan)) {
+                $nama_dok = $request->file_pernyataan->getClientOriginalName();
+                $slug = Functions::seo_friendly_url($nama_dok);
+                $ext = $request->file_pernyataan->extension();
+                $filename = 'f_pernyataan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                $path_pernyataan_saved = $request->file_pernyataan->storeAs($path, $filename, 'public');
+            }
+    
+            if (!$path_pernyataan_saved) {
+                return redirect()->back()->with('toast_error', 'Gagal Upload File Pernyataan');
+            }
+    
+            if ($jenis_dispensasi === '1') {
+                
+                if (isset($request->file_pra_transkrip)) {
+                    // var_dump($request->file_pra_transkrip);
+                    $nama_dok = $request->file_pra_transkrip->getClientOriginalName();
+                    $slug = Functions::seo_friendly_url($nama_dok);
+                    $ext = $request->file_pra_transkrip->extension();
+                    $filename = 'f_pratranskrip_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $path_pratranskrip_saved = $request->file_pra_transkrip->storeAs($path, $filename, 'public');
+                }
+    
+                if (!$path_pratranskrip_saved) {
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Pra Transkrip');
+                }
+            } elseif ($jenis_dispensasi === '2') {
+                // if (isset($request->file_keterangan)) {
+                //     $nama_dok = $request->file_keterangan->getClientOriginalName();
+                //     $slug = Functions::seo_friendly_url($nama_dok);
+                //     $ext = $request->file_keterangan->extension();
+                //     $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                //     $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
+                // }
+                // if (!$path_keterangan_saved) {
+                //     return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
+                // }
+    
+                if (isset($request->file_penghasilan)) {
+                    $nama_dok = $request->file_penghasilan->getClientOriginalName();
+                    $slug = Functions::seo_friendly_url($nama_dok);
+                    $ext = $request->file_penghasilan->extension();
+                    $filename = 'f_penghasilan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $path_penghasilan_saved = $request->file_penghasilan->storeAs($path, $filename, 'public');
+                }
+    
+                if (!$path_penghasilan_saved) {
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan');
+                }
+    
+                if (isset($request->file_bukti_pailit)) {
+                    $nama_dok = $request->file_bukti_pailit->getClientOriginalName();
+                    $slug = Functions::seo_friendly_url($nama_dok);
+                    $ext = $request->file_bukti_pailit->extension();
+                    $filename = 'f_pailit_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $path_pailit_saved = $request->file_bukti_pailit->storeAs($path, $filename, 'public');
+                }
+    
+                if (!$path_pailit_saved) {
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Kebangkrutan');
+                }
+            } elseif ($jenis_dispensasi === '3' || $jenis_dispensasi === '4' || $jenis_dispensasi === '5' || $jenis_dispensasi === '6') {
+                // if (isset($request->file_keterangan)) {
+                //     $nama_dok = $request->file_keterangan->getClientOriginalName();
+                //     $slug = Functions::seo_friendly_url($nama_dok);
+                //     $ext = $request->file_keterangan->extension();
+                //     $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                //     $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
+                // }
+                // if (!$path_keterangan_saved) {
+                //     return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
+                // }
+    
+                if (isset($request->file_penghasilan)) {
+                    $nama_dok = $request->file_penghasilan->getClientOriginalName();
+                    $slug = Functions::seo_friendly_url($nama_dok);
+                    $ext = $request->file_penghasilan->extension();
+                    $filename = 'f_penghasilan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $path_penghasilan_saved = $request->file_penghasilan->storeAs($path, $filename, 'public');
+                }
+    
+                if (!$path_penghasilan_saved) {
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan');
+                }
+            } else {
+                // if (isset($request->file_keterangan)) {
+                //     $nama_dok = $request->file_keterangan->getClientOriginalName();
+                //     $slug = Functions::seo_friendly_url($nama_dok);
+                //     $ext = $request->file_keterangan->extension();
+                //     $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                //     $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
+                // }
+                // if (!$path_keterangan_saved) {
+                //     return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
+                // }
+                if (isset($request->file_penghasilan)) {
+                    $nama_dok = $request->file_penghasilan->getClientOriginalName();
+                    $slug = Functions::seo_friendly_url($nama_dok);
+                    $ext = $request->file_penghasilan->extension();
+                    $filename = 'f_penghasilan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $path_penghasilan_saved = $request->file_penghasilan->storeAs($path, $filename, 'public');
+                }
+    
+                if (!$path_penghasilan_saved) {
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan');
+                }
+                if (isset($request->file_kurang_penghasilan)) {
+                    $nama_dok = $request->file_kurang_penghasilan->getClientOriginalName();
+                    $slug = Functions::seo_friendly_url($nama_dok);
+                    $ext = $request->file_kurang_penghasilan->extension();
+                    $filename = 'f_phk_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $path_phk_saved = $request->file_kurang_penghasilan->storeAs($path, $filename, 'public');
+                }
+    
+                if (!$path_phk_saved) {
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan PHK/Kematian');
+                }
+            }
+            // @dd($path_pratranskrip_saved);
+    
+            PengajuanDispensasiUKTModel::where([
+                'semester'          => $semester,
+                'nim'               => $nim
+            ])->update([
+                'file_permohonan'   => $path_permohonan_saved,
+                'file_pernyataan'   => $path_pernyataan_saved,
+                // 'file_keterangan'   => $path_keterangan_saved,
+                'file_penghasilan'  => $path_penghasilan_saved,
+                'file_phk'          => $path_phk_saved,
+                'file_pailit'       => $path_pailit_saved,
+                'file_pratranskrip' => $path_pratranskrip_saved
+            ]);
+            
+            //isian data
+            $potongan = 0;
+            $ditagihkan = 0;
+            $angsuran1 = 0;
+            $angsuran2 = 0;
+            $kel_ukt_baru = $kelompok_ukt;
+            $nominal_ukt_baru = $money;
+
+            if ($jenis_dispensasi == '1'){
+                $potongan = $nominal_ukt / 2;
+                $ditagihkan = $potongan;
+            }elseif ($jenis_dispensasi == '2'){
+                $potongan = $potongan;
+                $ditagihkan = $nominal_ukt - $potongan;
+            }elseif ($jenis_dispensasi == '3'){
+                $potongan = $nominal_ukt;
+                $ditagihkan = $nominal_ukt - $potongan;
+            }elseif ($jenis_dispensasi == '4'){
+                $angsuran1 = $nominal_ukt / 2;
+                $angsuran2 = $nominal_ukt / 2;
+                $ditagihkan = $nominal_ukt;
+            }elseif ($jenis_dispensasi == '5'){
+                $ditagihkan = $nominal_ukt;
+            }elseif ($jenis_dispensasi == '6'){
+                $potongan = $nominal_ukt;
+                $ditagihkan = $nominal_ukt - $potongan;
+            }elseif ($jenis_dispensasi == '7'){
+                $potongan = $nominal_ukt;
+                $ditagihkan = $nominal_ukt - $potongan;
+            }else{
+                $kel_ukt_baru = $request->kelompok_ukt_baru;
+                $nominal_ukt_baru = $moneyBaru;
+                $ditagihkan = $nominal_ukt_baru;
+            }
+            
+            $store = PengajuanDispensasiUKTModel::where([
+                'nim'       => $nim,
+                'semester'  => $semester
+            ])->update([
+                'status_pengajuan'  => '3',
+                'pengalihan'        => '1',
+                'awal_pengajuan'    => $jenis_dispensasi,
+                'kel_ukt_baru'      => $kel_ukt_baru,
+                'potongan'          => $potongan,
+                'ditagihkan'        => $ditagihkan,
+                'angsuran1'         => $angsuran1,
+                'angsuran2'         => $angsuran2
+            ]);
+
+            $dataAjuan = PengajuanDispensasiUKTModel::where('semester', $semester)->where('nim', $nim)->first();
+            $history = HistoryPengajuan::updateOrCreate(
+                [
+                    'id_pengajuan'      => $dataAjuan->id,
+                    'v_mode'            => trim(session('user_cmode'))
+                ],
+                [
+                    'alasan_verif'      => '',
+                    'status_ajuan'      => '1',
+                    'status_pengajuan'  => '3'
+                ]
+            );
+            
+            // return $history;
+            DB::commit();
+            return redirect()->route('penerima_dispensasi.input')->with('toast_success', 'Pengajuan Dispensasi berhasil ');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            return redirect()->route('penerima_dispensasi.input')->with('toast_error', 'Error : ' . $ex->getMessage());
+        }
+    }
 
     public function delete($id)
     {
@@ -690,6 +1099,15 @@ class PeneriamDispensasiController extends Controller
     public function getData($nim)
     {
         $getDataMhs = Services::getDataMahasiswa($nim,session('user_token'));
+        $lenMhs = count($getDataMhs['isi']);
+        $arrMhs = $getDataMhs['isi'];
+
+        // print_r($arrMhs);
+        return json_encode($arrMhs);
+    }
+    public function getMahasiswa($prodi)
+    {
+        $getDataMhs = Services::dataMahasiswaAktifPerProdi($prodi,session('user_token'));
         $lenMhs = count($getDataMhs['isi']);
         $arrMhs = $getDataMhs['isi'];
 

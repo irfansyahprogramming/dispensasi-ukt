@@ -82,10 +82,14 @@ class AppServiceProvider extends ServiceProvider
             $count_total_pengajuan = $dispensasi->where('mode','2')->count('id');
             // $count_total_ditolak = $dispensasi->where('status_ajuan','2')->count('id');
             $count_total_ditolak = $dispensasi->where('status_ajuan','2')->count('id');
+            $count_total_disetuju_fak = $dispensasi->where('mode','3')->where('status_ajuan','1')->count('id');
+            $count_total_setuju_wd2 = $dispensasi->where('mode','14')->where('status_ajuan','1')->count('id');
+            $count_total_disetuju_wr2 = $dispensasi->where('mode','20')->where('status_ajuan','1')->count('id');
             $count_total_verifikasi_fakultas = $dispensasi->where('mode','3')->count('id');
             $count_total_verifikasi_dekan = $dispensasi->where('mode','14')->count('id');
             // dd($count_total_verifikasi_fakultas."-".$count_total_verifikasi_dekan."+".$count_total_ditolak);
             $count_total_verifikasi_wr2 = $dispensasi->where('mode','20')->count('id');
+            // $count_total_acctolak_wr2 = $dispensasi->where('mode','20')->where('status_ajuan','2')->count('id');
             $count_total_verifikasi_hutalak = $dispensasi->where('mode','22')->count('id');
             $count_total_verifikasi_bakhum = $dispensasi->where('mode','4')->count('id');
             $count_total_verifikasi_upttik = $dispensasi->where('mode','13')->count('id');
@@ -100,11 +104,12 @@ class AppServiceProvider extends ServiceProvider
             $total_jenis7 = $dispensasi->where('mode',14)->where('id_jenis_dispensasi', 7)->where('status_ajuan','1')->count();
 
             if ($cmode == '3'){
-                $badges = $count_total_pengajuan - ($count_total_verifikasi_fakultas + $count_total_ditolak);
+                $badges = $count_total_pengajuan - $count_total_verifikasi_fakultas;
             }elseif ($cmode == '14'){
-                $badges = $count_total_verifikasi_fakultas - ($count_total_verifikasi_dekan + $count_total_ditolak);
+                $badges = $count_total_disetuju_fak - $count_total_verifikasi_dekan;
             }elseif ($cmode == '20'){
-                $badges = $count_total_verifikasi_dekan - $count_total_verifikasi_wr2;
+                $badges = $count_total_setuju_wd2 - $count_total_setuju_wr2;
+                // $badges = $count_total_ditolak_wd2;
             }elseif ($cmode == '22'){
                 $badges = $count_total_verifikasi_wr2 - $count_total_verifikasi_hutalak;
             }elseif ($cmode == '4'){

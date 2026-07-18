@@ -23,7 +23,7 @@
           <td>{{ $item->jenjang_prodi }} {{ $item->nama_prodi }}</td>
           <td>{{ $item->kelompok }}</td>
           <td>{{ number_format($item->nominal_ukt, 0) }}</td>
-          <td>{{ $item->jenis }}</td>
+          <td>{{ $item->nama_jenis_dispensasi }}</td>
         </tr>
       @endforeach
 

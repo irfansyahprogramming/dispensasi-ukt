@@ -68,6 +68,7 @@
                 <th scope="col">NIM</th>
                 <th scope="col">Nama</th>
                 <th scope="col">Program Studi</th>
+                <th scope="col">Fakultas</th>
                 <th scope="col">Jenis Keringanan</th>
                 <th scope="col">Kel.UKT</th>
                 <th scope="col">Nom.UKT</th>
@@ -76,6 +77,7 @@
                 <th scope="col">Nominal Ditagihkan</th>
                 <th scope="col">Potongan</th>
                 <th scope="col">Angsuran</th>
+                <th scope="col">Status Ajuan</th>
                 <th scope="col">Proses Keringanan UKT</th>
                 <th scope="col">Hapus Data</th>
               </tr>
@@ -83,7 +85,31 @@
             <tbody>
               @foreach ($pengajuan as $item)
               {{-- @dd($item) --}}
-
+                @php
+                  $namaFak = array(
+                    '11' => 'Fakultas Ilmu Pendidikan',
+                    '12' => 'Fakultas Bahasa dan Seni',
+                    '13' => 'Fakultas Matematika dan Ilmu Pengetahuan Alam',
+                    '14' => 'Fakultas Ilmu Sosial dan Hukum',
+                    '15' => 'Fakultas Teknik',
+                    '16' => 'Fakultas Ilmu Keolahragaan dan Kesehatan',
+                    '17' => 'Fakultas Ekonomi',
+                    '18' => 'Fakultas Pendidikan Psikologi',
+                    '99' => 'Sekolah Pascasarjana'
+                    );
+                  $kodeFak = substr($item->kode_prodi,0,2);
+                  $namaFakultas = $namaFak[$kodeFak];
+                  if ($item->status_pengajuan == "3"){
+                    $status = "Disetujui";
+                    $alert = "alert alert-success";
+                  }elseif ($item->status_pengajuan == "22" || $item->status_pengajuan == "23"){
+                    $status = "Ditolak";
+                    $alert = "alert alert-danger";
+                  }else{
+                    $status = "Belum diproses";
+                    $alert = "alert alert-warning";
+                  }
+                @endphp
                 <tr>
                   <td>
                     @if ($item->status_pengajuan == '2' or $item->status_pengajuan == '22')
@@ -101,6 +127,7 @@
                   <td>{{ $item->nim }}</td>
                   <td>{{ $item->nama }}</td>
                   <td>{{ $item->jenjang_prodi }} {{ $item->nama_prodi }}</td>
+                  <td>{{ $namaFakultas }}</td>
                   <td>{{ $item->jenis_dispensasi }}</td>
                   <td>{{ $item->kelompok }}</td>
                   <td>{{ number_format($item->nominal_ukt, 0) }}</td>
@@ -141,7 +168,7 @@
                     Angsuran 1 : Rp. {{ number_format($item->angsuran1, 0) }} <br>
                     Angsuran 2 : Rp. {{ number_format($item->angsuran2, 0) }}
                   </td>
-
+                  <td><i class="{{ $alert }}">{{ $status }}</i></td>
                   <td class="text-center">
                     @if ($item->status_pengajuan == 3 || $item->status_pengajuan == 23)
                       <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-sm btn-outline-success" onclick="verifData({{ $item->id }})"></i> Edit Status </button>

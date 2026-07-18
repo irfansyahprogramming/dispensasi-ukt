@@ -103,17 +103,20 @@ class PrintController extends Controller
         }
         
         if (trim(session('user_cmode')) != '4' && trim(session('user_cmode')) != '11' && trim(session('user_cmode')) != '13' && trim(session('user_cmode')) != '20' && trim(session('user_cmode')) != '22') {
-            $data_pengajuan = DB::table('tb_pengajuan_dispensasi')
+            // $data_pengajuan = DB::view('tb_pengajuan_dispensasi')
+            $data_pengajuan = DB::view('v_list_pengajuan')
                 ->where('kode_prodi', 'like', $kode_prodi . '%')
                 ->where('semester', trim($semester))
-                ->where('status_pengajuan', '>=', '3')
-                ->where('status_pengajuan', '<=', '7')
+                ->where('mode', '=', trim(session('user_cmode')))
+                ->where('status_ajuan', '=', '1')
+                // ->where('status_pengajuan', '<=', '7')
                 ->get();
-        } else {
-            $data_pengajuan = DB::table('tb_pengajuan_dispensasi')
+                } else {
+                $data_pengajuan = DB::table('tb_pengajuan_dispensasi')
                 ->where('semester', trim($semester))
-                ->where('status_pengajuan', '>=', '3')
-                ->where('status_pengajuan', '<=', '7')
+                ->where('mode', '=', trim(session('user_cmode')))
+                ->where('status_ajuan', '=', '1')
+                // ->where('status_pengajuan', '<=', '7')
                 ->get();
         }
 
