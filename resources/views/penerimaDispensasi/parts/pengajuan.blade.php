@@ -11,12 +11,7 @@
 
   <button class="btn btn-outline-primary" id="btnCetakPenerima" data-toggle="modal" data-target="#modal-Cetak"><i class="ace-icon fa fa-plus"></i> Cetak Pengajuan </button>
     {{-- @dd($mode); --}}
-<<<<<<< HEAD
-    
-    @if($semester <> '' && $cmode == "2")
-=======
     {{-- @if($semester <> '' && $mode == "Program Studi")
->>>>>>> 23bbcc7 (update apps 19072026)
         <button class="btn btn-outline-success {{ $tombol }}" id="btnTambahPengajuan" data-toggle="modal" data-target="#modal-Pengajuan" {{ $tombol }}><i class="ace-icon fa fa-edit"></i> Tambah Pengajuan </button>
     @endif --}}
         
