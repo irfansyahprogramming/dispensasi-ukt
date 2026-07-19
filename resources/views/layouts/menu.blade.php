@@ -79,6 +79,15 @@
               </p>
             </a>
           </li>
+          <li class="nav-item" title="Verifikasi Pengajuan Keringanan UKT yang masuk">
+            <a href="/verifikasi_dispensasi/prodi" class="nav-link {{ $dispen_active }}">
+              <i class="nav-icon fas fa-check"></i>
+              <p>
+                Verifikasi
+                <span class="badge bg-danger ml-2 right">{{ $notif_sisa ?? 0 }}</span>
+              </p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="/laporan" class="nav-link {{ $laporan_active }}">
               <i class="nav-icon fas fa-user"></i>

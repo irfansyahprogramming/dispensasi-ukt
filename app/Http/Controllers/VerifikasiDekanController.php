@@ -40,6 +40,7 @@ class VerifikasiDekanController extends Controller
         
         $pengajuan = DB::table('tb_pengajuan_dispensasi')
             ->select('tb_pengajuan_dispensasi.id', 'tb_pengajuan_dispensasi.semester', 'tb_pengajuan_dispensasi.nim', 'tb_pengajuan_dispensasi.nama', 'tb_pengajuan_dispensasi.kode_prodi', 'tb_pengajuan_dispensasi.nama_prodi', 'tb_pengajuan_dispensasi.jenjang_prodi', 'tb_pengajuan_dispensasi.kelompok_ukt', 'tb_pengajuan_dispensasi.nominal_ukt','tb_pengajuan_dispensasi.alamat', 'tb_pengajuan_dispensasi.no_hp','tb_pengajuan_dispensasi.email','tb_pengajuan_dispensasi.pekerjaan', 'tb_pengajuan_dispensasi.jabatan_kerja','tb_pengajuan_dispensasi.pengalihan', 'tb_pengajuan_dispensasi.awal_pengajuan','tb_pengajuan_dispensasi.status_pengajuan', 'tb_pengajuan_dispensasi.semesterke','tb_pengajuan_dispensasi.sks_belum', 'tb_pengajuan_dispensasi.file_pernyataan','tb_pengajuan_dispensasi.file_keterangan', 'tb_pengajuan_dispensasi.file_permohonan','tb_pengajuan_dispensasi.file_penghasilan', 'tb_pengajuan_dispensasi.file_phk','tb_pengajuan_dispensasi.file_pailit', 'tb_pengajuan_dispensasi.file_pratranskrip','tb_pengajuan_dispensasi.potongan' ,'tb_pengajuan_dispensasi.ditagihkan', 'tb_pengajuan_dispensasi.angsuran1', 'tb_pengajuan_dispensasi.angsuran2', 'tb_pengajuan_dispensasi.kel_ukt_baru', 'ref_jenisdipensasi.jenis_dispensasi', 'ref_status_pengajuan.status_ajuan', 'ref_kelompok_ukt.kelompok')
+            ->where('status_pengajuan', '>=', '2')
             ->where('kode_prodi', 'like', trim(session('user_unit')) . '%');
 
         if (isset($request->semester) and $request->semester != 'All') {
@@ -147,15 +148,15 @@ class VerifikasiDekanController extends Controller
         $semester = $request->semester;
         $kelayakan = $request->sellayak;
         $id = $request->id;
-        $alasan = $request->txtAlasan;
+        $alasan = (!$request->txtAlasan)?'':$request->txtAlasan;
 
         try {
             DB::beginTransaction();
 
             if ($kelayakan == '1') {
-                $status_pengajuan = '2';
+                $status_pengajuan = '3';
             } elseif ($kelayakan == '2') {
-                $status_pengajuan = '22';
+                $status_pengajuan = '23';
             } else {
                 return redirect()->back()->with('toast_error', 'Belum Ada Pilihan Kelayakan Berkas Dokumen');
             }
@@ -201,22 +202,22 @@ class VerifikasiDekanController extends Controller
             $data->status = DB::table('ref_status_pengajuan')->where('id', $data->status_pengajuan)->first()->status_ajuan;
             $data->kelompok = DB::table('ref_kelompok_ukt')->where('id', $data->kelompok_ukt)->first()->kelompok;
 
-            $data->file_pendukung = "<a href = " . asset('storage/' . $data->file_pernyataan) . " target='_blank'>File Pernyataan Kebenaran</a>";
+            $data->file_pendukung = "";
 
             if ($data->file_keterangan <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_keterangan) . " target='_blank'>File Keterangan Terdampak</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_keterangan) . " target='_blank'><i class=\"fa fa-file\"></i> File Keterangan Terdampak</a>";
             }
             if ($data->file_penghasilan <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_penghasilan) . " target='_blank'>File Slip Gaji/Keterangan Penghasilan</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_penghasilan) . " target='_blank'><i class=\"fa fa-file\"></i> File Slip Gaji/Keterangan Penghasilan</a>";
             }
             if ($data->file_pailit <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pailit) . " target='_blank'>File Surat Pengadilan/Surat Keterangan Pailit/Bangkrut</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pailit) . " target='_blank'><i class=\"fa fa-file\"></i> File Surat Pengadilan/Surat Keterangan Pailit/Bangkrut</a>";
             }
             if ($data->file_phk <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_phk) . " target='_blank'>File Surat Kematian/PHK/Cacat Permanen</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_phk) . " target='_blank'><i class=\"fa fa-file\"></i> File Surat Kematian/PHK/Cacat Permanen</a>";
             }
             if ($data->file_pratranskrip <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pratranskrip) . " target='_blank'>File Pratranskrip</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pratranskrip) . " target='_blank'><i class=\"fa fa-file\"></i> File Pratranskrip</a>";
             }
 
             $history = HistoryPengajuan::where('id_pengajuan', $data->id)->where('v_mode', trim(session('user_cmode')))->first();
@@ -228,23 +229,28 @@ class VerifikasiDekanController extends Controller
             }
 
             //get data siakad
-            $url = env('SIAKAD_URI') . "/dataMahasiswa/" . $data->nim . "/" . session('user_token');
-            $response = Http::get($url);
-            $dataMhs = json_decode($response);
+            // $url = env('SIAKAD_URI') . "/dataMahasiswa/" . $data->nim . "/" . session('user_token');
+            // $response = Http::get($url);
+            // $dataMhs = json_decode($response);
+            $dataMhs = Services::getDataMahasiswa($data->nim,session('user_token'));
+            // dd($url);
 
-            if ($dataMhs->status == true) {
-                foreach ($dataMhs->isi as $mhs) {
-                    $data->nim_siakad = $mhs->nim;
-                    $data->nama_siakad = $mhs->namaLengkap;
-                    $data->prodi_siakad = $mhs->jenjangProdi . " " . $mhs->namaProdi;
-                    $data->kontak_siakad = $mhs->hpm . " / " . $mhs->email;
-                    $data->alamat_siakad = $mhs->alamat . " RT. " . $mhs->rt . " RW." . $mhs->rw . "<br/> Kelurahan " . $mhs->lurah . "<br/>  " . $mhs->namaKecamatan . "<br/>  " . $mhs->namaKabkot . "<br/>  " . $mhs->namaPropinsi . " Kode pos " . $mhs->kdpos;
-                    $data->nom_ukt_siakad = number_format($mhs->biayaKuliah, 0);
+            if ($dataMhs['status'] == true) {
+                foreach ($dataMhs['isi'] as $mhs) {
+                    $data->nim_siakad = $mhs['nim'];
+                    $data->nama_siakad = $mhs['namaLengkap'];
+                    $data->prodi_siakad = $mhs['jenjangProdi']." ".$mhs['namaProdi'];
+                    $data->angkatan_siakad = $mhs['angkatan'];
+                    $data->kontak_siakad = $mhs['hpm']." / ".$mhs['email'];
+                    $data->alamat_siakad = $mhs['alamat']." RT. ".$mhs['rt']." RW.".$mhs['rw']."<br/> Kelurahan ".$mhs['lurah']."<br/>  ".$mhs['namaKecamatan']."<br/>  ".$mhs['namaKabkot']."<br/>  ".$mhs['namaPropinsi']." Kode pos ".$mhs['kdpos'];
+                    $data->nom_ukt_siakad = number_format($mhs['biayaKuliah'],0);
+
                 }
             } else {
                 $data->nim_siakad = "<i class='fas fa-x'></i>";
                 $data->nama_siakad = "<i class='fas fa-x'></i>";
                 $data->prodi_siakad = "<i class='fas fa-x'></i>";
+                $data->angkatan_siakad = "";
                 $data->kontak_siakad = "<i class='fas fa-x'></i>";
                 $data->alamat_siakad = "<i class='fas fa-x/'></i>";
                 $data->nom_ukt_siakad = "<i class='fas fa-x'></i>";
@@ -260,6 +266,7 @@ class VerifikasiDekanController extends Controller
         $nim = $request->nim;
         $ajuan = $request->idAjuan;
         $pesan = "";
+        // dd($ajuan);
         foreach ($ajuan as $x) {
             $id = $x;
             if ($id == 'deselect') {
@@ -267,11 +274,14 @@ class VerifikasiDekanController extends Controller
             } else {
                 try {
                     DB::beginTransaction();
+                    
                     $store = PengajuanDispensasiUKTModel::where([
                         'id'    => $id
                     ])->update([
-                        'status_pengajuan'  => '2'
+                        'status_pengajuan'  => '3'
                     ]);
+
+                    // dd($store);
 
                     if ($store) {
                         HistoryPengajuan::updateOrCreate(
@@ -280,15 +290,15 @@ class VerifikasiDekanController extends Controller
                                 'v_mode'            => trim(session('user_cmode'))
                             ],
                             [
-                                'alasan_verif'      => null,
+                                'alasan_verif'      => '',
                                 'status_ajuan'      => '1',
-                                'status_pengajuan'  => '2'
+                                'status_pengajuan'  => '3'
                             ]
                         );
                     }
 
                     DB::commit();
-                    $pesan .= "ID " . $id . " Berhasil input Layak<br/>";
+                    $pesan .= "Berhasil input Layak<br/>";
                     //return redirect()->route('verifikasiWR2_dispensasi.index')->with('toast_success', 'Verifikasi Kelayakan Pengajuan Dispensasi berhasil');
                 } catch (Exception $ex) {
                     DB::rollBack();
@@ -322,7 +332,7 @@ class VerifikasiDekanController extends Controller
                     $store = PengajuanDispensasiUKTModel::where([
                         'id'    => $id
                     ])->update([
-                        'status_pengajuan'  => '21'
+                        'status_pengajuan'  => '23'
                     ]);
 
                     if ($store) {
@@ -332,9 +342,9 @@ class VerifikasiDekanController extends Controller
                                 'v_mode'            => trim(session('user_cmode'))
                             ],
                             [
-                                'alasan_verif'      => null,
+                                'alasan_verif'      => '',
                                 'status_ajuan'      => '2',
-                                'status_pengajuan'  => '21'
+                                'status_pengajuan'  => '23'
                             ]
                         );
                     }

@@ -20,7 +20,6 @@ class HomeController extends Controller
         $mode = session('user_mode');
         $cmode = session('user_cmode');
         
-        // @dd($pengajuan);
         $arrData = [
             'title'         => 'Home',
             'active'        => 'home',
@@ -37,7 +36,8 @@ class HomeController extends Controller
             'laporan_active' => '',
             'penerbitan_active' => ''
         ];
-
+            // @dd($arrData);
+            
         return view('home', $arrData);
     }
 }

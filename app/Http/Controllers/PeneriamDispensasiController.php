@@ -424,7 +424,7 @@ class PeneriamDispensasiController extends Controller
             exit;
         }
         $lenMoney = strlen($nominal);
-        $money = substr($nominal, 4, ($lenMoney - 3));
+        $money = substr($nominal, 3, ($lenMoney - 3));
         if (isset($request->id)){
             // @dd($lenMoney);
             $money = substr($nominal, 3, ($lenMoney - 3));

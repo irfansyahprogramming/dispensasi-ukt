@@ -20,7 +20,14 @@
     {{-- @if ($cmode == '2' || $cmode == '3' || $cmode == '4' || $cmode == '11' || $cmode == '13' || $cmode == '14' || $cmode == '20')
       @include('layouts.infobox')
     @endif --}}
+    
+    @php
+    if ($cmode <> '9'){  
+    @endphp
     @include('layouts.infobox')
+    @php
+    }
+    @endphp
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Informasi </h3>

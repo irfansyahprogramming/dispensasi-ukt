@@ -36,7 +36,7 @@ class DispensasiController extends Controller
         }
 
         // get juknis
-        $list_dispensasi = DB::table('ref_jenisdipensasi')
+        $list_dispensasi = DB::table('ref_jenisdipensasi')->where('aktif','1')
             ->get();
 
         $kel_ukt = DB::table('ref_kelompok_ukt')
@@ -66,13 +66,24 @@ class DispensasiController extends Controller
                 $jenjang = $mhs['jenjangProdi'];
                 $hp = $mhs['hpm'];
                 $email = $mhs['email'];
-            }
-        } else {
-            $nama_lengkap = 'Kosong';
-            $kodeProdi = 'Kosong';
-            $nama_prodi = 'Kosong';
-            $jenjang = 'Kosong';
-            $hp = 'Kosong';
+                $jalan = trim($mhs['alamat']);
+                $rt = trim($mhs['rt']);
+                $rw = trim($mhs['rw']);
+                $kelurahan = trim($mhs['lurah']);
+                $kecamatan = trim($mhs['namaKecamatan']);
+                $kabkot = trim($mhs['namaKabkot']);
+                $propinsi = trim($mhs['namaPropinsi']);
+                $alamat = $jalan." RT/RW ".$rt."/".$rw." ".$kelurahan." ".$kecamatan." ".$kabkot." ".$propinsi; 
+                $biayaKuliah = $mhs['biayaKuliah'];
+                }
+            } else {
+                $nama_lengkap = 'Kosong';
+                $kodeProdi = 'Kosong';
+                $nama_prodi = 'Kosong';
+                $jenjang = 'Kosong';
+                $hp = 'Kosong';
+                $biayaKuliah = 0;
+                $alamat = "";
             $email = '<b>[Email UNJ anda tidak ada, silakan mengajukan pembuatan email ke UPT.TIK]</b>';
         }
 
@@ -111,6 +122,8 @@ class DispensasiController extends Controller
             'kelompok_ukt'      => $kel_ukt,
             'nim'               => session('user_username'),
             'nama_lengkap'      => $nama_lengkap,
+            'alamat'            => $alamat,
+            'biayaKuliah'       => $biayaKuliah,
             'kodeProdi'         => $kodeProdi,
             'nama_prodi'        => $nama_prodi,
             'jenjang'           => $jenjang,
@@ -159,10 +172,14 @@ class DispensasiController extends Controller
         $alamat = $request->alamat;
         $jenis_dispensasi = $request->jenis_dispensasi;
         $kelompok_ukt = $request->kelompok_ukt;
-        $nominal = $request->nominal_ukt;
-        $lenMoney = strlen($nominal);
-        $money = substr($nominal, 2, ($lenMoney - 2));
-        $nominal_ukt = intval(str_replace(',', '', $money));
+        $nominal = trim($request->nominal_ukt);
+        $nom = preg_replace('/[^0-9.]/', '', $nominal);
+        $nominal_ukt = intval(str_replace('.', '', $nom));
+        if ($nominal_ukt == 0) {
+            return redirect()->back()->with('toast_error', 'Nominal 0 tidak dibolehkan');
+            exit;
+        }
+        // dd($nominal_ukt);        
 
         if (isset($request->semesterke)) {
             $semesterke = $request->semesterke;
@@ -181,6 +198,24 @@ class DispensasiController extends Controller
             return redirect()->back()->with('toast_error', 'Belum Cek Persetujuan');
         }
 
+        $file_pernyataan = null;
+        $file_keterangan = null;
+        $file_penghasilan = null;
+        $file_phk = null;
+        $file_pailit = null;
+        $file_pratranskrip = null;
+
+        $pengajuan = DB::table('tb_pengajuan_dispensasi')->where('nim', session('user_username'))
+            ->get();
+        foreach($pengajuan as $ajuan){
+            $file_pernyataan = $ajuan->file_pernyataan;
+            $file_keterangan = $ajuan->file_keterangan;
+            $file_penghasilan = $ajuan->file_penghasilan;
+            $file_phk = $ajuan->file_phk;
+            $file_pailit = $ajuan->file_pailit;
+            $file_pratranskrip = $ajuan->file_pratranskrip;
+        }
+        
         try {
             DB::beginTransaction();
             PengajuanDispensasiUKTModel::updateOrCreate(
@@ -215,30 +250,43 @@ class DispensasiController extends Controller
             $path_phk_saved = null;
             $path_pailit_saved = null;
             $path_pratranskrip_saved = null;
-
+            
             if (isset($request->file_pernyataan)) {
                 $nama_dok = $request->file_pernyataan->getClientOriginalName();
                 $slug = Functions::seo_friendly_url($nama_dok);
                 $ext = $request->file_pernyataan->extension();
+                $size = $request->file_pernyataan->getSize();
                 $filename = 'f_pernyataan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                if ($size > 204800){
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Pengajuan - Ukuran File '.$size.' lebih besar dari 200 KB');
+                }
                 $path_pernyataan_saved = $request->file_pernyataan->storeAs($path, $filename, 'public');
+            }else{
+                $path_pernyataan_saved = $file_pernyataan;
             }
 
             if (!$path_pernyataan_saved) {
-                return redirect()->back()->with('toast_error', 'Gagal Upload File Pernyataan');
+                return redirect()->back()->with('toast_error', 'Gagal Upload File Pengajuan - File Pengajuan tidak ditemukan');
             }
 
             if ($jenis_dispensasi === '1') {
-                if (isset($request->file_pratranskrip)) {
-                    $nama_dok = $request->file_pratranskrip->getClientOriginalName();
+                if (isset($request->file_pra_transkrip)) {
+                    $nama_dok = $request->file_pra_transkrip->getClientOriginalName();
                     $slug = Functions::seo_friendly_url($nama_dok);
-                    $ext = $request->file_pratranskrip->extension();
+                    $ext = $request->file_pra_transkrip->extension();
                     $filename = 'f_pratranskrip_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
-                    $path_pratranskrip_saved = $request->file_pratranskrip->storeAs($path, $filename, 'public');
+                    
+                    $size = $request->file_pra_transkrip->getSize();
+                    if ($size > 204800){
+                        return redirect()->back()->with('toast_error', 'Gagal Upload File Pra Transkrip - Ukuran File '.$size.' lebih besar dari 200 KB');
+                    }
+                    $path_pratranskrip_saved = $request->file_pra_transkrip->storeAs($path, $filename, 'public');
+                }else{
+                    $path_pratranskrip_saved = $file_pratranskrip;
                 }
 
                 if (!$path_pratranskrip_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Pra Transkrip');
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Pra Transkrip - File PraTranskrip tidak ditemukan');
                 }
             } elseif ($jenis_dispensasi === '2') {
                 if (isset($request->file_keterangan)) {
@@ -246,10 +294,17 @@ class DispensasiController extends Controller
                     $slug = Functions::seo_friendly_url($nama_dok);
                     $ext = $request->file_keterangan->extension();
                     $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $size = $request->file_keterangan->getSize();
+                    if ($size > 204800){
+                        return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan - Ukuran File '.$size.' lebih besar dari 200 KB');
+                    }
                     $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
+                }else{
+                    $path_keterangan_saved = $file_keterangan;
                 }
+
                 if (!$path_keterangan_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan - File tidak ditemukan');
                 }
 
                 if (isset($request->file_penghasilan)) {
@@ -257,11 +312,17 @@ class DispensasiController extends Controller
                     $slug = Functions::seo_friendly_url($nama_dok);
                     $ext = $request->file_penghasilan->extension();
                     $filename = 'f_penghasilan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $size = $request->file_penghasilan->getSize();
+                    if ($size > 204800){
+                        return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan - Ukuran File '.$size.' lebih besar dari 200 KB');
+                    }
                     $path_penghasilan_saved = $request->file_penghasilan->storeAs($path, $filename, 'public');
+                }else{
+                    $path_penghasilan_saved = $file_penghasilan;
                 }
 
                 if (!$path_penghasilan_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan');
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan - File Penghasilan kosong');
                 }
 
                 if (isset($request->file_bukti_pailit)) {
@@ -269,11 +330,17 @@ class DispensasiController extends Controller
                     $slug = Functions::seo_friendly_url($nama_dok);
                     $ext = $request->file_bukti_pailit->extension();
                     $filename = 'f_pailit_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $size = $request->file_bukti_pailit->getSize();
+                    if ($size > 204800){
+                        return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan Kematian/Surat Keterangan PHK/SK Pensiun/Keterangan Dokter jika sakit permanen - Ukuran File '.$size.' lebih besar dari 200 KB');
+                    }
                     $path_pailit_saved = $request->file_bukti_pailit->storeAs($path, $filename, 'public');
+                }else{
+                    $path_pailit_saved = $file_pailit;
                 }
 
                 if (!$path_pailit_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Kebangkrutan');
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan Kematian/Surat Keterangan PHK/SK Pensiun/Keterangan Dokter jika sakit permanen - File tidak ditemukan');
                 }
             } elseif ($jenis_dispensasi === '3' || $jenis_dispensasi === '4' || $jenis_dispensasi === '5' || $jenis_dispensasi === '6') {
                 if (isset($request->file_keterangan)) {
@@ -281,10 +348,17 @@ class DispensasiController extends Controller
                     $slug = Functions::seo_friendly_url($nama_dok);
                     $ext = $request->file_keterangan->extension();
                     $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $size = $request->file_keterangan->getSize();
+                    if ($size > 204800){
+                        return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan dari Kelurahan untuk yang terdampak - Ukuran File '.$size.' lebih besar dari 200 KB');
+                    }
                     $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
+                }else{
+                    $path_keterangan_saved = $file_keterangan;
                 }
+
                 if (!$path_keterangan_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan - File tidak ditemukan');
                 }
 
                 if (isset($request->file_penghasilan)) {
@@ -292,11 +366,17 @@ class DispensasiController extends Controller
                     $slug = Functions::seo_friendly_url($nama_dok);
                     $ext = $request->file_penghasilan->extension();
                     $filename = 'f_penghasilan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $size = $request->file_penghasilan->getSize();
+                    if ($size > 204800){
+                        return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan - Ukuran File '.$size.' lebih besar dari 200 KB');
+                    }
                     $path_penghasilan_saved = $request->file_penghasilan->storeAs($path, $filename, 'public');
+                }else{
+                    $path_penghasilan_saved = $file_penghasilan;
                 }
 
                 if (!$path_penghasilan_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan');
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan - File tidak ditemukan');
                 }
             } else {
                 if (isset($request->file_keterangan)) {
@@ -304,17 +384,31 @@ class DispensasiController extends Controller
                     $slug = Functions::seo_friendly_url($nama_dok);
                     $ext = $request->file_keterangan->extension();
                     $filename = 'f_keterangan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $size = $request->file_keterangan->getSize();
+                    if ($size > 204800){
+                        return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan dari Kelurahan untuk yang terdampak - Ukuran File '.$size.' lebih besar dari 200 KB');
+                    }
                     $path_keterangan_saved = $request->file_keterangan->storeAs($path, $filename, 'public');
+                }else{
+                    $path_keterangan_saved = $file_keterangan;
                 }
+                
                 if (!$path_keterangan_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan');
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan - File tidak ditemukan');
                 }
+
                 if (isset($request->file_penghasilan)) {
                     $nama_dok = $request->file_penghasilan->getClientOriginalName();
                     $slug = Functions::seo_friendly_url($nama_dok);
                     $ext = $request->file_penghasilan->extension();
                     $filename = 'f_penghasilan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $size = $request->file_penghasilan->getSize();
+                    if ($size > 204800){
+                        return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan - Ukuran File '.$size.' lebih besar dari 200 KB');
+                    }
                     $path_penghasilan_saved = $request->file_penghasilan->storeAs($path, $filename, 'public');
+                }else{
+                    $path_penghasilan_saved = $file_penghasilan;
                 }
 
                 if (!$path_penghasilan_saved) {
@@ -325,11 +419,17 @@ class DispensasiController extends Controller
                     $slug = Functions::seo_friendly_url($nama_dok);
                     $ext = $request->file_phk->extension();
                     $filename = 'f_phk_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                    $size = $request->file_penghasilan->getSize();
+                    if ($size > 204800){
+                        return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan - Ukuran File '.$size.' lebih besar dari 200 KB');
+                    }
                     $path_phk_saved = $request->file_phk->storeAs($path, $filename, 'public');
+                }else{
+                    $path_phk_saved = $file_phk;
                 }
 
                 if (!$path_phk_saved) {
-                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan PHK/Kematian');
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Keterangan PHK/Kematian - File tidak ditemukan');
                 }
             }
 
@@ -352,7 +452,8 @@ class DispensasiController extends Controller
                     'v_mode'            => trim(session('user_cmode'))
                 ],
                 [
-                    'alasan_verif'      => '',
+                    'alasan_verif'      => "Keringanan UKT",
+                    'status_pengajuan'  => "0",
                     'status_ajuan'      => '0'
                 ]
             );

@@ -79,7 +79,7 @@ class Functions
       }  
     }
 
-    // var_dump($pengajuan);
+    // dd($pengajuan);
    
     return $pengajuan;
   }

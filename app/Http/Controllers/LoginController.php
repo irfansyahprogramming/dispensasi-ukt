@@ -30,7 +30,7 @@ class LoginController extends Controller
         ]);
 
         $url = env('SIAKAD_URI') . "/as400/signin";
-        // // dd ($url);
+        // dd ($credentials);
         // $post_data = http_build_query(
         //     array(
         //         'username'  => $request->username,

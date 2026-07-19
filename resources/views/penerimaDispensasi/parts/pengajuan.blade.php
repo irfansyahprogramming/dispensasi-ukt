@@ -11,10 +11,14 @@
 
   <button class="btn btn-outline-primary" id="btnCetakPenerima" data-toggle="modal" data-target="#modal-Cetak"><i class="ace-icon fa fa-plus"></i> Cetak Pengajuan </button>
     {{-- @dd($mode); --}}
+<<<<<<< HEAD
     
     @if($semester <> '' && $cmode == "2")
+=======
+    {{-- @if($semester <> '' && $mode == "Program Studi")
+>>>>>>> 23bbcc7 (update apps 19072026)
         <button class="btn btn-outline-success {{ $tombol }}" id="btnTambahPengajuan" data-toggle="modal" data-target="#modal-Pengajuan" {{ $tombol }}><i class="ace-icon fa fa-edit"></i> Tambah Pengajuan </button>
-    @endif
+    @endif --}}
         
     <div class="mt-4 table-responsive">
         <table id="table" class="table table-hover">
@@ -30,9 +34,9 @@
             <th scope="col">Nom.UKT</th>
             <th scope="col">File Pendukung</th>
             <th scope="col">Status Pengajuan</th>
-            @if($semester <> '' && $mode == "Program Studi")
+            {{-- @if($semester <> '' && $mode == "Program Studi")
             <th scope="col">Aksi</th>
-            @endif
+            @endif --}}
             </tr>
         </thead>
         <tbody>
@@ -71,7 +75,7 @@
                 @endif
                 </td>
                 <td><div class="alert alert-success">{{ $item->status_ajuan ?? '' }}</div> </td>
-                @if($semester <> '' && $mode == "Program Studi")
+                {{-- @if($semester <> '' && $mode == "Program Studi")
                 <td>
                   <div class="btn-group">
                     @if ($item->status_pengajuan > 1)
@@ -87,7 +91,7 @@
                       </form>
                     @endif
                 </td>
-                @endif
+                @endif --}}
             </tr>
             @endforeach
 

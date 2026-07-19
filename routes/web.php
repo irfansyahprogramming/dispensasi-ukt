@@ -67,9 +67,12 @@ Route::group(['prefix' => 'dispensasi', 'as' => 'dispensasi.'], function () {
 Route::group(['prefix' => 'verifikasi_dispensasi', 'as' => 'verifikasi_dispensasi.'], function () {
     Route::get('/', [VerifikasiUKTController::class, 'index'])->name('index');
     Route::post('simpan', [VerifikasiUKTController::class, 'simpan'])->name('simpan');
+    Route::post('simpan_verval', [VerifikasiUKTController::class, 'simpan_verval'])->name('simpan_verval');
     Route::get('/detil/{id}', [VerifikasiUKTController::class, 'detil'])->name('detil');  
+    Route::get('/detil_ajuan/{id}', [VerifikasiUKTController::class, 'detil_ajuan'])->name('detil');  
     Route::get('/dataukt/{in1}/{in2}', [VerifikasiUKTController::class, 'dataukt'])->name('dataukt');
     Route::delete('/{id}', [VerifikasiUKTController::class, 'delete'])->name('delete');
+    Route::get('/prodi', [VerifikasiUKTController::class, 'verval'])->name('prodi');
 });
 
 // Route::get('/verifikasi_dispensasi', [VerifikasiUKTController::class, 'index'])->name('index');

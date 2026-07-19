@@ -161,9 +161,32 @@
                 </div>
                 <div class="form-group">
                   <label for="alamat">Alamat Sekarang</label>
-                  <textarea name="alamat" id="alamat" class="form-control form-control-border required" cols="20" rows="3" placeholder="Alamat Sekarang"></textarea>
+                  <textarea name="alamat" id="alamat" class="form-control form-control-border required" cols="20" rows="3" placeholder="Alamat Sekarang">{{ $alamat }}</textarea>
                   <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">-->
                   <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                </div>
+                <div class="form-group">
+                  <label for="nominal_ukt">Nominal UKT</label>
+                  <input type="text" name="nominal_ukt" class="form-control form-control-border" id="nominal_ukt" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="{{ $biayaKuliah }}" data-type="currency" placeholder="Nominal UKT anda saat ini">
+                </div>
+                <div class="form-group">
+                  <label for="kelompok_ukt">Kelompok UKT</label>
+                  <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">-->
+                  <select name="kelompok_ukt" id="kelompok_ukt" class="form-control form-control-border required autocomplete="off">
+                    <option value="">Pilih Kelompok UKT</option>
+                    @foreach ($kelompok_ukt as $kel)
+                      <option value="{{ $kel->id }}">{{ $kel->kelompok }}</option>
+                    @endforeach
+                  </select>
+                  <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                </div>
+                <div class="form-group">
+                  <label for="pekerjaan">Pekerjaan orang tua/pihak lain yang membiayai</label>
+                  <input type="text" class="form-control form-control-border" name="pekerjaan" id="pekerjaan" placeholder="Pekerjaan orang tua/pihak lain yang membiayai">
+                </div>
+                <div class="form-group">
+                  <label for="jabatan">Jabatan Pekerjaan yang membiayai</label>
+                  <input type="text" class="form-control form-control-border" name="jabatan" id="jabatan" placeholder="Jabatan Pekerjaan yang membiayai">
                 </div>
                 <div class="form-group">
                   <label for="jenis_dispensasi">Jenis Keringanan UKT</label>
@@ -183,33 +206,12 @@
                   </div>
                   <div class="col">
                     <label for="sks">SKS Belum Lulus (Harus lebih kecil sama dengan 6 sks)</label>
-                    <input type="number" name="sks_belum" class="form-control form-control-border" id="sks_belums" placeholder="SKS yang belum belum lulus">
+                    <input type="number" name="sks_belum" class="form-control form-control-border" id="sks_belum" placeholder="SKS yang belum belum lulus">
                   </div>
 
                 </div>
-                <div class="form-group">
-                  <label for="kelompok_ukt">Kelompok UKT</label>
-                  <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">-->
-                  <select name="kelompok_ukt" id="kelompok_ukt" class="form-control form-control-border required autocomplete="off">
-                    <option value="">Pilih Kelompok UKT</option>
-                    @foreach ($kelompok_ukt as $kel)
-                      <option value="{{ $kel->id }}">{{ $kel->kelompok }}</option>
-                    @endforeach
-                  </select>
-                  <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-                </div>
-                <div class="form-group">
-                  <label for="nominal_ukt">Nominal UKT</label>
-                  <input type="text" name="nominal_ukt" class="form-control form-control-border" id="nominal_ukt" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="" data-type="currency" placeholder="Nominal UKT anda saat ini">
-                </div>
-                <div class="form-group">
-                  <label for="pekerjaan">Pekerjaan orang tua/pihak lain yang membiayai</label>
-                  <input type="text" class="form-control form-control-border" name="pekerjaan" id="pekerjaan" placeholder="Pekerjaan orang tua/pihak lain yang membiayai">
-                </div>
-                <div class="form-group">
-                  <label for="jabatan">Jabatan Pekerjaan yang membiayai</label>
-                  <input type="text" class="form-control form-control-border" name="jabatan" id="jabatan" placeholder="Jabatan Pekerjaan yang membiayai">
-                </div>
+                
+                
                 <div class="form-group">
                   <label for="jabatan">File Pendukung Pengajuan Keringanan UKT</label>
                   <br />
@@ -333,12 +335,20 @@
           $('[name="alamat"]').val(data.alamat);
           $('[name="jenis_dispensasi"]').val(data.jenis_dispensasi);
           $('[name="kelompok_ukt"]').val(data.kelompok_ukt);
-          $('[name="nominal_ukt"]').val(nom.toFixed(0));
           $('[name="kelompok_ukt"]').val(data.kelompok_ukt);
           $('[name="pekerjaan"]').val(data.pekerjaan);
           $('[name="jabatan"]').val(data.jabatan_kerja);
-
-
+          $('[name="semesterke"]').val(data.semesterke);
+          $('[name="sks_belum"]').val(data.sks_belum);
+          const nominal = nom.toFixed(0);
+          // Mengubah menjadi format mata uang Rupiah
+          const uang = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0 // Menghilangkan dua angka nol di belakang koma
+          }).format(nominal);
+          $('[name="nominal_ukt"]').val(uang);
+          
           if (data.file_pernyataan != null) {
             $('#nama_file_pernyataan').html('<font class="text-success"><i class="fa fa-check"></i> Sudah Terisi</font> [Silakan pilih file untuk menggantikan file yang sudah ada]')
           }

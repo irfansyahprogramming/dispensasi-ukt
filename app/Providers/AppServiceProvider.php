@@ -77,23 +77,38 @@ class AppServiceProvider extends ServiceProvider
                 $dispensasi = $getData->where($param)->get();
             }
             // echo $cmode;
-            // dd($dispensasi);
+            // dd($getData);
 
-            $count_total_pengajuan = $dispensasi->where('mode','2')->count('id');
+            $count_total_pengajuan = $dispensasi->where('mode','0')->count('id');
             // $count_total_ditolak = $dispensasi->where('status_ajuan','2')->count('id');
-            $count_total_ditolak = $dispensasi->where('status_ajuan','2')->count('id');
-            $count_total_disetuju_fak = $dispensasi->where('mode','3')->where('status_ajuan','1')->count('id');
-            $count_total_setuju_wd2 = $dispensasi->where('mode','14')->where('status_ajuan','1')->count('id');
-            $count_total_disetuju_wr2 = $dispensasi->where('mode','20')->where('status_ajuan','1')->count('id');
+            // $count_total_ditolak = $dispensasi->where('status_ajuan','2')->count('id');
+            // $count_total_disetuju_fak = $dispensasi->where('mode','3')->where('status_ajuan','1')->count('id');
+            // $count_total_setuju_wd2 = $dispensasi->where('mode','14')->where('status_ajuan','1')->count('id');
+            // $count_total_disetuju_wr2 = $dispensasi->where('mode','20')->where('status_ajuan','1')->count('id');
+            $count_total_pengajuan = $dispensasi->where('status_ajuan','0')->count('id');
+            
+            //Proses Prodi
+            $count_total_ditolak_prodi = $dispensasi->where('status_ajuan','21')->count('id');
+            $count_total_verifikasi_prodi = $dispensasi->where('mode','2')->count('id');
+            // dd($count_total_verifikasi_prodi);
+            //Proses Fakultas
+            $count_total_ditolak_fakultas = $dispensasi->where('status_ajuan','22')->count('id');
             $count_total_verifikasi_fakultas = $dispensasi->where('mode','3')->count('id');
+            //Proses WD2 
+            $count_total_ditolak_wd2 = $dispensasi->where('status_ajuan','23')->count('id');
             $count_total_verifikasi_dekan = $dispensasi->where('mode','14')->count('id');
-            // dd($count_total_verifikasi_fakultas."-".$count_total_verifikasi_dekan."+".$count_total_ditolak);
+            //Proses WR2
+            $count_total_ditolak_wr2 = $dispensasi->where('status_ajuan','24')->count('id');
             $count_total_verifikasi_wr2 = $dispensasi->where('mode','20')->count('id');
             // $count_total_acctolak_wr2 = $dispensasi->where('mode','20')->where('status_ajuan','2')->count('id');
+            
+            //Proses UNIT
             $count_total_verifikasi_hutalak = $dispensasi->where('mode','22')->count('id');
             $count_total_verifikasi_bakhum = $dispensasi->where('mode','4')->count('id');
             $count_total_verifikasi_upttik = $dispensasi->where('mode','13')->count('id');
             
+            $count_total_ditolak = $count_total_ditolak_prodi + $count_total_ditolak_fakultas + $count_total_ditolak_wd2 + $count_total_ditolak_wr2;
+
             $count_total_setuju_fakultas = $dispensasi->where('mode','3')->count('id');
             $count_total_setuju_dekan = $dispensasi->where('mode','14')->count('id');
             $count_total_setuju_wr2 = $dispensasi->where('mode','20')->count('id');
@@ -103,22 +118,26 @@ class AppServiceProvider extends ServiceProvider
             $total_jenis5 = $dispensasi->where('mode',14)->where('id_jenis_dispensasi', 5)->where('status_ajuan','1')->count();
             $total_jenis7 = $dispensasi->where('mode',14)->where('id_jenis_dispensasi', 7)->where('status_ajuan','1')->count();
 
-            if ($cmode == '3'){
-                $badges = $count_total_pengajuan - $count_total_verifikasi_fakultas;
+            if ($cmode == '2'){
+                $badges = $count_total_pengajuan - ($count_total_verifikasi_prodi + $count_total_ditolak_prodi);
+            }elseif ($cmode == '3'){
+                $badges = $count_total_verifikasi_prodi - ($count_total_verifikasi_fakultas + $count_total_ditolak_fakultas);
             }elseif ($cmode == '14'){
-                $badges = $count_total_disetuju_fak - $count_total_verifikasi_dekan;
+                $badges = $count_total_verifikasi_fakultas - ($count_total_verifikasi_dekan + $count_total_ditolak_wd2) ;
             }elseif ($cmode == '20'){
-                $badges = $count_total_setuju_wd2 - $count_total_setuju_wr2;
+                $badges = $count_total_verifikasi_dekan - ($count_total_verifikasi_wr2 + $count_total_ditolak_wr2);
                 // $badges = $count_total_ditolak_wd2;
             }elseif ($cmode == '22'){
-                $badges = $count_total_verifikasi_wr2 - $count_total_verifikasi_hutalak;
+                $badges = $count_total_verifikasi_wr2;
             }elseif ($cmode == '4'){
-                $badges = $count_total_verifikasi_hutalak - $count_total_verifikasi_bakhum;
+                $badges = $count_total_verifikasi_wr2;
             }elseif ($cmode == '13'){
-                $badges = $count_total_verifikasi_wr2 - $count_total_verifikasi_upttik;
+                $badges = $count_total_verifikasi_wr2;
             }else{
                 $badges = 0;
             }
+            // dd($count_total_pengajuan."- (".$count_total_verifikasi_prodi." + ". $count_total_ditolak_prodi);
+
             $count_all = array (
                 'getData'           => $getData,
                 'total_ajuan'       => $count_total_pengajuan,
@@ -127,7 +146,7 @@ class AppServiceProvider extends ServiceProvider
                 'total_wr2'         => $count_total_setuju_wr2,
                 'total_hutalak'     => $count_total_verifikasi_hutalak,
                 'total_bakhum'      => $count_total_verifikasi_bakhum,
-                'total_ditolak'      => $count_total_ditolak,
+                'total_ditolak'     => $count_total_ditolak,
                 'total_upttik'      => $count_total_verifikasi_upttik,
                 'semester'          => $semester,
                 'notif_sisa'        => $badges,
