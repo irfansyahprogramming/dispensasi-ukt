@@ -46,7 +46,9 @@ class VerifikasiWR2Controller extends Controller
         $listProdi = Services::getProdi('All');
 
         $pengajuan = DB::table('tb_pengajuan_dispensasi')
-        ->select('tb_pengajuan_dispensasi.id', 'tb_pengajuan_dispensasi.semester', 'tb_pengajuan_dispensasi.nim', 'tb_pengajuan_dispensasi.nama', 'tb_pengajuan_dispensasi.kode_prodi', 'tb_pengajuan_dispensasi.nama_prodi', 'tb_pengajuan_dispensasi.jenjang_prodi', 'tb_pengajuan_dispensasi.kelompok_ukt', 'tb_pengajuan_dispensasi.nominal_ukt','tb_pengajuan_dispensasi.alamat', 'tb_pengajuan_dispensasi.no_hp','tb_pengajuan_dispensasi.email','tb_pengajuan_dispensasi.pekerjaan', 'tb_pengajuan_dispensasi.jabatan_kerja','tb_pengajuan_dispensasi.pengalihan', 'tb_pengajuan_dispensasi.awal_pengajuan','tb_pengajuan_dispensasi.status_pengajuan', 'tb_pengajuan_dispensasi.semesterke','tb_pengajuan_dispensasi.sks_belum', 'tb_pengajuan_dispensasi.file_pernyataan','tb_pengajuan_dispensasi.file_keterangan', 'tb_pengajuan_dispensasi.file_permohonan','tb_pengajuan_dispensasi.file_penghasilan', 'tb_pengajuan_dispensasi.file_phk','tb_pengajuan_dispensasi.file_pailit', 'tb_pengajuan_dispensasi.file_pratranskrip','tb_pengajuan_dispensasi.potongan' ,'tb_pengajuan_dispensasi.ditagihkan', 'tb_pengajuan_dispensasi.angsuran1', 'tb_pengajuan_dispensasi.angsuran2', 'tb_pengajuan_dispensasi.kel_ukt_baru', 'ref_jenisdipensasi.jenis_dispensasi', 'ref_status_pengajuan.status_ajuan', 'ref_kelompok_ukt.kelompok');
+        ->select('tb_pengajuan_dispensasi.id', 'tb_pengajuan_dispensasi.semester', 'tb_pengajuan_dispensasi.nim', 'tb_pengajuan_dispensasi.nama', 'tb_pengajuan_dispensasi.kode_prodi', 'tb_pengajuan_dispensasi.nama_prodi', 'tb_pengajuan_dispensasi.jenjang_prodi', 'tb_pengajuan_dispensasi.kelompok_ukt', 'tb_pengajuan_dispensasi.nominal_ukt','tb_pengajuan_dispensasi.alamat', 'tb_pengajuan_dispensasi.no_hp','tb_pengajuan_dispensasi.email','tb_pengajuan_dispensasi.pekerjaan', 'tb_pengajuan_dispensasi.jabatan_kerja','tb_pengajuan_dispensasi.pengalihan', 'tb_pengajuan_dispensasi.awal_pengajuan','tb_pengajuan_dispensasi.status_pengajuan', 'tb_pengajuan_dispensasi.semesterke','tb_pengajuan_dispensasi.sks_belum', 'tb_pengajuan_dispensasi.file_pernyataan','tb_pengajuan_dispensasi.file_keterangan', 'tb_pengajuan_dispensasi.file_permohonan','tb_pengajuan_dispensasi.file_penghasilan', 'tb_pengajuan_dispensasi.file_phk','tb_pengajuan_dispensasi.file_pailit', 'tb_pengajuan_dispensasi.file_pratranskrip','tb_pengajuan_dispensasi.potongan' ,'tb_pengajuan_dispensasi.ditagihkan', 'tb_pengajuan_dispensasi.angsuran1', 'tb_pengajuan_dispensasi.angsuran2', 'tb_pengajuan_dispensasi.kel_ukt_baru', 'ref_jenisdipensasi.jenis_dispensasi', 'ref_status_pengajuan.status_ajuan', 'ref_kelompok_ukt.kelompok')
+        ->where('status_pengajuan', '>=', '3')
+        ->where('status_pengajuan', '<=', '20');
         
         if (isset($request->semester) and $request->semester != 'All') {
             $pengajuan = $pengajuan->where('tb_pengajuan_dispensasi.semester', trim($request->semester));
@@ -123,15 +125,15 @@ class VerifikasiWR2Controller extends Controller
         $semester = $request->semester;
         $kelayakan = $request->sellayak;
         $id = $request->id;
-        $alasan = $request->txtAlasan;
+        $alasan = (!$request->txtAlasan)?'':$request->txtAlasan;
 
         try {
             DB::beginTransaction();
 
             if ($kelayakan == '1') {
-                $status_pengajuan = '3';
+                $status_pengajuan = '4';
             } elseif ($kelayakan == '2') {
-                $status_pengajuan = '23';
+                $status_pengajuan = '24';
             } else {
                 return redirect()->back()->with('toast_error', 'Belum Ada Pilihan Kelayakan Berkas Dokumen');
             }
@@ -255,7 +257,7 @@ class VerifikasiWR2Controller extends Controller
                     $store = PengajuanDispensasiUKTModel::where([
                         'id'    => $id
                     ])->update([
-                        'status_pengajuan'  => '3'
+                        'status_pengajuan'  => '4'
                     ]);
 
                     if ($store) {
@@ -267,7 +269,7 @@ class VerifikasiWR2Controller extends Controller
                             [
                                 'alasan_verif'      => null,
                                 'status_ajuan'      => '1',
-                                'status_pengajuan'  => '3'
+                                'status_pengajuan'  => '4'
                             ]
                         );
                     }
@@ -307,7 +309,7 @@ class VerifikasiWR2Controller extends Controller
                     $store = PengajuanDispensasiUKTModel::where([
                         'id'    => $id
                     ])->update([
-                        'status_pengajuan'  => '22'
+                        'status_pengajuan'  => '24'
                     ]);
 
                     if ($store) {
@@ -319,7 +321,7 @@ class VerifikasiWR2Controller extends Controller
                             [
                                 'alasan_verif'      => null,
                                 'status_ajuan'      => '2',
-                                'status_pengajuan'  => '22'
+                                'status_pengajuan'  => '24'
                             ]
                         );
                     }

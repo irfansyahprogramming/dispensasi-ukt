@@ -1,16 +1,16 @@
 {{-- @dd($pengajuan) --}}
 <div class="row">
   <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box">
+    <div class="info-box" onclick="location.href='/penerima_dispensasi/pengajuan'" style="cursor: pointer;">
       <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
-      <div class="info-box-content">
-        <span class="info-box-text">Pengajuan</span>
-        <span class="info-box-number">{{ $total_ajuan ?? 0 }}</span>
-      </div>
+        <div class="info-box-content">
+          <span class="info-box-text">Pengajuan</span>
+          <span class="info-box-number">{{ $total_ajuan ?? 0 }}</span>
+        </div>
     </div>
   </div>
   <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box">
+    <div class="info-box" onclick="location.href='/penerima_dispensasi/verifikasi_fakultas'" style="cursor: pointer;">
       <span class="info-box-icon bg-primary"><i class="far fa-edit"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Verifikasi Fakultas</span>
@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box">
+    <div class="info-box" onclick="location.href='/penerima_dispensasi/verifikasi_dekan'" style="cursor: pointer;">
       <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Disetujui Dekan</span>
@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box">
+    <div class="info-box" onclick="location.href='/penerima_dispensasi/verifikasi_wr2'" style="cursor: pointer;">
       <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Disetujui WR2</span>
@@ -46,7 +46,7 @@
     </div>
   </div> --}}
   <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box">
+    <div class="info-box" onclick="location.href='/penerima_dispensasi/ditolak'" style="cursor: pointer;">
       <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Ditolak</span>
@@ -55,7 +55,7 @@
     </div>
   </div>
   <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box">
+    <div class="info-box" onclick="location.href='/penerima_dispensasi/potongan'" style="cursor: pointer;">
       <span class="info-box-icon bg-primary"><i class="fa fa-bars"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Potongan 50% <small><strong>(disetujui)</strong></small></span>
@@ -64,7 +64,7 @@
     </div>
   </div>
   <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box">
+    <div class="info-box" onclick="location.href='/penerima_dispensasi/penundaan'" style="cursor: pointer;">
       <span class="info-box-icon bg-success"><i class="fa fa-star"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Penundaan UKT <small><strong>(disetujui)</strong></small></span>
@@ -73,7 +73,7 @@
     </div>
   </div>
   <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box">
+    <div class="info-box" onclick="location.href='/penerima_dispensasi/angsuran'" style="cursor: pointer;">
       <span class="info-box-icon bg-danger"><i class="fa fa-lock"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Angsuran UKT <small><strong>(disetujui)</strong></small></span>
@@ -82,7 +82,7 @@
     </div>
   </div>
   <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box">
+    <div class="info-box" onclick="location.href='/penerima_dispensasi/perubahan'" style="cursor: pointer;">
       <span class="info-box-icon bg-warning"><i class="fa fa-heart"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Perubahan UKT <small><strong>(disetujui)</strong></small></span>

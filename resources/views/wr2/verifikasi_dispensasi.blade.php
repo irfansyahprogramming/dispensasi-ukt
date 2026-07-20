@@ -112,7 +112,7 @@
                 @endphp
                 <tr>
                   <td>
-                    @if ($item->status_pengajuan == '2' or $item->status_pengajuan == '22')
+                    @if ($item->status_pengajuan == '3' or $item->status_pengajuan == '23')
                       <label class="pos-rel">
                         <input type="hidden" id="semester_cek" name="semester_cek" value="{{ $item->semester }}" />
                         <input type="hidden" id="nim_cek" name="nim_cek" value="{{ $item->nim }}" />
