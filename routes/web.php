@@ -117,6 +117,7 @@ Route::group(['prefix' => 'penerima_dispensasi', 'as' => 'penerima_dispensasi.']
     // cetak penerima dispensasi
     Route::get('/print/{semester}/{kode_prodi}', [PrintController::class, 'cetakPenerimaDispensasi'])->name('print');
     Route::delete('delete/{id}', [PeneriamDispensasiController::class, 'delete'])->name('delete');
+    Route::get('/pengajuan', [PeneriamDispensasiController::class, 'pengajuan'])->name('pengajuan');
 });
 
 // Route::get('/laporan', [LaporanController::class, 'index'])->name('index');

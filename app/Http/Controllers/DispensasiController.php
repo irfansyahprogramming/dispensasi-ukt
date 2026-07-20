@@ -175,8 +175,8 @@ class DispensasiController extends Controller
         $nominal = trim($request->nominal_ukt);
         $nom = preg_replace('/[^0-9.]/', '', $nominal);
         $nominal_ukt = intval(str_replace('.', '', $nom));
-        if ($nominal_ukt == 0) {
-            return redirect()->back()->with('toast_error', 'Nominal 0 tidak dibolehkan');
+        if ($nominal_ukt == 0 || $nominal_ukt >= 20000000) {
+            return redirect()->back()->with('toast_error', 'Nominal UKT 0 atau lebih besar dari UKT '.$nominal);
             exit;
         }
         // dd($nominal_ukt);        

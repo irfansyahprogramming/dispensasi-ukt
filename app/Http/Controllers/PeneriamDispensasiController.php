@@ -1122,5 +1122,112 @@ class PeneriamDispensasiController extends Controller
         // print_r($arrMhs);
         return json_encode($arrMhs);
     }
+    public function pengajuan()
+    {
+        if (!Session::has('isLoggedIn')) {
+            return redirect()->to('login');
+        }
+        $user = session('user_name');
+        $mode = session('user_mode');
+        $cmode = session('user_cmode');
+        $unit = session('user_unit');
 
+        $periode = BukaDispensasi::where('aktif', '1')->first();
+        $now = new DateTime("now");
+        if ($periode) {
+            $semester = $periode->semester;
+            $awal = new DateTime($periode->start_date);
+            $akhir = new DateTime($periode->end_date);
+            if ($now->getTimestamp() >= $awal->getTimestamp() && $now->getTimestamp() <= $akhir->getTimestamp()){
+                $tombol = "";
+            }else{
+                $tombol = "disabled";
+            }            
+        } else {
+            $tombol = "disabled";
+            $semester = "All";
+        }
+
+        $dispensasi = DB::table('tb_pengajuan_dispensasi')
+        ->select('tb_pengajuan_dispensasi.id', 'tb_pengajuan_dispensasi.semester', 'tb_pengajuan_dispensasi.nim', 'tb_pengajuan_dispensasi.nama', 'tb_pengajuan_dispensasi.kode_prodi', 'tb_pengajuan_dispensasi.nama_prodi', 'tb_pengajuan_dispensasi.jenjang_prodi', 'tb_pengajuan_dispensasi.kelompok_ukt', 'tb_pengajuan_dispensasi.nominal_ukt','tb_pengajuan_dispensasi.alamat', 'tb_pengajuan_dispensasi.no_hp','tb_pengajuan_dispensasi.email','tb_pengajuan_dispensasi.pekerjaan', 'tb_pengajuan_dispensasi.jabatan_kerja','tb_pengajuan_dispensasi.pengalihan', 'tb_pengajuan_dispensasi.awal_pengajuan','tb_pengajuan_dispensasi.status_pengajuan', 'tb_pengajuan_dispensasi.semesterke','tb_pengajuan_dispensasi.sks_belum', 'tb_pengajuan_dispensasi.file_pernyataan','tb_pengajuan_dispensasi.file_keterangan', 'tb_pengajuan_dispensasi.file_permohonan','tb_pengajuan_dispensasi.file_penghasilan', 'tb_pengajuan_dispensasi.file_phk','tb_pengajuan_dispensasi.file_pailit', 'tb_pengajuan_dispensasi.file_pratranskrip','tb_pengajuan_dispensasi.potongan' ,'tb_pengajuan_dispensasi.ditagihkan', 'tb_pengajuan_dispensasi.angsuran1', 'tb_pengajuan_dispensasi.angsuran2', 'tb_pengajuan_dispensasi.kel_ukt_baru', 'ref_jenisdipensasi.jenis_dispensasi', 'ref_status_pengajuan.status_ajuan', 'ref_kelompok_ukt.kelompok')
+        ->join('ref_jenisdipensasi','ref_jenisdipensasi.id', '=' ,'tb_pengajuan_dispensasi.jenis_dispensasi')
+        ->join('ref_status_pengajuan','ref_status_pengajuan.id', '=', 'tb_pengajuan_dispensasi.status_pengajuan','inner')
+        ->join('ref_kelompok_ukt','ref_kelompok_ukt.id', '=', 'tb_pengajuan_dispensasi.kelompok_ukt','inner');
+
+        $unit = trim(session('user_unit'));
+        if ($cmode == '3' || $cmode == '14'){
+            $pengajuan = $dispensasi->where('tb_pengajuan_dispensasi.kode_prodi','like',trim($unit).'%')
+            // ->where('tb_pengajuan_dispensasi.status_pengajuan', '=', '0')
+            ->orderBy('tb_pengajuan_dispensasi.id','desc')
+            ->get();
+        }elseif($cmode == '2'){
+            $pengajuan = $dispensasi->where('tb_pengajuan_dispensasi.kode_prodi',trim($unit))
+            // ->where('tb_pengajuan_dispensasi.status_pengajuan', '=', '0')
+            ->orderBy('tb_pengajuan_dispensasi.id','desc')
+            ->get();
+        }else{
+            $pengajuan = $dispensasi
+            // ->where('tb_pengajuan_dispensasi.status_pengajuan', '=', '0')
+            ->orderBy('tb_pengajuan_dispensasi.id','desc')
+            ->get();
+        }
+
+        if (Session::has('dekan_active')) {
+            Session::forget('ajuan_active');
+            Session::forget('wr2_active');
+            Session::forget('wr1_active');
+            Session::forget('bakhum_active');
+            Session::forget('selesai');
+        } else if (Session::has('wr2_active')) {
+            Session::forget('ajuan_active');
+            Session::forget('input_active');
+            Session::forget('dekan_active');
+            Session::forget('wr1_active');
+            Session::forget('bakhum_active');
+            Session::forget('selesai');
+        } else if (Session::has('wr1_active')) {
+            Session::forget('ajuan_active');
+            Session::forget('dekan_active');
+            Session::forget('wr2_active');
+            Session::forget('bakhum_active');
+            Session::forget('selesai');
+        } else if (Session::has('bakhum_active')) {
+            Session::forget('ajuan_active');
+            Session::forget('dekan_active');
+            Session::forget('wr2_active');
+            Session::forget('wr1_active');
+            Session::forget('selesai');
+        } else if (Session::has('selesai')) {
+            Session::forget('ajuan_active');
+            Session::forget('dekan_active');
+            Session::forget('wr2_active');
+            Session::forget('wr1_active');
+            Session::forget('bakhum_active');
+        } else {
+            Session::flash('ajuan_active', 'active');
+        }
+
+        $arrData = [
+            'title'             => 'Home',
+            'active'            => 'Dispensasi UKT',
+            'user'              => $user,
+            'mode'              => $mode,
+            'cmode'             => $cmode,
+            'unit'              => $unit,
+            'subtitle'          => 'Pengajuan Keringanan UKT',
+            'home_active'       => '',
+            'input_active'       => '',
+            'dispen_active'     => '',
+            'dataukt_active'    => '',
+            'laporan_active'    => '',
+            'periode_active'    => '',
+            'penerima_active'   => 'active',
+            'users'             => session('user_username'),
+            'tombol'            => $tombol,
+            'semester'          => $semester,
+            'pengajuan'         => $pengajuan
+        ];
+        // @dd($arrData) ;
+        return view('penerimaDispensasi.pengajuan_keringanan', $arrData);
+    }
 }
