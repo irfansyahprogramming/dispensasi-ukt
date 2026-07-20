@@ -44,7 +44,7 @@
       <div class="float-right d-none d-sm-block">
         <strong>AdminLTE.io</a></strong>
       </div>
-      <strong>Copyright &copy; 2022 <a href="https://pustikom.unj.ac.id/">UPT.TIK-UNJ</a>.</strong> <b>Version</b> 1.0.0
+      <strong>Copyright &copy; 2022 <a href="https://pustikom.unj.ac.id/">Pustikom</a>.</strong> <b>Version</b> 1.0.0
     </footer>
 
     <aside class="control-sidebar control-sidebar-dark">

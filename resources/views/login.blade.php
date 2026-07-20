@@ -187,7 +187,7 @@
         </div>
         <div class="card-footer">
           <div class="d-flex flex-column">
-            <h6 class="text-center unj-color cinzel">Copyright &copy; <?= date('Y') == 2022 ? '2022' : '2022 - ' . date('Y') ?> : Universitas Negeri Jakarta (v.1.0)</h6>
+            <h6 class="text-center unj-color cinzel">Copyright &copy; <?= date('Y') == 2022 ? '2022' : '2022 - ' . date('Y') ?> : Universitas Negeri Jakarta (v.1.1)</h6>
           </div>
         </div>
       </div>
