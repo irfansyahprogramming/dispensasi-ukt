@@ -118,6 +118,14 @@ Route::group(['prefix' => 'penerima_dispensasi', 'as' => 'penerima_dispensasi.']
     Route::get('/print/{semester}/{kode_prodi}', [PrintController::class, 'cetakPenerimaDispensasi'])->name('print');
     Route::delete('delete/{id}', [PeneriamDispensasiController::class, 'delete'])->name('delete');
     Route::get('/pengajuan', [PeneriamDispensasiController::class, 'pengajuan'])->name('pengajuan');
+    Route::get('/verifikasi_fakultas', [PeneriamDispensasiController::class, 'verifikasiFakultas'])->name('verifikasi_fakultas');
+    Route::get('/verifikasi_dekan', [PeneriamDispensasiController::class, 'verifikasiDekan'])->name('verifikasi_dekan');
+    Route::get('/verifikasi_wr2', [PeneriamDispensasiController::class, 'verifikasiWR2'])->name('verifikasi_wr2');
+    Route::get('/ditolak', [PeneriamDispensasiController::class, 'ditolak'])->name('ditolak');
+    Route::get('/potongan', [PeneriamDispensasiController::class, 'potongan'])->name('potongan');
+    Route::get('/penundaan', [PeneriamDispensasiController::class, 'penundaan'])->name('penundaan');
+    Route::get('/angsuran', [PeneriamDispensasiController::class, 'angsuran'])->name('angsuran');
+    Route::get('/perubahan', [PeneriamDispensasiController::class, 'perubahan'])->name('perubahan');
 });
 
 // Route::get('/laporan', [LaporanController::class, 'index'])->name('index');
