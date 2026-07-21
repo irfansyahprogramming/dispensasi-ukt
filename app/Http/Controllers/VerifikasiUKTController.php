@@ -414,7 +414,7 @@ class VerifikasiUKTController extends Controller
             $data->status = DB::table('ref_status_pengajuan')->where('id', $data->status_pengajuan)->first()->status_ajuan;
             $data->kelompok = DB::table('ref_kelompok_ukt')->where('id', $data->kelompok_ukt)->first()->kelompok;
 
-            $data->file_pendukung = "<a href = " . asset('storage/' . $data->file_permohonan) . " target='_blank'>File Permohonan</a>";
+            $data->file_pendukung = "";
             if ($data->file_pernyataan <> null) {
                 $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pernyataan) . " target='_blank'>File Pernyataan Kebenaran</a>";
             }
