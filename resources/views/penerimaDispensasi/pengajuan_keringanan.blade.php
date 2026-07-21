@@ -37,6 +37,9 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Daftar Pengajuan Keringanan UKT</h3>
+                <a href="{{ route('penerima_dispensasi.pengajuan_export') }}" class="btn btn-success btn-sm float-right">
+                    <i class="fas fa-file-excel"></i> Export Excel
+                </a>
             </div>
             <div class="card-body">
                 {{-- <button class="btn btn-outline-primary" id="btnCetakPenerima" data-toggle="modal" data-target="#modal-Cetak"><i class="ace-icon fa fa-plus"></i> Cetak Pengajuan </button> --}}

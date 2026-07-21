@@ -203,7 +203,12 @@ class VerifikasiDekanController extends Controller
             $data->kelompok = DB::table('ref_kelompok_ukt')->where('id', $data->kelompok_ukt)->first()->kelompok;
 
             $data->file_pendukung = "";
-
+            if ($data->file_permohonan <> null) {
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_permohonan) . " target='_blank'><i class=\"fa fa-file\"></i> File Permohonan</a>";
+            }
+            if ($data->file_pernyataan <> null) {
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pernyataan) . " target='_blank'>File Pernyataan Kebenaran</a>";
+            }
             if ($data->file_keterangan <> null) {
                 $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_keterangan) . " target='_blank'><i class=\"fa fa-file\"></i> File Keterangan Terdampak</a>";
             }

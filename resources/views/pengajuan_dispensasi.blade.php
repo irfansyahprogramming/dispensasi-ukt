@@ -167,7 +167,7 @@
                 </div>
                 <div class="form-group">
                   <label for="nominal_ukt">Nominal UKT</label>
-                  <input type="text" name="nominal_ukt" class="form-control form-control-border" id="nominal_ukt" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="{{ $biayaKuliah }}" data-type="currency" placeholder="Nominal UKT anda saat ini">
+                  <input type="text" name="nominal_ukt" class="form-control form-control-border" id="nominal_ukt" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="{{ number_format($biayaKuliah,0) }}" data-type="currency" placeholder="Nominal UKT anda saat ini">
                 </div>
                 <div class="form-group">
                   <label for="kelompok_ukt">Kelompok UKT</label>
@@ -215,6 +215,8 @@
                 <div class="form-group">
                   <label for="jabatan">File Pendukung Pengajuan Keringanan UKT</label>
                   <br />
+                  <b>Surat Permohonan <div id="nama_file_permohonan"></div> </b>
+                  <input type="file" class="form-control form-control-border" name="file_permohonan" id="file_permohonan">
                   <b>Surat Pernyataan <div id="nama_file_pernyataan"></div> </b>
                   <input type="file" class="form-control form-control-border" name="file_pernyataan" id="file_pernyataan">
 
@@ -349,6 +351,9 @@
           }).format(nominal);
           $('[name="nominal_ukt"]').val(uang);
           
+          if (data.file_permohonan != null) {
+            $('#nama_file_permohonan').html('<font class="text-success"><i class="fa fa-check"></i> Sudah Terisi</font> [Silakan pilih file untuk menggantikan file yang sudah ada]')
+          }
           if (data.file_pernyataan != null) {
             $('#nama_file_pernyataan').html('<font class="text-success"><i class="fa fa-check"></i> Sudah Terisi</font> [Silakan pilih file untuk menggantikan file yang sudah ada]')
           }

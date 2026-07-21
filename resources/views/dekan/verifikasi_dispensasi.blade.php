@@ -113,9 +113,9 @@
                   <td>{{ $item->kelompok }}</td>
                   <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                   <td>
-                    {{-- @if ($item->file_permohonan)
-                      <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Permohonan Dokumen">Surat Permohonan</a><br />
-                    @endif --}}
+                    @if ($item->file_permohonan)
+                      <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Permohonan"><i class="fa fa-file"></i> Surat Permohonan</a><br />
+                    @endif
                     @if ($item->file_pernyataan)
                       <a href="{{ asset('storage/' . $item->file_pernyataan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen"><i class="fa fa-file"></i> Surat Pernyataan</a><br />
                     @endif

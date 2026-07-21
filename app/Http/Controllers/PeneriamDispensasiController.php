@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PDF;
 
 class PeneriamDispensasiController extends Controller
@@ -1229,6 +1233,98 @@ class PeneriamDispensasiController extends Controller
         ];
         // @dd($arrData) ;
         return view('penerimaDispensasi.pengajuan_keringanan', $arrData);
+    }
+
+    public function exportPengajuanExcel()
+    {
+        if (!Session::has('isLoggedIn')) {
+            return redirect()->to('login');
+        }
+
+        $cmode = session('user_cmode');
+        $unit = trim(session('user_unit'));
+
+        $dispensasi = DB::table('tb_pengajuan_dispensasi')
+            ->select('tb_pengajuan_dispensasi.nim', 'tb_pengajuan_dispensasi.nama', 'tb_pengajuan_dispensasi.kode_prodi', 'tb_pengajuan_dispensasi.nama_prodi', 'tb_pengajuan_dispensasi.jenjang_prodi', 'tb_pengajuan_dispensasi.nominal_ukt', 'ref_jenisdipensasi.jenis_dispensasi', 'ref_kelompok_ukt.kelompok', 'ref_status_pengajuan.status_ajuan')
+            ->join('ref_jenisdipensasi', 'ref_jenisdipensasi.id', '=', 'tb_pengajuan_dispensasi.jenis_dispensasi')
+            ->join('ref_kelompok_ukt', 'ref_kelompok_ukt.id', '=', 'tb_pengajuan_dispensasi.kelompok_ukt', 'inner')
+            ->join('ref_status_pengajuan', 'ref_status_pengajuan.id', '=', 'tb_pengajuan_dispensasi.status_pengajuan', 'inner');
+
+        if ($cmode == '3' || $cmode == '14') {
+            $pengajuan = $dispensasi->where('tb_pengajuan_dispensasi.kode_prodi', 'like', $unit . '%')
+                ->orderBy('tb_pengajuan_dispensasi.id', 'desc')
+                ->get();
+        } elseif ($cmode == '2') {
+            $pengajuan = $dispensasi->where('tb_pengajuan_dispensasi.kode_prodi', $unit)
+                ->orderBy('tb_pengajuan_dispensasi.id', 'desc')
+                ->get();
+        } else {
+            $pengajuan = $dispensasi->orderBy('tb_pengajuan_dispensasi.id', 'desc')->get();
+        }
+
+        // kode 2 digit awal kode_prodi menunjukkan fakultas
+        $namaFakultas = [
+            '11' => 'Fakultas Ilmu Pendidikan',
+            '12' => 'Fakultas Bahasa dan Seni',
+            '13' => 'Fakultas Matematika dan Ilmu Pengetahuan Alam',
+            '14' => 'Fakultas Ilmu Sosial dan Hukum',
+            '15' => 'Fakultas Teknik',
+            '16' => 'Fakultas Ilmu Keolahragaan dan Kesehatan',
+            '17' => 'Fakultas Ekonomi',
+            '18' => 'Fakultas Pendidikan Psikologi',
+            '99' => 'Sekolah Pascasarjana',
+        ];
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setShowGridlines(false);
+
+        $columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+        foreach ($columns as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $headers = ['No', 'Nama', 'NIM', 'Program Studi', 'Fakultas', 'Jenis Keringanan', 'Kelompok UKT', 'Besaran UKT', 'Status Pengajuan'];
+        foreach ($headers as $i => $header) {
+            $sheet->setCellValue($columns[$i] . '1', $header);
+        }
+        $sheet->getStyle('A1:I1')->applyFromArray([
+            'font' => ['bold' => true],
+            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+        ]);
+
+        $row = 2;
+        $number = 1;
+        foreach ($pengajuan as $item) {
+            $kodeFak = substr($item->kode_prodi, 0, 2);
+
+            $sheet->setCellValue('A' . $row, $number++);
+            $sheet->setCellValue('B' . $row, $item->nama);
+            $sheet->getCell('C' . $row)->setValueExplicit($item->nim, DataType::TYPE_STRING);
+            $sheet->setCellValue('D' . $row, trim($item->jenjang_prodi . ' ' . $item->nama_prodi));
+            $sheet->setCellValue('E' . $row, $namaFakultas[$kodeFak] ?? '');
+            $sheet->setCellValue('F' . $row, $item->jenis_dispensasi);
+            $sheet->setCellValue('G' . $row, $item->kelompok);
+            $sheet->setCellValue('H' . $row, $item->nominal_ukt);
+            $sheet->setCellValue('I' . $row, $item->status_ajuan);
+            $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray([
+                'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+            ]);
+            $row++;
+        }
+
+        if ($row > 2) {
+            $sheet->getStyle('H2:H' . ($row - 1))->getNumberFormat()->setFormatCode('#,##0');
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Pengajuan_Keringanan_UKT.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
     }
 
     public function verifikasiFakultas()

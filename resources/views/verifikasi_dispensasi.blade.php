@@ -86,9 +86,9 @@
                   <td>{{ $item->kelompok }}</td>
                   <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                   <td>
-                    {{-- @if ($item->file_pernyataan)
-                    <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
-                    @endif --}}
+                    @if ($item->file_permohonan)
+                      <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Permohonan"><i class="fa fa-file"></i> Surat Permohonan</a><br />
+                    @endif
                     @if ($item->file_pernyataan)
                     <a href="{{ asset('storage/' . $item->file_pernyataan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
                     @endif
@@ -105,7 +105,7 @@
                     <a href="{{ asset('storage/' . $item->file_phk) }}" target="_blank" title="Surat Keterangan Kematian/Surat Keterangan PHK/SK Pensiun/Keterangan Dokter jika sakit permanen">Surat PHK/Kematian</a><br />
                     @endif
                     @if ($item->file_pratranskrip)
-                    <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
+                    <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank"><i class="fa fa-file"></i> Pra Transkrip</a>
                     @endif
                   </td>
                   <td>{{ $item->status_ajuan ?? '' }}</td>

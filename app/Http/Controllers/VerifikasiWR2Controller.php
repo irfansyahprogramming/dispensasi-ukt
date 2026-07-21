@@ -180,24 +180,26 @@ class VerifikasiWR2Controller extends Controller
             $data->kelompok = DB::table('ref_kelompok_ukt')->where('id', $data->kelompok_ukt)->first()->kelompok;
 
             $data->file_pendukung = "";
-
+            if ($data->file_permohonan <> null) {
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_permohonan) . " target='_blank'><i class=\"fa fa-file\"></i> File Permohonan</a>";
+            }
             if ($data->file_pernyataan <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pernyataan) . " target='_blank'>File pernyataan</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pernyataan) . " target='_blank'><i class=\"fa fa-file\"></i> File pernyataan</a>";
             }
             if ($data->file_keterangan <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_keterangan) . " target='_blank'>File Keterangan Terdampak</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_keterangan) . " target='_blank'><i class=\"fa fa-file\"></i> File Keterangan Terdampak</a>";
             }
             if ($data->file_penghasilan <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_penghasilan) . " target='_blank'>File Slip Gaji/Keterangan Penghasilan</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_penghasilan) . " target='_blank'><i class=\"fa fa-file\"></i> File Slip Gaji/Keterangan Penghasilan</a>";
             }
             if ($data->file_pailit <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pailit) . " target='_blank'>File Surat Pengadilan/Surat Keterangan Pailit/Bangkrut</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pailit) . " target='_blank'><i class=\"fa fa-file\"></i> File Surat Pengadilan/Surat Keterangan Pailit/Bangkrut</a>";
             }
             if ($data->file_phk <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_phk) . " target='_blank'>File Surat Kematian/PHK/Cacat Permanen</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_phk) . " target='_blank'><i class=\"fa fa-file\"></i> File Surat Kematian/PHK/Cacat Permanen</a>";
             }
             if ($data->file_pratranskrip <> null) {
-                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pratranskrip) . " target='_blank'>File Pratranskrip</a>";
+                $data->file_pendukung .= "<br/><a href = " . asset('storage/' . $data->file_pratranskrip) . " target='_blank'><i class=\"fa fa-file\"></i> File Pratranskrip</a>";
             }
 
             $history = HistoryPengajuan::where('id_pengajuan', $data->id)->where('v_mode', trim(session('user_cmode')))->first();

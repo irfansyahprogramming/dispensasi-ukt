@@ -198,6 +198,7 @@ class DispensasiController extends Controller
             return redirect()->back()->with('toast_error', 'Belum Cek Persetujuan');
         }
 
+        $file_permohonan = null;
         $file_pernyataan = null;
         $file_keterangan = null;
         $file_penghasilan = null;
@@ -208,6 +209,7 @@ class DispensasiController extends Controller
         $pengajuan = DB::table('tb_pengajuan_dispensasi')->where('nim', session('user_username'))
             ->get();
         foreach($pengajuan as $ajuan){
+            $file_permohonan = $ajuan->file_permohonan;
             $file_pernyataan = $ajuan->file_pernyataan;
             $file_keterangan = $ajuan->file_keterangan;
             $file_penghasilan = $ajuan->file_penghasilan;
@@ -244,13 +246,32 @@ class DispensasiController extends Controller
             );
 
             $path = 'file_pendukung/' . $semester . '/' . $nim;
+            $path_permohonan_saved = null;
             $path_pernyataan_saved = null;
             $path_keterangan_saved = null;
             $path_penghasilan_saved = null;
             $path_phk_saved = null;
             $path_pailit_saved = null;
             $path_pratranskrip_saved = null;
-            
+
+            if (isset($request->file_permohonan)) {
+                $nama_dok = $request->file_permohonan->getClientOriginalName();
+                $slug = Functions::seo_friendly_url($nama_dok);
+                $ext = $request->file_permohonan->extension();
+                $size = $request->file_permohonan->getSize();
+                $filename = 'f_permohonan_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
+                if ($size > 204800){
+                    return redirect()->back()->with('toast_error', 'Gagal Upload File Permohonan - Ukuran File '.$size.' lebih besar dari 200 KB');
+                }
+                $path_permohonan_saved = $request->file_permohonan->storeAs($path, $filename, 'public');
+            }else{
+                $path_permohonan_saved = $file_permohonan;
+            }
+
+            if (!$path_permohonan_saved) {
+                return redirect()->back()->with('toast_error', 'Gagal Upload File Permohonan - File Permohonan tidak ditemukan');
+            }
+
             if (isset($request->file_pernyataan)) {
                 $nama_dok = $request->file_pernyataan->getClientOriginalName();
                 $slug = Functions::seo_friendly_url($nama_dok);
@@ -437,6 +458,7 @@ class DispensasiController extends Controller
                 'semester'          => $semester,
                 'nim'               => $nim
             ])->update([
+                'file_permohonan'   => $path_permohonan_saved,
                 'file_pernyataan'   => $path_pernyataan_saved,
                 'file_keterangan'   => $path_keterangan_saved,
                 'file_penghasilan'  => $path_penghasilan_saved,

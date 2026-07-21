@@ -118,6 +118,7 @@ Route::group(['prefix' => 'penerima_dispensasi', 'as' => 'penerima_dispensasi.']
     Route::get('/print/{semester}/{kode_prodi}', [PrintController::class, 'cetakPenerimaDispensasi'])->name('print');
     Route::delete('delete/{id}', [PeneriamDispensasiController::class, 'delete'])->name('delete');
     Route::get('/pengajuan', [PeneriamDispensasiController::class, 'pengajuan'])->name('pengajuan');
+    Route::get('/pengajuan/export-excel', [PeneriamDispensasiController::class, 'exportPengajuanExcel'])->name('pengajuan_export');
     Route::get('/verifikasi_fakultas', [PeneriamDispensasiController::class, 'verifikasiFakultas'])->name('verifikasi_fakultas');
     Route::get('/verifikasi_dekan', [PeneriamDispensasiController::class, 'verifikasiDekan'])->name('verifikasi_dekan');
     Route::get('/verifikasi_wr2', [PeneriamDispensasiController::class, 'verifikasiWR2'])->name('verifikasi_wr2');

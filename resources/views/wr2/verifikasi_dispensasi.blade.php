@@ -133,25 +133,25 @@
                   <td>{{ number_format($item->nominal_ukt, 0) }}</td>
                   <td>
                     @if ($item->file_permohonan)
-                      <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Permohonan Dokumen">Surat Permohonan</a><br />
+                      <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Permohonan"><i class="fa fa-file"></i> Surat Permohonan</a><br />
                     @endif
                     @if ($item->file_pernyataan)
-                      <a href="{{ asset('storage/' . $item->file_pernyataan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
+                      <a href="{{ asset('storage/' . $item->file_pernyataan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen"><i class="fa fa-file"></i> Surat Pernyataan</a><br />
                     @endif
                     @if ($item->file_keterangan)
-                      <a href="{{ asset('storage/' . $item->file_keterangan) }}" target="_blank" title="Surat Keterangan dari kelurahan untuk yang terdampak">Surat Keterangan</a><br />
+                      <a href="{{ asset('storage/' . $item->file_keterangan) }}" target="_blank" title="Surat Keterangan dari kelurahan untuk yang terdampak"><i class="fa fa-file"></i> Surat Keterangan</a><br />
                     @endif
                     @if ($item->file_penghasilan)
-                      <a href="{{ asset('storage/' . $item->file_penghasilan) }}" target="_blank" title="Slip Gaji/Surat Keterangan Penghasilan yang disahkan oleh Lurah/Kepala Desa">Slip Gaji</a><br />
+                      <a href="{{ asset('storage/' . $item->file_penghasilan) }}" target="_blank" title="Slip Gaji/Surat Keterangan Penghasilan yang disahkan oleh Lurah/Kepala Desa"><i class="fa fa-file"></i> Slip Gaji</a><br />
                     @endif
                     @if ($item->file_pailit)
-                      <a href="{{ asset('storage/' . $item->file_pailit) }}" target="_blank" title="Keputusan Pengadilan yang bersifat tetap untuk yang mengalami pailit/Surat Keterangan dari Kelurahan tentang usaha yang mengalami kebangkrutan">Surat Keterangan Pailit</a><br />
+                      <a href="{{ asset('storage/' . $item->file_pailit) }}" target="_blank" title="Keputusan Pengadilan yang bersifat tetap untuk yang mengalami pailit/Surat Keterangan dari Kelurahan tentang usaha yang mengalami kebangkrutan"><i class="fa fa-file"></i> Surat Keterangan Pailit</a><br />
                     @endif
                     @if ($item->file_phk)
-                      <a href="{{ asset('storage/' . $item->file_phk) }}" target="_blank" title="Surat Keterangan Kematian/Surat Keterangan PHK/SK Pensiun/Keterangan Dokter jika sakit permanen">Surat PHK/Kematian</a><br />
+                      <a href="{{ asset('storage/' . $item->file_phk) }}" target="_blank" title="Surat Keterangan Kematian/Surat Keterangan PHK/SK Pensiun/Keterangan Dokter jika sakit permanen"><i class="fa fa-file"></i> Surat PHK/Kematian</a><br />
                     @endif
                     @if ($item->file_pratranskrip)
-                      <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank">[Pra Transkrip]</a>
+                      <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank"><i class="fa fa-file"></i> Pra Transkrip</a>
                     @endif
                   </td>
                   @if ($item->status_pengajuan >= 3 and $item->status_pengajuan <= 7)
