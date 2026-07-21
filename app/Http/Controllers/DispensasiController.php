@@ -438,13 +438,13 @@ class DispensasiController extends Controller
                 if (isset($request->file_phk)) {
                     $nama_dok = $request->file_phk->getClientOriginalName();
                     $slug = Functions::seo_friendly_url($nama_dok);
-                    $ext = $request->file_phk->extension();
+                    $ext = $request->file_kurang_penghasilan->extension();
                     $filename = 'f_phk_' . mt_rand(1000, 9999) . '_' . $slug . '.' . $ext;
-                    $size = $request->file_penghasilan->getSize();
+                    $size = $request->file_kurang_penghasilan->getSize();
                     if ($size > 204800){
                         return redirect()->back()->with('toast_error', 'Gagal Upload File Penghasilan - Ukuran File '.$size.' lebih besar dari 200 KB');
                     }
-                    $path_phk_saved = $request->file_phk->storeAs($path, $filename, 'public');
+                    $path_phk_saved = $request->file_kurang_penghasilan->storeAs($path, $filename, 'public');
                 }else{
                     $path_phk_saved = $file_phk;
                 }
