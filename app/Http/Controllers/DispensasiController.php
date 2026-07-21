@@ -74,7 +74,7 @@ class DispensasiController extends Controller
                 $kabkot = trim($mhs['namaKabkot']);
                 $propinsi = trim($mhs['namaPropinsi']);
                 $alamat = $jalan." RT/RW ".$rt."/".$rw." ".$kelurahan." ".$kecamatan." ".$kabkot." ".$propinsi; 
-                $biayaKuliah = $mhs['biayaKuliah'];
+                $biayaKuliah = "Rp ".str_replace('.00','',$mhs['biayaKuliah']);
                 }
             } else {
                 $nama_lengkap = 'Kosong';

@@ -167,7 +167,7 @@
                 </div>
                 <div class="form-group">
                   <label for="nominal_ukt">Nominal UKT</label>
-                  <input type="text" name="nominal_ukt" class="form-control form-control-border" id="nominal_ukt" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="{{ number_format($biayaKuliah,0) }}" data-type="currency" placeholder="Nominal UKT anda saat ini">
+                  <input type="text" name="nominal_ukt" class="form-control form-control-border" id="nominal_ukt" pattern="^\Rp\d{1,3}(,\d{3})*(\.\d+)?Rp" value="{{ $biayaKuliah }}" data-type="currency" placeholder="Nominal UKT anda saat ini">
                 </div>
                 <div class="form-group">
                   <label for="kelompok_ukt">Kelompok UKT</label>
