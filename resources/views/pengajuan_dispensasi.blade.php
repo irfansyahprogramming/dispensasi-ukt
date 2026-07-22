@@ -70,9 +70,10 @@
                 <th scope="col">Jenis Keringanan</th>
                 <th scope="col">Kelompok UKT</th>
                 <th scope="col">Nominal UKT</th>
-                <th scope="col">Pekerjaan Yang Membiayai</th>
-                <th scope="col">Jabatan Pekerjaan Yang Membiayai</th>
-                <th scope="col">Status Pengajuan</th>
+                {{-- <th scope="col">Pekerjaan Yang Membiayai</th> --}}
+                {{-- <th scope="col">Jabatan Pekerjaan Yang Membiayai</th>
+                {{-- <th scope="col">Status Pengajuan</th> --}} --}}
+                <th scope="col">Berkas</th>
                 <th scope="col">Aksi</th>
               </tr>
             </thead>
@@ -84,9 +85,32 @@
                   <td>{{ $item->jenis }}</td>
                   <td>{{ $item->kelompok }}</td>
                   <td>{{ $item->nom_ukt }}</td>
-                  <td>{{ $item->pekerjaan }}</td>
-                  <td>{{ $item->jabatan_kerja }}</td>
+                  {{-- <td>{{ $item->pekerjaan }}</td>
+                  <td>{{ $item->jabatan_kerja }}</td> --}}
                   <td>{{ $item->status ?? '' }}</td>
+                  <td>
+                    @if ($item->file_permohonan)
+                        <a href="{{ asset('storage/' . $item->file_permohonan) }}" target="_blank" title="Surat Permohonan">Surat Permohonan</a><br />
+                    @endif
+                    @if ($item->file_pernyataan)
+                        <a href="{{ asset('storage/' . $item->file_pernyataan) }}" target="_blank" title="Surat Pernyataan Kebenaran Dokumen">Surat Pernyataan</a><br />
+                    @endif
+                    @if ($item->file_keterangan)
+                        <a href="{{ asset('storage/' . $item->file_keterangan) }}" target="_blank" title="Surat Keterangan dari kelurahan untuk yang terdampak">Surat Keterangan</a><br />
+                    @endif
+                    @if ($item->file_penghasilan)
+                        <a href="{{ asset('storage/' . $item->file_penghasilan) }}" target="_blank" title="Slip Gaji/Surat Keterangan Penghasilan yang disahkan oleh Lurah/Kepala Desa">Slip Gaji</a><br />
+                    @endif
+                    @if ($item->file_pailit)
+                        <a href="{{ asset('storage/' . $item->file_pailit) }}" target="_blank" title="Keputusan Pengadilan yang bersifat tetap untuk yang mengalami pailit/Surat Keterangan dari Kelurahan tentang usaha yang mengalami kebangkrutan">Surat Keterangan Pailit</a><br />
+                    @endif
+                    @if ($item->file_phk)
+                        <a href="{{ asset('storage/' . $item->file_phk) }}" target="_blank" title="Surat Keterangan Kematian/Surat Keterangan PHK/SK Pensiun/Keterangan Dokter jika sakit permanen">Surat PHK/Kematian</a><br />
+                    @endif
+                    @if ($item->file_pratranskrip)
+                        <a href="{{ asset('storage/' . $item->file_pratranskrip) }}" target="_blank">Pra Transkrip</a>
+                    @endif
+                  </td>
                   <td class="btn-group text-center">
                     @if ($tombol == '' && $item->status_pengajuan == 0)
                       <button type="button" data-toggle="tooltip" data-placement="top" title="Edit Data" class="btn btn-sm btn-outline-warning mr-2" onclick="editPengajuan({{ $item->id }})"><i class="fas fa-edit"></i> </button>
