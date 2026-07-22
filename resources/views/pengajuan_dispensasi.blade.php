@@ -367,7 +367,7 @@
             $('#nama_file_penghasilan').html('<font class="text-success"><i class="fa fa-check"></i> Sudah Terisi</font> [Silakan pilih file untuk menggantikan file yang sudah ada]')
           }
           if (data.file_phk != null) {
-            $('#nama_file_phk').html('<font class="text-success"><i class="fa fa-check"></i> Sudah Terisi</font> [Silakan pilih file untuk menggantikan file yang sudah ada]')
+            $('#nama_file_kurang_penghasilan').html('<font class="text-success"><i class="fa fa-check"></i> Sudah Terisi</font> [Silakan pilih file untuk menggantikan file yang sudah ada]')
           }
           if (data.file_pratranskrip != null) {
             $('#nama_file_pra_transkrip').html('<font class="text-success"><i class="fa fa-check"></i> Sudah Terisi</font> [Silakan pilih file untuk menggantikan file yang sudah ada]')
