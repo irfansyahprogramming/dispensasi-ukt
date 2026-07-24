@@ -89,17 +89,17 @@ class AppServiceProvider extends ServiceProvider
             
             //Proses Prodi
             $count_total_ditolak_prodi = $dispensasi->where('status_ajuan','21')->count('id');
-            $count_total_verifikasi_prodi = $dispensasi->where('mode','2')->where('status_pengajuan','1')->count('id');
+            $count_total_verifikasi_prodi = $dispensasi->where('mode','2')->where('status_ajuan','1')->count('id');
             // dd($count_total_verifikasi_prodi);
             //Proses Fakultas
             $count_total_ditolak_fakultas = $dispensasi->where('status_ajuan','22')->count('id');
-            $count_total_verifikasi_fakultas = $dispensasi->where('mode','3')->where('status_pengajuan','2')->count('id');
+            $count_total_verifikasi_fakultas = $dispensasi->where('mode','3')->where('status_ajuan','1')->count('id');
             //Proses WD2 
             $count_total_ditolak_wd2 = $dispensasi->where('status_ajuan','23')->count('id');
-            $count_total_verifikasi_dekan = $dispensasi->where('mode','14')->where('status_pengajuan','3')->count('id');
+            $count_total_verifikasi_dekan = $dispensasi->where('mode','14')->where('status_ajuan','1')->count('id');
             //Proses WR2
             $count_total_ditolak_wr2 = $dispensasi->where('status_ajuan','24')->count('id');
-            $count_total_verifikasi_wr2 = $dispensasi->where('mode','20')->where('status_pengajuan','4')->count('id');
+            $count_total_verifikasi_wr2 = $dispensasi->where('mode','20')->where('status_ajuan','1')->count('id');
             // $count_total_acctolak_wr2 = $dispensasi->where('mode','20')->where('status_ajuan','2')->count('id');
             
             //Proses UNIT
