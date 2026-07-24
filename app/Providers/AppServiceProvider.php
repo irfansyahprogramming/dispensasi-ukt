@@ -89,6 +89,7 @@ class AppServiceProvider extends ServiceProvider
             
             //Proses Prodi
             $count_total_ditolak_prodi = $dispensasi->where('mode','2')->where('status_ajuan','2')->count('id');
+            $count_total_diterima_prodi = $dispensasi->where('mode','2')->where('status_ajuan','1')->count('id');
             $count_total_verifikasi_prodi = $dispensasi->where('mode','2')->count('id');
             //Proses Fakultas
             $count_total_ditolak_fakultas = $dispensasi->where('mode','3')->where('status_ajuan','2')->count('id');

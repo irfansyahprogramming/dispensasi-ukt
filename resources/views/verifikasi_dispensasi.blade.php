@@ -117,9 +117,9 @@
                   </td>
                   <td><i class="{{ $alert }}">{{ $status }}</i></td>
                   <td class="text-center">
-                    @if ($item->status_pengajuan == 1 || $item->status_pengajuan == 21)
+                    @if ($item->status_pengajuan == 2 || $item->status_pengajuan == 22)
                       <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-outline-success" onclick="verifData({{ $item->id }})"><i class="fas fa-edit"></i> Edit Status </button>
-                    @elseif ($item->status_pengajuan > 1)
+                    @elseif ($item->status_pengajuan > 3)
                       <button type="button" class="btn btn-outline-success"></i> Lock </button>
                     @else
                       <button type="button" data-toggle="tooltip" data-placement="top" title="Verifikasi Data" class="btn btn-outline-info" onclick="verifData({{ $item->id }})"><i class="fas fa-edit"></i> Proses</button>
