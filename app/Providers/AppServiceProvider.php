@@ -121,7 +121,7 @@ class AppServiceProvider extends ServiceProvider
             if ($cmode == '2'){
                 $badges = $count_total_pengajuan - ($count_total_verifikasi_prodi + $count_total_ditolak_prodi);
             }elseif ($cmode == '3'){
-                $badges = $count_total_verifikasi_prodi - ($count_total_verifikasi_fakultas + $count_total_ditolak_fakultas);
+                $badges = $count_total_verifikasi_prodi - ($count_total_verifikasi_fakultas + $count_total_ditolak_fakultas) - 1;
             }elseif ($cmode == '14'){
                 $badges = $count_total_verifikasi_fakultas - ($count_total_verifikasi_dekan + $count_total_ditolak_wd2) ;
             }elseif ($cmode == '20'){
